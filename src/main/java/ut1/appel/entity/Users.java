@@ -1,7 +1,6 @@
 package ut1.appel.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +9,9 @@ import ut1.appel.enums.Role;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,16 +33,15 @@ public class User {
     @Column(nullable = false)
     private Role role = Role.PENDING;
 
-    @Column(nullable = false)
-    private String photoPath;
-
     @ManyToOne
     @JoinColumn(name = "class_id")
-    private StudentClass studentClassId;
+    private StudentClass studentClass;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private StudentGroup studentGroupId;
+    private StudentGroup studentGroup;
+
+    private String picturePath;
 
     public boolean isAdmin() { return role == Role.ADMIN; }
     public boolean isPending() { return role == Role.PENDING; }

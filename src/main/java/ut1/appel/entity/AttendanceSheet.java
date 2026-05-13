@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -19,13 +19,12 @@ public class AttendanceSheet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Boolean isValidated;
-    private LocalDateTime validationDate;
+    private LocalDate validationDate;
 
-    @ManyToOne
-    @JoinColumn(name = "session_id")
-    private Session sessionId;
+    @OneToOne
+    @JoinColumn(name = "session_id", unique = true)
+    private Session session;
 
-    @OneToMany(mappedBy = "", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "attendanceSheet", cascade = CascadeType.ALL)
     private List<AttendanceRow> attendanceRows;
 }

@@ -1,6 +1,7 @@
 package ut1.appel.entity;
 
 import jakarta.persistence.*;
+import ut1.appel.enums.AttendanceRowStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +18,14 @@ public class AttendanceRow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Enum status; // Ex: PRESENT, ABSENT, RETARD
+    @Enumerated(EnumType.STRING)
+    private AttendanceRowStatus status;
+
     private Boolean changedGroup;
 
-    // L'élève concerné
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users user;
 
     @ManyToOne
     @JoinColumn(name = "attendance_sheet_id")

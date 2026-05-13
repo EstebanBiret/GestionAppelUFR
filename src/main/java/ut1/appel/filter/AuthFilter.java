@@ -1,7 +1,7 @@
 package ut1.appel.filter;
 
 import ut1.appel.enums.Role;
-import ut1.appel.entity.User;
+import ut1.appel.entity.Users;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.*;
@@ -41,9 +41,14 @@ public class AuthFilter implements Filter {
         String path = request.getServletPath()
                 + (request.getPathInfo() == null ? "" : request.getPathInfo());
 
-        User user = getSessionUser(request);
+        Users user = getSessionUser(request);
 
         if (path.startsWith("/css") || path.startsWith("/js") || path.startsWith("/img")) {
+            chain.doFilter(req, res);
+            return;
+        }
+
+        if (path.startsWith("/test")) {
             chain.doFilter(req, res);
             return;
         }
@@ -53,7 +58,14 @@ public class AuthFilter implements Filter {
                 chain.doFilter(req, res);
                 return;
             }
-            if (user != null && user.getRole() != Role.PENDING) {
+            if (user == null) {
+                chain.doFilter(req, res);
+                return;
+            }
+            if (user.getRole() != Role.PENDING
+                    && (path.equals("/auth/login")
+                    || path.equals("/auth/register"))) {
+
                 redirectByRole(user.getRole(), request, response);
                 return;
             }
@@ -81,8 +93,8 @@ public class AuthFilter implements Filter {
         chain.doFilter(req, res);
     }
 
-    private User getSessionUser(HttpServletRequest request) {
+    private Users getSessionUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        return (session != null) ? (User) session.getAttribute("currentUser") : null;
+        return (session != null) ? (Users) session.getAttribute("currentUser") : null;
     }
 }

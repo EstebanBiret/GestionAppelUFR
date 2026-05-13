@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="ut1.appel.entity.User" %>
+<%@ page import="ut1.appel.entity.Users" %>
 <%
-    User u = (User) session.getAttribute("currentUser");
+    Users u = (Users) session.getAttribute("currentUser");
     if (u == null) {
         response.sendRedirect(request.getContextPath() + "/auth/login");
         return;

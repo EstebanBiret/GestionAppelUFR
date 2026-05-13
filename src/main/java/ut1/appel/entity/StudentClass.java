@@ -26,5 +26,5 @@ public class StudentClass {
     private List<StudentGroup> groups;
 
     @OneToMany(mappedBy = "studentClass")
-    private List<User> users;
+    private List<Users> users;
 }

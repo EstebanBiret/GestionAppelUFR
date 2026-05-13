@@ -1,6 +1,7 @@
 package ut1.appel.entity;
 
 import jakarta.persistence.*;
+import ut1.appel.enums.JustificationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,14 +17,16 @@ public class Justification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fileUrl; // Le chemin du fichier (ex: le PDF du médecin)
-    private LocalDate depositDate;
-    private String status; // Ex: EN_ATTENTE, VALIDE, REFUSE
+    private String fileUrl;
 
-    // Le justificatif a été déposé par UN utilisateur
+    private LocalDate depositDate;
+
+    @Enumerated(EnumType.STRING)
+    private JustificationStatus status;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users user;
 
     @OneToMany(mappedBy = "justification")
     private List<AttendanceRow> attendanceLines;

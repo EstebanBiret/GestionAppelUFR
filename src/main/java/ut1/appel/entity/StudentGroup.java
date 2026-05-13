@@ -22,9 +22,9 @@ public class StudentGroup {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "class")
+    @JoinColumn(name = "class_id")
     private StudentClass studentClass;
 
     @OneToMany(mappedBy = "studentGroup")
-    private List<User> users;
+    private List<Users> users;
 }

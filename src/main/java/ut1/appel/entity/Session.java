@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -18,7 +18,11 @@ public class Session {
     private Long id;
 
     private LocalDate sessionDate;
+
+    @Column(columnDefinition = "TIME")
     private LocalTime startTime;
+
+    @Column(columnDefinition = "TIME")
     private LocalTime endTime;
 
     @ManyToOne
@@ -27,8 +31,10 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
-    private User teacher;
+    private Users teacher;
 
+    @OneToOne(mappedBy = "session", cascade = CascadeType.ALL)
+    private AttendanceSheet attendanceSheet;
 
     @ManyToMany
     @JoinTable(
@@ -36,7 +42,7 @@ public class Session {
             joinColumns = @JoinColumn(name = "session_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id")
     )
-    private List<StudentClass> studentClasses;
+    private Set<StudentClass> studentClasses;
 
     @ManyToMany
     @JoinTable(
@@ -44,5 +50,5 @@ public class Session {
             joinColumns = @JoinColumn(name = "session_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
-    private List<StudentGroup> studentGroups;
+    private Set<StudentGroup> studentGroups;
 }
