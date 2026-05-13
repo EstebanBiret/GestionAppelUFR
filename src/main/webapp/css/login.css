@@ -1,0 +1,185 @@
+/* UT Capitole – Charte graphique officielle
+   Couleur principale : Pantone 1797 C = R205 G4 B46 (#CD042E)
+   Secondaire         : Pantone 187 C  ≈ #9B1935 (grenat)
+   Accent             : Pantone 877 C  ≈ #A8A9AD (argent)
+*/
+:root {
+    --utc-rouge:        #CD042E;
+    --utc-rouge-dark:   #9B1935;
+    --utc-rouge-light:  #faeaed;
+    --utc-argent:       #A8A9AD;
+    --utc-argent-light: #f2f2f3;
+    --utc-gris:         #3a3a3a;
+    --utc-border:       #e0c5ca;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--utc-argent-light);
+    background-image: linear-gradient(150deg, var(--utc-rouge-light) 0%, #ffffff 55%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, 'Segoe UI', sans-serif;
+    color: var(--utc-gris);
+}
+
+/* Bande supérieure rouge + grenat */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(90deg, var(--utc-rouge) 0%, var(--utc-rouge-dark) 100%);
+    z-index: 10;
+}
+
+/* Carte formulaire */
+.login-container {
+    background: #ffffff;
+    border-radius: 8px;
+    border-top: 5px solid var(--utc-rouge);
+    box-shadow:
+            0 10px 36px rgba(205, 4, 46, 0.10),
+            0 1px 4px rgba(0, 0, 0, 0.06);
+    padding: 2.5rem 2.25rem;
+    width: 100%;
+    max-width: 420px;
+}
+
+/* Titre h2 */
+.login-container h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--utc-rouge);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.75rem;
+}
+
+.login-container h2::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: var(--utc-argent);
+    margin: 0.5rem auto 0;
+}
+
+/* Labels */
+.form-label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--utc-gris);
+    margin-bottom: 0.3rem;
+}
+
+/* Champs de saisie */
+.form-control {
+    border: 1.5px solid var(--utc-border);
+    border-radius: 5px;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.95rem;
+    color: var(--utc-gris);
+    background-color: #fdfafa;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--utc-rouge);
+    box-shadow: 0 0 0 3px rgba(205, 4, 46, 0.12);
+    background-color: #fff;
+}
+
+.form-control::placeholder {
+    color: #b8a8ab;
+    font-size: 0.9rem;
+}
+
+/* Bouton principal */
+.btn-primary {
+    background-color: var(--utc-rouge);
+    border-color: var(--utc-rouge);
+    color: #fff;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.97rem;
+    letter-spacing: 0.04em;
+    padding: 0.65rem;
+    border-radius: 5px;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--utc-rouge-dark);
+    border-color: var(--utc-rouge-dark);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Lien "Créer un compte" */
+.login-container a {
+    color: var(--utc-rouge);
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.login-container a:hover {
+    color: var(--utc-rouge-dark);
+    text-decoration: underline;
+}
+
+/* Alertes */
+.alert {
+    border-radius: 5px;
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.alert-success {
+    background-color: #edf7f0;
+    border: 1px solid #a8d5b5;
+    color: #1e6b38;
+}
+
+.alert-danger {
+    background-color: var(--utc-rouge-light);
+    border: 1px solid var(--utc-border);
+    color: var(--utc-rouge-dark);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .login-container {
+        margin: 1rem;
+        padding: 2rem 1.25rem;
+    }
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-header img {
+    height: 70px;
+    width: auto;
+}
