@@ -18,7 +18,6 @@
     <img src="${pageContext.request.contextPath}/pictures/logo_utc.jpg"
          alt="Université Toulouse Capitole">
 </div>
-<h1>${pageContext.request.contextPath}</h1>
 
 <div class="login-container">
     <h2 class="text-center mb-4">Connexion</h2>

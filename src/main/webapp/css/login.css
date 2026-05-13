@@ -29,6 +29,7 @@ body {
     justify-content: center;
     font-family: Arial, 'Segoe UI', sans-serif;
     color: var(--utc-gris);
+    padding: 1rem;
 }
 
 /* Bande supérieure rouge + grenat */
@@ -41,6 +42,17 @@ body::before {
     height: 10px;
     background: linear-gradient(90deg, var(--utc-rouge) 0%, var(--utc-rouge-dark) 100%);
     z-index: 10;
+}
+
+/* Logo */
+.login-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-header img {
+    height: 80px !important;
+    width: auto;
 }
 
 /* Carte formulaire */
@@ -166,20 +178,36 @@ body::before {
     color: var(--utc-rouge-dark);
 }
 
-/* Responsive */
-@media (max-width: 480px) {
+/* ── Responsive ── */
+
+/* Tablette */
+@media (min-width: 481px) and (max-width: 768px) {
     .login-container {
-        margin: 1rem;
-        padding: 2rem 1.25rem;
+        max-width: 480px;
+        padding: 2rem 1.75rem;
+    }
+
+    .login-header img {
+        height: 65px !important;
     }
 }
 
-.login-header {
-    text-align: center;
-    margin-bottom: 1.5rem;
-}
+/* Mobile */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 1.75rem 1.25rem;
+    }
 
-.login-header img {
-    height: 70px;
-    width: auto;
+    .login-header img {
+        height: 50px !important;
+    }
+
+    .login-container h2 {
+        font-size: 1.2rem;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
 }

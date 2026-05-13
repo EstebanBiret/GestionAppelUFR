@@ -43,7 +43,7 @@ public class AuthFilter implements Filter {
 
         User user = getSessionUser(request);
 
-        if (path.startsWith("/css") || path.startsWith("/js") || path.startsWith("/img")) {
+        if (path.startsWith("/css") || path.startsWith("/js") || path.startsWith("/img") || path.startsWith("/pictures")) {
             chain.doFilter(req, res);
             return;
         }
