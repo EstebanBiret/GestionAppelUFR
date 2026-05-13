@@ -9,5 +9,12 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.show_sql">true</property>
+        <mapping class="ut1.appel.entity.Subject"/>
+        <mapping class="ut1.appel.entity.StudentGroup"/>
+        <mapping class="ut1.appel.entity.StudentClass"/>
+        <mapping class="ut1.appel.entity.Session"/>
+        <mapping class="ut1.appel.entity.AttendanceSheet"/>
+        <mapping class="ut1.appel.entity.AttendanceRow"/>
+        <mapping class="ut1.appel.entity.Justification"/>
     </session-factory>
 </hibernate-configuration>

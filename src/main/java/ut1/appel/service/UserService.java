@@ -1,7 +1,7 @@
 package ut1.appel.service;
 
 import ut1.appel.enums.Role;
-import ut1.appel.entity.User;
+import ut1.appel.entity.Users;
 import ut1.appel.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -24,27 +24,27 @@ public class UserService {
     public boolean emailExists(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Long count = session.createQuery(
-                            "SELECT COUNT(u) FROM User u WHERE u.email = :email", Long.class)
+                            "SELECT COUNT(u) FROM Users u WHERE u.email = :email", Long.class)
                     .setParameter("email", email)
                     .uniqueResult();
             return count > 0;
         }
     }
 
-    public User findByEmail(String email) {
+    public Users findByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                            "FROM User u WHERE u.email = :email", User.class)
+                            "FROM Users u WHERE u.email = :email", Users.class)
                     .setParameter("email", email)
                     .uniqueResult();
         }
     }
 
-    public User register(String firstName, String lastName, String email, String password) {
+    public Users register(String firstName, String lastName, String email, String password) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
 
-            User u = new User();
+            Users u = new Users();
             u.setFirstName(firstName);
             u.setLastName(lastName);
             u.setEmail(email);

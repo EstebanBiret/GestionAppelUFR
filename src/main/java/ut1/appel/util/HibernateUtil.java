@@ -1,17 +1,16 @@
 package ut1.appel.util;
 
-import ut1.appel.entity.User;
+import lombok.Getter;
+import ut1.appel.entity.Users;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil {
+    @Getter
     private static final SessionFactory sessionFactory =
             new Configuration()
                     .configure("hibernate.cfg.xml")
-                    .addAnnotatedClass(User.class)
+                    .addAnnotatedClass(Users.class)
                     .buildSessionFactory();
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
 }

@@ -1,6 +1,6 @@
 package ut1.appel.servlet;
 
-import ut1.appel.entity.User;
+import ut1.appel.entity.Users;
 import ut1.appel.filter.AuthFilter;
 import ut1.appel.service.UserService;
 import javax.servlet.ServletException;
@@ -73,7 +73,7 @@ public class AuthServlet extends HttpServlet {
             return;
         }
 
-        User newUser = userService.register(firstName, lastName, email, password);
+        Users newUser = userService.register(firstName, lastName, email, password);
         req.getSession().setAttribute("currentUser", newUser);
         resp.sendRedirect(req.getContextPath() + "/auth/pending");
     }
@@ -84,7 +84,7 @@ public class AuthServlet extends HttpServlet {
         String email    = req.getParameter("email").trim();
         String password = req.getParameter("password");
 
-        User user = userService.findByEmail(email);
+        Users user = userService.findByEmail(email);
 
         if (user == null) {
             req.setAttribute("error", "Aucun compte trouvé avec cet email.");
