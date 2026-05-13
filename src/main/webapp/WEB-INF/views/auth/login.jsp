@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 <%@ page session="false" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>

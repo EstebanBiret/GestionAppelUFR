@@ -86,15 +86,8 @@ public class AuthServlet extends HttpServlet {
 
         Users user = userService.findByEmail(email);
 
-        if (user == null) {
-            req.setAttribute("error", "Aucun compte trouvé avec cet email.");
-            req.setAttribute("emailValue", email);
-            req.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(req, resp);
-            return;
-        }
-
-        if (!user.getPassword().equals(UserService.hashPassword(password))) {
-            req.setAttribute("error", "Mot de passe incorrect.");
+        if (user == null || !user.getPassword().equals(UserService.hashPassword(password))) {
+            req.setAttribute("error", "Mot de passe ou email incorrect.");
             req.setAttribute("emailValue", email);
             req.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(req, resp);
             return;

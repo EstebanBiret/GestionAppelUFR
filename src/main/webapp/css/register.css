@@ -1,0 +1,95 @@
+/* =====================================================
+   register.css – Page d'inscription
+   Étend main.css, ne pas oublier de charger les deux
+   ===================================================== */
+
+body {
+    min-height: 100vh;
+    background-image: linear-gradient(150deg, var(--utc-rouge-light) 0%, #ffffff 55%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+/* Logo */
+.register-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.register-header img {
+    height: 80px !important;
+    width: auto;
+}
+
+/* Carte formulaire */
+.register-container {
+    background: #ffffff;
+    border-radius: 8px;
+    border-top: 5px solid var(--utc-rouge);
+    box-shadow:
+            0 10px 36px rgba(205, 4, 46, 0.10),
+            0 1px 4px rgba(0, 0, 0, 0.06);
+    padding: 2.5rem 2.25rem;
+    width: 100%;
+    max-width: 480px;
+}
+
+/* Titre */
+.register-container h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--utc-rouge);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.75rem;
+}
+.register-container h2::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: var(--utc-argent);
+    margin: 0.5rem auto 0;
+}
+
+/* Lien retour connexion */
+.register-container a {
+    color: var(--utc-rouge);
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.register-container a:hover {
+    color: var(--utc-rouge-dark);
+    text-decoration: underline;
+}
+
+/* Responsive – tablette */
+@media (min-width: 481px) and (max-width: 768px) {
+    .register-container {
+        max-width: 520px;
+        padding: 2rem 1.75rem;
+    }
+    .register-header img {
+        height: 65px !important;
+    }
+}
+
+/* Responsive – mobile */
+@media (max-width: 480px) {
+    .register-container {
+        padding: 1.75rem 1.25rem;
+    }
+    .register-header img {
+        height: 50px !important;
+    }
+    .register-container h2 {
+        font-size: 1.2rem;
+    }
+    .btn-primary {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+}

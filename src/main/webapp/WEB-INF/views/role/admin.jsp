@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 <%@ page import="java.util.List" %>
 <%@ page import="ut1.appel.entity.Users" %>
 <%@ page import="java.util.Map" %>
