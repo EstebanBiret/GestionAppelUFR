@@ -15,7 +15,7 @@
 <body>
 
 <div class="login-header">
-    <img src="${pageContext.request.contextPath}/pictures/logo_utc.jpg"
+    <img src="${pageContext.request.contextPath}/images/logo_utc.jpg"
          alt="Université Toulouse Capitole">
 </div>
 
