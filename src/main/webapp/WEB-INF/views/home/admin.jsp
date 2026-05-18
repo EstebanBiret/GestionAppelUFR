@@ -43,7 +43,6 @@
     </div>
   </div>
 
-  <%-- TABLE 1 : EN ATTENTE --%>
   <div class="section-label">
     En attente d'attribution
     <span class="count-chip" id="pendingCount"><%= pending.size() %></span>
@@ -114,7 +113,6 @@
     </div>
   </div>
 
-  <%-- TABLE 2 : UTILISATEURS AVEC RÔLE --%>
   <div class="section-label">
     Utilisateurs actifs
     <span class="count-chip" id="assignedCount"><%= assigned.size() %></span>
