@@ -1,9 +1,8 @@
 async function loadStudents(classId, currentGroupId, preCheckedIds) {
   const tbody = document.getElementById('studentsTbody');
-  const hint  = document.getElementById('selectHint'); // ← récupéré avant tout
+  const hint  = document.getElementById('selectHint');
 
   if (!classId) {
-    // Remettre le hint manuellement si la sélection revient à vide
     tbody.innerHTML = `
       <tr id="selectHint">
         <td colspan="5" class="select-class-hint">
@@ -13,7 +12,6 @@ async function loadStudents(classId, currentGroupId, preCheckedIds) {
     return;
   }
 
-  // Masquer le hint s'il existe encore
   if (hint) hint.style.display = 'none';
   tbody.innerHTML = '<tr><td colspan="5" class="empty-students">Chargement…</td></tr>';
 

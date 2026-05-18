@@ -1,4 +1,3 @@
-/* ── Table classes ── */
 .classes-table { width: 100%; border-collapse: collapse; }
 .classes-table thead th {
   background: var(--rouge); color: #fff;
@@ -29,7 +28,6 @@
   background: var(--gris); border-top: 1.5px solid var(--gris-bd);
 }
 
-/* ── Table étudiants ── */
 .students-table { width: 100%; border-collapse: collapse; }
 .students-table thead th {
   background: var(--rouge); color: #fff;

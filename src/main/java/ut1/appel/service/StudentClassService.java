@@ -68,7 +68,6 @@ public class StudentClassService {
         }
     }
 
-    // Remplace l'ancienne méthode
     public void saveStudentAssignments(Long classId, String[] checkedUserIds) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
@@ -78,7 +77,6 @@ public class StudentClassService {
                 for (String id : checkedUserIds) checkedSet.add(Long.parseLong(id));
             }
 
-            // Tous les étudiants FI/FA
             List<Users> allStudents = session.createQuery(
                     "FROM Users u WHERE u.role IN ('ETUDIANT_FI', 'ETUDIANT_FA')",
                     Users.class).list();

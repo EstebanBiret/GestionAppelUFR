@@ -43,7 +43,7 @@ public class ScolariteServlet extends HttpServlet {
         }
     }
 
-    // ── Classes (inchangé) ──────────────────────────────────────────
+    // ===== Classes ===== //
 
     private void handleClassesList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -98,7 +98,7 @@ public class ScolariteServlet extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + "/scolarite/classes");
     }
 
-    // ── Groupes ─────────────────────────────────────────────────────
+    //====== Groupes ======//
 
     private void handleGroupesList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

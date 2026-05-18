@@ -43,7 +43,6 @@
     <div class="error-msg">⚠ <%= error %></div>
   <% } %>
 
-  <%-- Bloc nom --%>
   <div class="card">
     <div class="card-header">Nom de la classe</div>
     <div class="card-body">

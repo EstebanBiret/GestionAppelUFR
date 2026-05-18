@@ -1,11 +1,8 @@
-/* Réutilise classes-table, badge, actions de classes.css */
-
 .groups-meta {
   font-size: .8rem;
   color: var(--txt-muted);
 }
 
-/* Tableau étudiants avec checkbox */
 .check-table { width: 100%; border-collapse: collapse; }
 .check-table thead th {
   background: var(--rouge); color: #fff;
