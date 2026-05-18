@@ -5,7 +5,10 @@ import ut1.appel.entity.Users;
 import ut1.appel.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StudentClassService {
 
@@ -65,23 +68,34 @@ public class StudentClassService {
         }
     }
 
-    public void saveStudentAssignments(String[] userIds, String[] classIds) {
-        if (userIds == null) return;
+    // Remplace l'ancienne méthode
+    public void saveStudentAssignments(Long classId, String[] checkedUserIds) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
-            for (int i = 0; i < userIds.length; i++) {
-                Users u = session.get(Users.class, Long.parseLong(userIds[i]));
-                if (u == null) continue;
-                String classIdStr = classIds[i];
-                if (classIdStr == null || classIdStr.equals("0")) {
-                    u.setStudentClass(null);
-                    u.setStudentGroup(null);
-                } else {
-                    StudentClass c = session.get(StudentClass.class, Long.parseLong(classIdStr));
-                    if (u.getStudentClass() == null || !u.getStudentClass().getId().equals(c.getId())) {
+
+            Set<Long> checkedSet = new HashSet<>();
+            if (checkedUserIds != null) {
+                for (String id : checkedUserIds) checkedSet.add(Long.parseLong(id));
+            }
+
+            // Tous les étudiants FI/FA
+            List<Users> allStudents = session.createQuery(
+                    "FROM Users u WHERE u.role IN ('ETUDIANT_FI', 'ETUDIANT_FA')",
+                    Users.class).list();
+
+            StudentClass sc = session.get(StudentClass.class, classId);
+
+            for (Users u : allStudents) {
+                if (checkedSet.contains(u.getId())) {
+                    if (u.getStudentClass() == null || !u.getStudentClass().getId().equals(classId)) {
                         u.setStudentGroup(null);
                     }
-                    u.setStudentClass(c);
+                    u.setStudentClass(sc);
+                } else {
+                    if (u.getStudentClass() != null && u.getStudentClass().getId().equals(classId)) {
+                        u.setStudentClass(null);
+                        u.setStudentGroup(null);
+                    }
                 }
             }
             tx.commit();

@@ -1,0 +1,33 @@
+/* Réutilise classes-table, badge, actions de classes.css */
+
+.groups-meta {
+  font-size: .8rem;
+  color: var(--txt-muted);
+}
+
+/* Tableau étudiants avec checkbox */
+.check-table { width: 100%; border-collapse: collapse; }
+.check-table thead th {
+  background: var(--rouge); color: #fff;
+  padding: .65rem 1rem; text-align: left;
+  font-size: .78rem; font-weight: 600;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.check-table thead th:first-child { width: 44px; text-align: center; }
+.check-table tbody tr { border-bottom: 1px solid var(--gris-bd); transition: background .12s; cursor: pointer; }
+.check-table tbody tr:last-child { border-bottom: none; }
+.check-table tbody tr:hover { background: var(--rouge-lt); }
+.check-table tbody tr.checked-row { background: var(--rouge-lt); }
+.check-table td { padding: .7rem 1rem; font-size: .875rem; vertical-align: middle; }
+.check-table td:first-child { text-align: center; }
+.check-table input[type=checkbox] { accent-color: var(--rouge); width: 16px; height: 16px; cursor: pointer; }
+
+.empty-students {
+  text-align: center; padding: 2rem;
+  color: var(--txt-muted); font-size: .875rem;
+}
+.select-class-hint {
+  text-align: center; padding: 2rem;
+  color: var(--txt-muted); font-size: .875rem;
+  font-style: italic;
+}

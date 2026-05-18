@@ -45,6 +45,15 @@
         <div class="nav-card-sub">Créer, modifier, affecter les étudiants</div>
       </div>
     </a>
+
+    <a href="${pageContext.request.contextPath}/scolarite/groupes" class="nav-card">
+      <div class="nav-icon">👥</div>
+      <div>
+        <div class="nav-card-title">Groupes de TD</div>
+        <div class="nav-card-sub">Créer et gérer les groupes</div>
+      </div>
+    </a>
+
   </div>
 </main>
 
