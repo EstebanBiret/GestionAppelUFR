@@ -30,13 +30,23 @@ async function loadStudents(classId, currentGroupId, preCheckedIds) {
     const groupLabel = s.groupName
       ? `<span class="pill" style="background:var(--gris);color:var(--txt-muted)">${s.groupName}</span>`
       : `<span style="color:var(--txt-muted);font-size:.78rem">Aucun groupe</span>`;
-
+    const initials = s.firstName[0].toUpperCase() + s.lastName[0].toUpperCase();
+    const avatarSrc = s.picturePath
+      ? `${window._contextPath}/images/users/${s.picturePath}`
+      : `${window._contextPath}/images/users/default.jpg`;
     return `
       <tr class="${checked ? 'checked-row' : ''}" onclick="toggleRow(this)">
         <td><input type="checkbox" name="checkedStudents" value="${s.id}" ${checked ? 'checked' : ''}
                    onclick="event.stopPropagation()"></td>
-        <td>${s.lastName}</td>
-        <td>${s.firstName}</td>
+        <td>
+          <div class="check-student-info">
+            <div class="avatar"><img src="${avatarSrc}" alt="${initials}"></div>
+            <div>
+              <div class="check-student-name">${s.firstName} ${s.lastName}</div>
+              <div class="check-student-email">${s.email}</div>
+            </div>
+          </div>
+        </td>
         <td><span class="pill ${isFI ? 'pill-fi' : 'pill-fa'}">${isFI ? 'FI' : 'FA'}</span></td>
         <td>${groupLabel}</td>
       </tr>`;

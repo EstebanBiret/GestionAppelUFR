@@ -86,15 +86,14 @@
             <span style="font-weight:400; font-size:.8rem; color:var(--txt-muted)">— cochez les membres du groupe</span>
           </div>
           <table class="check-table">
-            <thead>
-              <tr>
-                <th><label for="checkAll" style="cursor:pointer">✓</label></th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Formation</th>
-                <th>Groupe actuel</th>
-              </tr>
-            </thead>
+           <thead>
+             <tr>
+               <th><label for="checkAll" style="cursor:pointer">✓</label></th>
+               <th>Étudiant</th>
+               <th>Formation</th>
+               <th>Groupe actuel</th>
+             </tr>
+           </thead>
             <tbody id="studentsTbody">
               <tr>
                 <td colspan="5" id="selectHint" class="select-class-hint">
@@ -128,7 +127,6 @@
   <% if (isEdit && editGroupe.getStudentClass() != null) { %>
     document.addEventListener('DOMContentLoaded', () => {
       loadStudents('<%= editGroupe.getStudentClass().getId() %>', currentGroupId, preCheckedIds);
-      document.getElementById('selectHint').style.display = 'none';
     });
   <% } %>
 </script>

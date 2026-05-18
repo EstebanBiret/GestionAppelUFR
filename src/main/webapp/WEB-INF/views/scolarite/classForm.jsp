@@ -85,8 +85,7 @@
         <thead>
           <tr>
             <th><label for="checkAll" style="cursor:pointer">✓</label></th>
-            <th>Nom</th>
-            <th>Prénom</th>
+            <th>Étudiant</th>
             <th>Formation</th>
             <th>Classe actuelle</th>
           </tr>
@@ -97,8 +96,9 @@
               boolean inThisClass = etudiant.getStudentClass() != null
                                  && etudiant.getStudentClass().getId().equals(editClass.getId());
               String classeLabel = etudiant.getStudentClass() != null
-                                 ? etudiant.getStudentClass().getName()
-                                 : null;
+                                 ? etudiant.getStudentClass().getName() : null;
+              String initials = etudiant.getFirstName().substring(0,1).toUpperCase()
+                              + etudiant.getLastName().substring(0,1).toUpperCase();
           %>
           <tr class="<%= inThisClass ? "checked-row" : "" %>" onclick="toggleRow(this)">
             <td>
@@ -106,8 +106,21 @@
                      <%= inThisClass ? "checked" : "" %>
                      onclick="event.stopPropagation()">
             </td>
-            <td style="font-weight:600"><%= etudiant.getLastName() %></td>
-            <td><%= etudiant.getFirstName() %></td>
+            <td>
+              <div class="check-student-info">
+                <div class="avatar">
+                  <% if (etudiant.getPicturePath() != null && !etudiant.getPicturePath().isEmpty()) { %>
+                    <img src="${pageContext.request.contextPath}/images/users/<%= etudiant.getPicturePath() %>" alt="">
+                  <% } else { %>
+                    <img src="${pageContext.request.contextPath}/images/users/default.jpg" alt="">
+                  <% } %>
+                </div>
+                <div>
+                  <div class="check-student-name"><%= etudiant.getFirstName() %> <%= etudiant.getLastName() %></div>
+                  <div class="check-student-email"><%= etudiant.getEmail() %></div>
+                </div>
+              </div>
+            </td>
             <td>
               <span class="pill <%= isFI ? "pill-fi" : "pill-fa" %>">
                 <%= isFI ? "FI" : "FA" %>
@@ -115,9 +128,7 @@
             </td>
             <td>
               <% if (classeLabel != null) { %>
-                <span class="pill" style="background:var(--gris);color:var(--txt-muted)">
-                  <%= classeLabel %>
-                </span>
+                <span class="pill" style="background:var(--gris);color:var(--txt-muted)"><%= classeLabel %></span>
               <% } else { %>
                 <span style="color:var(--txt-muted);font-size:.78rem">Aucune classe</span>
               <% } %>

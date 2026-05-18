@@ -141,6 +141,8 @@ public class ScolariteServlet extends HttpServlet {
                     .append("\"id\":").append(s.getId()).append(",")
                     .append("\"firstName\":\"").append(s.getFirstName()).append("\",")
                     .append("\"lastName\":\"").append(s.getLastName()).append("\",")
+                    .append("\"email\":\"").append(s.getEmail()).append("\",")
+                    .append("\"picturePath\":").append(s.getPicturePath() != null ? "\"" + s.getPicturePath() + "\"" : "null").append(",")
                     .append("\"role\":\"").append(s.getRole()).append("\",")
                     .append("\"groupId\":").append(groupId != null ? groupId : "null").append(",")
                     .append("\"groupName\":").append(groupName != null ? "\"" + groupName + "\"" : "null")

@@ -19,12 +19,16 @@
 .check-table td:first-child { text-align: center; }
 .check-table input[type=checkbox] { accent-color: var(--rouge); width: 16px; height: 16px; cursor: pointer; }
 
-.empty-students {
-  text-align: center; padding: 2rem;
-  color: var(--txt-muted); font-size: .875rem;
+.check-student-info { display: flex; align-items: center; gap: .75rem; }
+.check-student-info .avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--rouge-lt); color: var(--rouge-dk);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .8rem; overflow: hidden; flex-shrink: 0;
 }
-.select-class-hint {
-  text-align: center; padding: 2rem;
-  color: var(--txt-muted); font-size: .875rem;
-  font-style: italic;
-}
+.check-student-info .avatar img { width: 100%; height: 100%; object-fit: cover; }
+.check-student-name { font-weight: 600; font-size: .875rem; }
+.check-student-email { font-size: .75rem; color: var(--txt-muted); margin-top: .1rem; }
+
+.empty-students { text-align: center; padding: 2rem; color: var(--txt-muted); font-size: .875rem; }
+.select-class-hint { text-align: center; padding: 2rem; color: var(--txt-muted); font-size: .875rem; font-style: italic; }
