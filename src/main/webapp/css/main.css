@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=DM+Sans:wght@400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --rouge:    #C8102E;
+  --rouge-dk: #A00C24;
+  --rouge-lt: #FAE8EB;
+  --gris:     #F5F4F2;
+  --gris-bd:  #E0DDD8;
+  --txt:      #1A1A1A;
+  --txt-muted:#6B6B6B;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--gris);
+  color: var(--txt);
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+header {
+  background: #fff;
+  border-bottom: 3px solid var(--rouge);
+  padding: 0 2.5rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo { display: flex; align-items: center; gap: .75rem; }
+.logo-bar { width: 6px; height: 36px; background: var(--rouge); border-radius: 3px; }
+.logo-text { font-family: 'Source Serif 4', serif; font-size: 1.1rem; font-weight: 600; }
+.logo-sub  { font-size: .75rem; color: var(--txt-muted); margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 1.5rem; }
+.user-chip {
+  background: var(--rouge-lt);
+  color: var(--rouge-dk);
+  padding: .35rem .9rem;
+  border-radius: 20px;
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+/* ── Layout ── */
+main { max-width: 900px; margin: 2.5rem auto; padding: 0 1.5rem; }
+
+.page-header {
+  display: flex; align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+h1 { font-family: 'Source Serif 4', serif; font-size: 1.6rem; font-weight: 600; }
+.page-header a { font-size: .85rem; color: var(--txt-muted); text-decoration: none; }
+.page-header a:hover { color: var(--rouge); }
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border: 1.5px solid var(--gris-bd);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.card-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1.5px solid var(--gris-bd);
+  font-weight: 600;
+  font-size: .95rem;
+}
+.card-body { padding: 1.25rem; }
+
+/* ── Boutons ── */
+.btn {
+  padding: .55rem 1.4rem;
+  border-radius: 8px;
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+  transition: background .15s, transform .1s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--rouge); color: #fff; }
+.btn-primary:hover { background: var(--rouge-dk); }
+.btn-secondary {
+  background: #fff; color: var(--txt);
+  border: 1.5px solid var(--gris-bd);
+}
+.btn-secondary:hover { border-color: var(--rouge); color: var(--rouge); }
+.btn-secondary:disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
+.btn-logout {
+  background: none; border: 1.5px solid var(--gris-bd);
+  color: var(--txt-muted); padding: .35rem .9rem;
+  border-radius: 8px; font-size: .8rem; cursor: pointer;
+  text-decoration: none;
+}
+.btn-logout:hover { border-color: var(--rouge); color: var(--rouge); }
+.btn-danger {
+  background: none; border: none;
+  color: #aaa; cursor: pointer; font-size: .8rem;
+  padding: .25rem .5rem; border-radius: 6px;
+  font-family: inherit;
+}
+.btn-danger:hover { color: var(--rouge); background: var(--rouge-lt); }
+
+/* ── Formulaire ── */
+.form-row { display: flex; gap: 1rem; align-items: flex-end; }
+.form-group { flex: 1; }
+label {
+  display: block; font-size: .8rem; font-weight: 600;
+  margin-bottom: .4rem; color: var(--txt-muted);
+  text-transform: uppercase; letter-spacing: .04em;
+}
+input[type=text] {
+  width: 100%; padding: .6rem .9rem;
+  border: 1.5px solid var(--gris-bd); border-radius: 8px;
+  font-family: inherit; font-size: .9rem;
+  transition: border-color .15s; outline: none;
+}
+input[type=text]:focus { border-color: var(--rouge); }
+select {
+  padding: .4rem .7rem; border: 1.5px solid var(--gris-bd);
+  border-radius: 8px; font-family: inherit; font-size: .85rem;
+  background: #fff; cursor: pointer; outline: none;
+  transition: border-color .15s;
+}
+select:focus { border-color: var(--rouge); }
+
+.error-msg {
+  background: var(--rouge-lt); color: var(--rouge-dk);
+  border: 1px solid var(--rouge); border-radius: 8px;
+  padding: .6rem 1rem; font-size: .85rem; margin-bottom: 1rem;
+}
+
+.form-footer {
+  display: flex; justify-content: flex-end; gap: .75rem;
+  padding: 1rem 1.25rem;
+  background: var(--gris); border-top: 1.5px solid var(--gris-bd);
+}
+
+.empty { text-align: center; padding: 2.5rem; color: var(--txt-muted); font-size: .9rem; }

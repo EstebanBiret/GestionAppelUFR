@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,5 +26,5 @@ public class StudentGroup {
     private StudentClass studentClass;
 
     @OneToMany(mappedBy = "studentGroup")
-    private List<Users> users;
+    private Set<Users> users;
 }

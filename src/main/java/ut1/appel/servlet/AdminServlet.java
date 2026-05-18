@@ -43,7 +43,7 @@ public class AdminServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        req.getRequestDispatcher("/WEB-INF/views/role/admin.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/home/admin.jsp").forward(req, resp);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
