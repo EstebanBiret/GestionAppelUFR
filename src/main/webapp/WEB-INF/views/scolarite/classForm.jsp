@@ -109,11 +109,7 @@
             <td>
               <div class="check-student-info">
                 <div class="avatar">
-                  <% if (etudiant.getPicturePath() != null && !etudiant.getPicturePath().isEmpty()) { %>
-                    <img src="${pageContext.request.contextPath}/images/users/<%= etudiant.getPicturePath() %>" alt="">
-                  <% } else { %>
-                    <img src="${pageContext.request.contextPath}/images/users/default.jpg" alt="">
-                  <% } %>
+                    <img src="${pageContext.request.contextPath}/<%= etudiant.getPicturePath() %>" alt="Photo de profil">
                 </div>
                 <div>
                   <div class="check-student-name"><%= etudiant.getFirstName() %> <%= etudiant.getLastName() %></div>
