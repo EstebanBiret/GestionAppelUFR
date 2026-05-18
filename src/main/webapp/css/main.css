@@ -60,7 +60,7 @@ body::before {
     content: '';
     position: fixed;
     top: 0; left: 0; right: 0;
-    height: 5px;
+    height: 10px;
     background: linear-gradient(90deg, var(--utc-rouge) 0%, var(--utc-rouge-dark) 100%);
     z-index: 1000;
 }

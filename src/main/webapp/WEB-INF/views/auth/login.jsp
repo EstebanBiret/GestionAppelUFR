@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 <%@ page session="false" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
@@ -22,17 +21,6 @@
 
 <div class="login-container">
     <h2 class="text-center mb-4">Connexion</h2>
-
-    <% if ("true".equals(request.getParameter("registered"))) { %>
-    <div class="alert alert-success" role="alert">
-        Compte créé ! En attente d'activation par un administrateur.
-    </div>
-    <% } %>
-    <% if (request.getAttribute("error") != null) { %>
-    <div class="alert alert-danger" role="alert">
-        <%= request.getAttribute("error") %>
-    </div>
-    <% } %>
 
     <form method="post" action="${pageContext.request.contextPath}/auth/login">
         <div class="mb-3">

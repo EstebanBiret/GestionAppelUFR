@@ -27,33 +27,38 @@
     </div>
     <% } %>
 
-    <form method="post" action="${pageContext.request.contextPath}/auth/register">
+    <form method="post" action="${pageContext.request.contextPath}/auth/register" enctype="multipart/form-data">
         <div class="row g-3 mb-3">
             <div class="col-sm-6">
-                <label for="firstName" class="form-label">Prénom</label>
+                <label for="firstName" class="form-label">Prénom <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="firstName" name="firstName"
                        placeholder="Prénom" required>
             </div>
             <div class="col-sm-6">
-                <label for="lastName" class="form-label">Nom</label>
+                <label for="lastName" class="form-label">Nom <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="lastName" name="lastName"
                        placeholder="Nom" required>
             </div>
         </div>
         <div class="mb-3">
-            <label for="email" class="form-label">Adresse email</label>
+            <label for="email" class="form-label">Adresse email <span class="text-danger">*</span></label>
             <input type="email" class="form-control" id="email" name="email"
                    placeholder="nom@exemple.com" required>
         </div>
         <div class="mb-3">
-            <label for="password" class="form-label">Mot de passe</label>
+            <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>
             <input type="password" class="form-control" id="password" name="password"
                    placeholder="Mot de passe" required>
         </div>
         <div class="mb-4">
-            <label for="confirmPassword" class="form-label">Confirmer le mot de passe</label>
+            <label for="confirmPassword" class="form-label">Confirmer le mot de passe <span class="text-danger">*</span></label>
             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
                    placeholder="Confirmer le mot de passe" required>
+        </div>
+        <div class="mb-4">
+            <label for="profilePicture" class="form-label">Photo de profil</label>
+            <input class="form-control" type="file" id="profilePicture" name="profilePicture" accept="image/*">
+
         </div>
         <div class="d-grid">
             <button type="submit" class="btn btn-primary">S'inscrire</button>
