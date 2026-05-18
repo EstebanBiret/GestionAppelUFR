@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/admin")
 public class AdminServlet extends HttpServlet {
@@ -18,9 +19,24 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        java.util.Map<String, String> allRoles = new java.util.LinkedHashMap<>();
+        Map<String, String> allRoles = getRoleMap();
 
-        for (ut1.appel.enums.Role role : ut1.appel.enums.Role.values()) {
+        req.setAttribute("allRoles", allRoles);
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            List<Users> usersList = session.createQuery("FROM Users", Users.class).list();
+            req.setAttribute("users", usersList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        req.getRequestDispatcher("/WEB-INF/views/home/admin.jsp").forward(req, resp);
+    }
+
+    private static Map<String, String> getRoleMap() {
+        Map<String, String> allRoles = new java.util.LinkedHashMap<>();
+
+        for (Role role : Role.values()) {
 
             String label = switch (role) {
                 case PENDING -> "En attente";
@@ -33,17 +49,7 @@ public class AdminServlet extends HttpServlet {
 
             allRoles.put(role.name(), label);
         }
-
-        req.setAttribute("allRoles", allRoles);
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            List<Users> usersList = session.createQuery("FROM Users", Users.class).list();
-            req.setAttribute("users", usersList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        req.getRequestDispatcher("/WEB-INF/views/home/admin.jsp").forward(req, resp);
+        return allRoles;
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
