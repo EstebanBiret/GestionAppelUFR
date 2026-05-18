@@ -1,8 +1,3 @@
-/* =====================================================
-   pending.css – Page d'attente d'activation
-   Nécessite main.css
-   ===================================================== */
-
 body {
     min-height: 100vh;
     background-image: linear-gradient(150deg, var(--utc-rouge-light) 0%, #ffffff 55%);

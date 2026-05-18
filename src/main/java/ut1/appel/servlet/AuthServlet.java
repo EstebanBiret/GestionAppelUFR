@@ -87,8 +87,7 @@ public class AuthServlet extends HttpServlet {
             return;
         }
 
-        // --- Gestion de la photo de profil ---
-        String picturePath = "images/users/default.jpg"; // valeur par défaut
+        String picturePath = "images/users/default.jpg";
 
         Part filePart = req.getPart("profilePicture");
         if (filePart != null && filePart.getSize() > 0) {
@@ -99,7 +98,6 @@ public class AuthServlet extends HttpServlet {
                 extension = originalFileName.substring(originalFileName.lastIndexOf("."));
             }
 
-            // Génère un nom en UUID
             String uniqueFileName = UUID.randomUUID().toString() + extension;
 
             // Chemin lu depuis web.xml, portable sur toutes les machines
@@ -109,7 +107,6 @@ public class AuthServlet extends HttpServlet {
                 uploadFolder.mkdirs();
             }
 
-            // Sauvegarde le fichier sur le disque
             File file = new File(uploadFolder, uniqueFileName);
             try (InputStream input = filePart.getInputStream();
                  OutputStream output = new FileOutputStream(file)) {
@@ -118,7 +115,6 @@ public class AuthServlet extends HttpServlet {
 
             picturePath = "images/users/" + uniqueFileName;
         }
-        // --- Fin gestion photo ---
 
         Users newUser = userService.register(firstName, lastName, email, password, picturePath);
         req.getSession().setAttribute("currentUser", newUser);
