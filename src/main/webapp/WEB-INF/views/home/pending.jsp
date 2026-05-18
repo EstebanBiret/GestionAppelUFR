@@ -13,19 +13,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>En attente d'activation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pending.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth.css">
 </head>
 <body>
-<div class="pending-container">
-    <img src="${pageContext.request.contextPath}/pictures/logo_utc.jpg"
-         alt="Université Toulouse Capitole">
-    <div class="pending-icon">⏳</div>
-    <h2>Bienvenue <%= u.getFirstName() %> <%= u.getLastName() %></h2>
-    <p>Votre compte est en attente d'activation par un administrateur.</p>
-    <a href="${pageContext.request.contextPath}/auth/logout">Se déconnecter</a>
+
+<div class="auth-header">
+    <img src="${pageContext.request.contextPath}/images/logo_utc.jpg" alt="Université Toulouse Capitole">
 </div>
+
+<div class="auth-container pending">
+    <div class="pending-icon">⏳</div>
+
+    <h2>Bienvenue <%= u.getFirstName() %> <%= u.getLastName() %></h2>
+
+    <p class="pending-text">Votre compte est en attente d'activation par un administrateur.</p>
+
+    <div class="form-action">
+        <a href="${pageContext.request.contextPath}/auth/logout" class="btn btn-primary">Se déconnecter</a>
+    </div>
+</div>
+
 </body>
 </html>

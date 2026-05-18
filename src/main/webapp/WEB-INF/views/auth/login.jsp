@@ -6,39 +6,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth.css">
 </head>
 <body>
 
-<div class="login-header">
-    <img src="${pageContext.request.contextPath}/images/logo_utc.jpg"
-         alt="Université Toulouse Capitole">
+<div class="auth-header">
+    <img src="${pageContext.request.contextPath}/images/logo_utc.jpg" alt="Université Toulouse Capitole">
 </div>
 
-<div class="login-container">
-    <h2 class="text-center mb-4">Connexion</h2>
+<div class="auth-container login">
+    <h2>Connexion</h2>
 
     <form method="post" action="${pageContext.request.contextPath}/auth/login">
-        <div class="mb-3">
+        <div class="form-group">
             <label for="email" class="form-label">Adresse email</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="nom@exemple.com" required>
         </div>
-        <div class="mb-3">
+        <div class="form-group">
             <label for="password" class="form-label">Mot de passe</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe"
-                   required>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe" required>
         </div>
-        <div class="d-grid">
+        <div class="form-action">
             <button type="submit" class="btn btn-primary">Se connecter</button>
         </div>
     </form>
 
-    <div class="text-center mt-3">
+    <div class="form-footer-link">
         <a href="${pageContext.request.contextPath}/auth/register">Créer un compte</a>
     </div>
 </div>
-
 </body>
 </html>

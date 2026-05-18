@@ -8,6 +8,10 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @WebServlet("/auth/*")
@@ -58,7 +62,6 @@ public class AuthServlet extends HttpServlet {
         String password  = req.getParameter("password");
         String confirm   = req.getParameter("confirmPassword");
 
-        // Vérification null avant trim()
         if (firstName == null || lastName == null || email == null || password == null || confirm == null) {
             req.setAttribute("error", "Tous les champs sont obligatoires.");
             req.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(req, resp);
@@ -88,30 +91,28 @@ public class AuthServlet extends HttpServlet {
         }
 
         String picturePath = "images/users/default.jpg";
-
         Part filePart = req.getPart("profilePicture");
+
         if (filePart != null && filePart.getSize() > 0) {
-            // Récupère l'extension du fichier original
             String originalFileName = filePart.getSubmittedFileName();
             String extension = "";
+
             if (originalFileName != null && originalFileName.contains(".")) {
                 extension = originalFileName.substring(originalFileName.lastIndexOf("."));
             }
 
-            String uniqueFileName = UUID.randomUUID().toString() + extension;
-
-            // Chemin lu depuis web.xml, portable sur toutes les machines
+            String uniqueFileName = UUID.randomUUID() + extension;
             String uploadDir = getServletContext().getInitParameter("uploadDir");
-            File uploadFolder = new File(uploadDir);
-            if (!uploadFolder.exists()) {
-                uploadFolder.mkdirs();
+
+            Path uploadPath = Paths.get(uploadDir);
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
             }
 
-            File file = new File(uploadFolder, uniqueFileName);
-            try (InputStream input = filePart.getInputStream();
-                 OutputStream output = new FileOutputStream(file)) {
-                input.transferTo(output);
-            }
+            Path targetFilePath = uploadPath.resolve(uniqueFileName);
+
+            Files.copy(filePart.getInputStream(), targetFilePath, StandardCopyOption.REPLACE_EXISTING);
 
             picturePath = "images/users/" + uniqueFileName;
         }

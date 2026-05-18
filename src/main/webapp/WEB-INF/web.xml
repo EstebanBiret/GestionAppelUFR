@@ -6,7 +6,8 @@
 
     <context-param>
         <param-name>uploadDir</param-name>
-        <param-value>C:\\Users\\Léa\\Documents\\M2\\Projets\\GestionAppelUFR\\src\\main\\webapp\\images\\users\\</param-value>
+        <!-- @TODO Mettre le path de son dossier en local : -->
+        <param-value>FULL PATH  : .........\users\</param-value>
     </context-param>
 
 </web-app>

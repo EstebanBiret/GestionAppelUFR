@@ -1,113 +1,57 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=DM+Sans:wght@400;500;600&display=swap');
 
-/* =====================================================
-   main.css – Styles globaux de l'application
-   UT Capitole – Charte graphique officielle
-   Couleur principale : Pantone 1797 C = R205 G4 B46 (#CD042E)
-   Secondaire         : Pantone 187 C  ≈ #9B1935 (grenat)
-   Accent             : Pantone 877 C  ≈ #A8A9AD (argent)
-   ===================================================== */
-
 :root {
-    /* Couleurs UT Capitole */
-    --utc-rouge:        #CD042E;
-    --utc-rouge-dark:   #9B1935;
-    --utc-rouge-light:  #faeaed;
-    --utc-argent:       #A8A9AD;
-    --utc-argent-light: #f2f2f3;
-    --utc-gris:         #3a3a3a;
-    --utc-gris-light:   #6c757d;
-    --utc-border:       #e0c5ca;
-    --utc-blanc:        #ffffff;
-    --utc-bg:           #f8f5f5;
+    /* Un rouge plus profond, élégant et moins agressif pour les grands aplats */
+    --rouge:    #B30D25;
+    --rouge-dk: #8A0A1C;
+    --rouge-lt: #F7E4E7;
 
-    /* Aliases courts (compatibilité branch main) */
-    --rouge:    var(--utc-rouge);
-    --rouge-dk: var(--utc-rouge-dark);
-    --rouge-lt: var(--utc-rouge-light);
-    --gris:     var(--utc-bg);
-    --gris-bd:  var(--utc-border);
-    --txt:      var(--utc-gris);
-    --txt-muted:var(--utc-gris-light);
-
-    --radius:    6px;
-    --shadow:    0 4px 16px rgba(205, 4, 46, 0.08), 0 1px 4px rgba(0,0,0,0.05);
-    --transition:0.2s ease;
+    --gris:     #F5F4F2;
+    --gris-bd:  #E0DDD8;
+    --txt:      #1A1A1A;
+    --txt-muted:#6B6B6B;
+    --transition: 0.15s ease;
 }
 
-/* ── Reset & base ── */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-html {
-    font-size: 16px;
-    scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
-    font-family: 'DM Sans', Arial, sans-serif;
-    background-color: var(--utc-bg);
-    color: var(--utc-gris);
-    line-height: 1.6;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gris);
+    color: var(--txt);
     min-height: 100vh;
+    line-height: 1.6;
 }
-
-/* ── Bande rouge en haut ── */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 10px;
-    background: linear-gradient(90deg, var(--utc-rouge) 0%, var(--utc-rouge-dark) 100%);
-    z-index: 1000;
-}
-
-/* ── Typographie ── */
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Source Serif 4', Arial, serif;
-    color: var(--utc-rouge);
-    font-weight: 700;
-    line-height: 1.3;
-}
-
-h1 { font-size: 1.8rem; }
-h2 { font-size: 1.4rem; }
-h3 { font-size: 1.15rem; }
 
 a {
-    color: var(--utc-rouge);
+    color: var(--rouge);
     text-decoration: none;
     transition: color var(--transition);
 }
 a:hover {
-    color: var(--utc-rouge-dark);
+    color: var(--rouge-dk);
     text-decoration: underline;
 }
 
-/* ── Navbar Bootstrap override ── */
-.navbar {
-    background-color: var(--utc-rouge) !important;
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Source Serif 4', serif;
+    font-weight: 600;
+    color: var(--rouge);
+    line-height: 1.3;
 }
-.navbar-brand,
-.navbar .nav-link {
-    color: var(--utc-blanc) !important;
-    font-weight: 700;
-}
-.navbar .nav-link:hover {
-    color: rgba(255,255,255,0.8) !important;
-}
-.navbar-brand img {
-    height: 40px;
-    width: auto;
-}
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.4rem; }
+h3 { font-size: 1.15rem; }
 
-/* ── Header custom (branch main) ── */
 header {
-    background: var(--utc-blanc);
-    border-bottom: 3px solid var(--utc-rouge);
+    background: #fff;
+    border-bottom: 3px solid var(--rouge);
     padding: 0 2.5rem;
     height: 64px;
     display: flex;
@@ -115,20 +59,19 @@ header {
     justify-content: space-between;
 }
 .logo { display: flex; align-items: center; gap: .75rem; }
-.logo-bar { width: 6px; height: 36px; background: var(--utc-rouge); border-radius: 3px; }
+.logo-bar { width: 6px; height: 36px; background: var(--rouge); border-radius: 3px; }
 .logo-text { font-family: 'Source Serif 4', serif; font-size: 1.1rem; font-weight: 600; }
-.logo-sub  { font-size: .75rem; color: var(--utc-gris-light); margin-top: 1px; }
+.logo-sub  { font-size: .75rem; color: var(--txt-muted); margin-top: 1px; }
 .header-right { display: flex; align-items: center; gap: 1.5rem; }
 .user-chip {
-    background: var(--utc-rouge-light);
-    color: var(--utc-rouge-dark);
+    background: var(--rouge-lt);
+    color: var(--rouge-dk);
     padding: .35rem .9rem;
     border-radius: 20px;
     font-size: .8rem;
     font-weight: 600;
 }
 
-/* ── Layout ── */
 main { max-width: 900px; margin: 2.5rem auto; padding: 0 1.5rem; }
 
 .page-header {
@@ -137,193 +80,132 @@ main { max-width: 900px; margin: 2.5rem auto; padding: 0 1.5rem; }
     justify-content: space-between;
     margin-bottom: 1.5rem;
 }
-.page-header a { font-size: .85rem; color: var(--utc-gris-light); text-decoration: none; }
-.page-header a:hover { color: var(--utc-rouge); }
+.page-header a { font-size: .85rem; color: var(--txt-muted); text-decoration: none; }
+.page-header a:hover { color: var(--rouge); }
 
-/* ── Cartes Bootstrap override ── */
 .card {
-    border: none;
-    border-radius: var(--radius);
-    border-top: 3px solid var(--utc-rouge);
-    box-shadow: var(--shadow);
-    background: var(--utc-blanc);
+    background: #fff;
+    border: 1.5px solid var(--gris-bd);
+    border-radius: 12px;
     overflow: hidden;
     margin-bottom: 1.5rem;
 }
 .card-header {
-    background-color: var(--utc-rouge);
-    color: var(--utc-blanc);
-    font-weight: 700;
-    border-radius: var(--radius) var(--radius) 0 0 !important;
     padding: 1rem 1.25rem;
+    border-bottom: 1.5px solid var(--gris-bd);
+    font-weight: 600;
     font-size: .95rem;
+    color: var(--rouge);
 }
 .card-body { padding: 1.25rem; }
-.card-title {
-    color: var(--utc-rouge);
-    font-weight: 700;
-}
 
-/* ── Boutons Bootstrap override ── */
+/* ── BOUTONS CORRIGÉS ── */
 .btn {
-    border-radius: var(--radius);
+    padding: .55rem 1.4rem;
+    border-radius: 8px;
+    font-size: .875rem;
     font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: background var(--transition), border-color var(--transition), color var(--transition), transform .1s;
+    white-space: nowrap;
     font-family: inherit;
-    transition: background-color var(--transition), border-color var(--transition), transform 0.1s;
 }
 .btn:active { transform: scale(.97); }
 
 .btn-primary {
-    background-color: var(--utc-rouge);
-    border-color: var(--utc-rouge);
-    color: var(--utc-blanc);
+    background: var(--rouge);
+    color: #ffffff;
+    border: 1.5px solid var(--rouge); /* Ajouté pour équilibrer la taille avec le bouton secondaire */
 }
-.btn-primary:hover, .btn-primary:focus {
-    background-color: var(--utc-rouge-dark);
-    border-color: var(--utc-rouge-dark);
-    color: var(--utc-blanc);
-    transform: translateY(-1px);
-}
-.btn-primary:active { transform: translateY(0); }
-
-.btn-outline-primary {
-    color: var(--utc-rouge);
-    border-color: var(--utc-rouge);
-}
-.btn-outline-primary:hover {
-    background-color: var(--utc-rouge);
-    border-color: var(--utc-rouge);
-    color: var(--utc-blanc);
+.btn-primary:hover {
+    background: var(--rouge-dk);
+    border-color: var(--rouge-dk);
+    color: #ffffff; /* Forcé pour éviter l'illisibilité */
 }
 
 .btn-secondary {
-    background-color: var(--utc-argent);
-    border-color: var(--utc-argent);
-    color: var(--utc-blanc);
-    border: 1.5px solid var(--utc-border);
+    background: #ffffff;
+    color: var(--txt);
+    border: 1.5px solid var(--gris-bd);
 }
-.btn-secondary:hover { border-color: var(--utc-rouge); color: var(--utc-rouge); }
-.btn-secondary:disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
+.btn-secondary:hover {
+    background: var(--gris);
+    border-color: var(--txt-muted);
+    color: var(--txt); /* Reste foncé pour être lisible au lieu de passer au rouge */
+}
+.btn-secondary:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
 
-/* Boutons custom (branch main) */
 .btn-logout {
-    background: none;
-    border: 1.5px solid var(--utc-border);
-    color: var(--utc-gris-light);
-    padding: .35rem .9rem;
-    border-radius: var(--radius);
-    font-size: .8rem;
-    cursor: pointer;
-    text-decoration: none;
+    background: none; border: 1.5px solid var(--gris-bd); color: var(--txt-muted);
+    padding: .35rem .9rem; border-radius: 8px; font-size: .8rem; cursor: pointer; text-decoration: none;
 }
-.btn-logout:hover { border-color: var(--utc-rouge); color: var(--utc-rouge); }
+.btn-logout:hover { border-color: var(--rouge); color: var(--rouge); }
 
-.btn-danger-custom {
-    background: none;
-    border: none;
-    color: #aaa;
-    cursor: pointer;
-    font-size: .8rem;
-    padding: .25rem .5rem;
-    border-radius: var(--radius);
-    font-family: inherit;
+.btn-danger {
+    background: none; border: none; color: #aaa; cursor: pointer; font-size: .8rem;
+    padding: .25rem .5rem; border-radius: 6px; font-family: inherit;
 }
-.btn-danger-custom:hover { color: var(--utc-rouge); background: var(--utc-rouge-light); }
+.btn-danger:hover { color: var(--rouge); background: var(--rouge-lt); }
 
-/* ── Formulaires Bootstrap override ── */
-.form-label {
-    font-weight: 700;
-    font-size: 0.88rem;
-    color: var(--utc-gris);
-    text-transform: uppercase;
-    letter-spacing: .04em;
+/* ── FORMULAIRES ── */
+.form-row { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.25rem; }
+.form-group { flex: 1; margin-bottom: 1.25rem; display: flex; flex-direction: column; }
+
+label, .form-label {
+    display: block; font-size: .8rem; font-weight: 600; margin-bottom: .4rem;
+    color: var(--txt-muted); text-transform: uppercase; letter-spacing: .04em;
 }
-.form-control, .form-select {
-    border: 1.5px solid var(--utc-border);
-    border-radius: var(--radius);
+
+input[type=text], input[type=email], input[type=password], input[type=file],
+select, .form-control, .form-select {
+    width: 100%;
+    padding: .6rem .9rem;
+    border: 1.5px solid var(--gris-bd);
+    border-radius: 8px;
     font-family: inherit;
-    color: var(--utc-gris);
-    background-color: #fdfafa;
-    transition: border-color var(--transition), box-shadow var(--transition);
-}
-.form-control:focus, .form-select:focus {
-    border-color: var(--utc-rouge);
-    box-shadow: 0 0 0 3px rgba(205, 4, 46, 0.12);
-    background-color: var(--utc-blanc);
+    font-size: .9rem;
+    transition: border-color var(--transition);
     outline: none;
+    background: #fff;
+    color: var(--txt);
 }
-.form-control::placeholder { color: #b8a8ab; }
+input:focus, select:focus, .form-control:focus, .form-select:focus {
+    border-color: var(--rouge);
+}
 
-/* Formulaires custom (branch main) */
-.form-row { display: flex; gap: 1rem; align-items: flex-end; }
-.form-group { flex: 1; }
 .form-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: .75rem;
-    padding: 1rem 1.25rem;
-    background: var(--utc-bg);
-    border-top: 1.5px solid var(--utc-border);
-}
-.error-msg {
-    background: var(--utc-rouge-light);
-    color: var(--utc-rouge-dark);
-    border: 1px solid var(--utc-rouge);
-    border-radius: var(--radius);
-    padding: .6rem 1rem;
-    font-size: .85rem;
-    margin-bottom: 1rem;
+    display: flex; justify-content: flex-end; gap: .75rem; padding: 1rem 1.25rem;
+    background: var(--gris); border-top: 1.5px solid var(--gris-bd);
 }
 
-/* ── Tableaux Bootstrap override ── */
-.table thead {
-    background-color: var(--utc-rouge);
-    color: var(--utc-blanc);
-}
-.table thead th {
-    font-weight: 700;
-    border: none;
-}
-.table-hover tbody tr:hover {
-    background-color: var(--utc-rouge-light);
-}
-
-/* ── Badges ── */
-.badge-present  { background-color: #198754; color: #fff; }
-.badge-absent   { background-color: var(--utc-rouge); color: #fff; }
-.badge-retard   { background-color: #fd7e14; color: #fff; }
-.badge-justifie { background-color: var(--utc-argent); color: #fff; }
-
-/* ── Alertes Bootstrap override ── */
-.alert-danger {
-    background-color: var(--utc-rouge-light);
-    border-color: var(--utc-border);
-    color: var(--utc-rouge-dark);
+.error-msg, .alert-danger {
+    background: var(--rouge-lt); color: var(--rouge-dk);
+    border: 1px solid var(--rouge); border-radius: 8px;
+    padding: .6rem 1rem; font-size: .85rem; margin-bottom: 1rem;
 }
 .alert-success {
-    background-color: #edf7f0;
-    border-color: #a8d5b5;
-    color: #1e6b38;
+    background-color: #edf7f0; border: 1px solid #a8d5b5; color: #1e6b38;
+    border-radius: 8px; padding: .6rem 1rem; font-size: .85rem; margin-bottom: 1rem;
 }
 
-/* ── Pagination Bootstrap override ── */
-.page-link { color: var(--utc-rouge); }
-.page-item.active .page-link {
-    background-color: var(--utc-rouge);
-    border-color: var(--utc-rouge);
-    color: var(--utc-blanc);
-}
+.empty { text-align: center; padding: 2.5rem; color: var(--txt-muted); font-size: .9rem; }
+.text-utc { color: var(--rouge) !important; }
 
-/* ── Utilitaires ── */
-.text-utc   { color: var(--utc-rouge) !important; }
-.bg-utc     { background-color: var(--utc-rouge) !important; }
-.border-utc { border-color: var(--utc-rouge) !important; }
-.empty      { text-align: center; padding: 2.5rem; color: var(--utc-gris-light); font-size: .9rem; }
+/* ── TABLEAUX ── */
+.table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+.table thead { background-color: var(--rouge); color: #ffffff; }
+.table th, .table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--gris-bd); }
+.table-hover tbody tr:hover { background-color: var(--rouge-lt); }
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
-    h1 { font-size: 1.4rem; }
-    h2 { font-size: 1.2rem; }
-    .navbar-brand img { height: 30px; }
-    main { margin: 1.5rem auto; }
-}
+/* ── BADGES ── */
+.badge-present  { background-color: #198754; color: #fff; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; }
+.badge-absent   { background-color: var(--rouge); color: #fff; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; }
+.badge-retard   { background-color: #fd7e14; color: #fff; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; }
+.badge-justifie { background-color: var(--txt-muted); color: #fff; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; }
