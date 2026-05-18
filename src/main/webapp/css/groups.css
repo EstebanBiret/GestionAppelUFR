@@ -32,3 +32,16 @@
 
 .empty-students { text-align: center; padding: 2rem; color: var(--txt-muted); font-size: .875rem; }
 .select-class-hint { text-align: center; padding: 2rem; color: var(--txt-muted); font-size: .875rem; font-style: italic; }
+
+.check-table thead th {
+  background: var(--rouge); color: #fff;
+  padding: .65rem 1rem; text-align: left;
+  font-size: .78rem; font-weight: 600;
+  letter-spacing: .04em; text-transform: uppercase;
+  cursor: pointer; user-select: none;
+}
+.check-table thead th:first-child { width: 44px; text-align: center; cursor: default; }
+.check-table thead th:hover { background: var(--rouge-dk); }
+.check-table thead th.sorted { background: var(--rouge-dk); }
+.check-table thead th .sort-icon { margin-left: .4rem; opacity: .6; font-size: .7rem; }
+.check-table thead th.sorted .sort-icon { opacity: 1; }
