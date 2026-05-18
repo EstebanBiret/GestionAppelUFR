@@ -23,7 +23,7 @@ public class AuthServlet extends HttpServlet {
             case "/register" ->
                     req.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(req, resp);
             case "/pending" ->
-                    req.getRequestDispatcher("/WEB-INF/views/role/pending.jsp").forward(req, resp);
+                    req.getRequestDispatcher("/WEB-INF/views/home/pending.jsp").forward(req, resp);
             case "/logout" -> {
                 HttpSession session = req.getSession(false);
                 if (session != null) session.invalidate();

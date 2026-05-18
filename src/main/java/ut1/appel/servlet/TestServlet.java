@@ -253,7 +253,7 @@ public class TestServlet extends HttpServlet {
         u.setRole(role);
         u.setStudentClass(studentClass);
         u.setStudentGroup(studentGroup);
-        u.setPicturePath("resources/assets/images/users/default.jpg");
+        u.setPicturePath("default.jpg");
         return u;
     }
 
