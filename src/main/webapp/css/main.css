@@ -1,13 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=DM+Sans:wght@400;500;600&display=swap');
+
 /* =====================================================
    main.css – Styles globaux de l'application
-
-    UT Capitole – Charte graphique officielle
+   UT Capitole – Charte graphique officielle
    Couleur principale : Pantone 1797 C = R205 G4 B46 (#CD042E)
    Secondaire         : Pantone 187 C  ≈ #9B1935 (grenat)
    Accent             : Pantone 877 C  ≈ #A8A9AD (argent)
    ===================================================== */
 
 :root {
+    /* Couleurs UT Capitole */
     --utc-rouge:        #CD042E;
     --utc-rouge-dark:   #9B1935;
     --utc-rouge-light:  #faeaed;
@@ -19,9 +21,18 @@
     --utc-blanc:        #ffffff;
     --utc-bg:           #f8f5f5;
 
-    --radius:           6px;
-    --shadow:           0 4px 16px rgba(205, 4, 46, 0.08), 0 1px 4px rgba(0,0,0,0.05);
-    --transition:       0.2s ease;
+    /* Aliases courts (compatibilité branch main) */
+    --rouge:    var(--utc-rouge);
+    --rouge-dk: var(--utc-rouge-dark);
+    --rouge-lt: var(--utc-rouge-light);
+    --gris:     var(--utc-bg);
+    --gris-bd:  var(--utc-border);
+    --txt:      var(--utc-gris);
+    --txt-muted:var(--utc-gris-light);
+
+    --radius:    6px;
+    --shadow:    0 4px 16px rgba(205, 4, 46, 0.08), 0 1px 4px rgba(0,0,0,0.05);
+    --transition:0.2s ease;
 }
 
 /* ── Reset & base ── */
@@ -37,10 +48,11 @@ html {
 }
 
 body {
-    font-family: Arial, 'Segoe UI', sans-serif;
+    font-family: 'DM Sans', Arial, sans-serif;
     background-color: var(--utc-bg);
     color: var(--utc-gris);
     line-height: 1.6;
+    min-height: 100vh;
 }
 
 /* ── Bande rouge en haut ── */
@@ -55,7 +67,7 @@ body::before {
 
 /* ── Typographie ── */
 h1, h2, h3, h4, h5, h6 {
-    font-family: Arial, sans-serif;
+    font-family: 'Source Serif 4', Arial, serif;
     color: var(--utc-rouge);
     font-weight: 700;
     line-height: 1.3;
@@ -75,7 +87,7 @@ a:hover {
     text-decoration: underline;
 }
 
-/* ── Navbar ── */
+/* ── Navbar Bootstrap override ── */
 .navbar {
     background-color: var(--utc-rouge) !important;
 }
@@ -92,33 +104,79 @@ a:hover {
     width: auto;
 }
 
-/* ── Cartes ── */
+/* ── Header custom (branch main) ── */
+header {
+    background: var(--utc-blanc);
+    border-bottom: 3px solid var(--utc-rouge);
+    padding: 0 2.5rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo { display: flex; align-items: center; gap: .75rem; }
+.logo-bar { width: 6px; height: 36px; background: var(--utc-rouge); border-radius: 3px; }
+.logo-text { font-family: 'Source Serif 4', serif; font-size: 1.1rem; font-weight: 600; }
+.logo-sub  { font-size: .75rem; color: var(--utc-gris-light); margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 1.5rem; }
+.user-chip {
+    background: var(--utc-rouge-light);
+    color: var(--utc-rouge-dark);
+    padding: .35rem .9rem;
+    border-radius: 20px;
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+/* ── Layout ── */
+main { max-width: 900px; margin: 2.5rem auto; padding: 0 1.5rem; }
+
+.page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+.page-header a { font-size: .85rem; color: var(--utc-gris-light); text-decoration: none; }
+.page-header a:hover { color: var(--utc-rouge); }
+
+/* ── Cartes Bootstrap override ── */
 .card {
     border: none;
     border-radius: var(--radius);
     border-top: 3px solid var(--utc-rouge);
     box-shadow: var(--shadow);
     background: var(--utc-blanc);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
 }
 .card-header {
     background-color: var(--utc-rouge);
     color: var(--utc-blanc);
     font-weight: 700;
     border-radius: var(--radius) var(--radius) 0 0 !important;
+    padding: 1rem 1.25rem;
+    font-size: .95rem;
 }
+.card-body { padding: 1.25rem; }
 .card-title {
     color: var(--utc-rouge);
     font-weight: 700;
 }
 
-/* ── Boutons ── */
+/* ── Boutons Bootstrap override ── */
+.btn {
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color var(--transition), border-color var(--transition), transform 0.1s;
+}
+.btn:active { transform: scale(.97); }
+
 .btn-primary {
     background-color: var(--utc-rouge);
     border-color: var(--utc-rouge);
     color: var(--utc-blanc);
-    font-weight: 700;
-    border-radius: var(--radius);
-    transition: background-color var(--transition), border-color var(--transition), transform 0.1s;
 }
 .btn-primary:hover, .btn-primary:focus {
     background-color: var(--utc-rouge-dark);
@@ -131,8 +189,6 @@ a:hover {
 .btn-outline-primary {
     color: var(--utc-rouge);
     border-color: var(--utc-rouge);
-    font-weight: 600;
-    border-radius: var(--radius);
 }
 .btn-outline-primary:hover {
     background-color: var(--utc-rouge);
@@ -144,15 +200,43 @@ a:hover {
     background-color: var(--utc-argent);
     border-color: var(--utc-argent);
     color: var(--utc-blanc);
-    font-weight: 600;
-    border-radius: var(--radius);
+    border: 1.5px solid var(--utc-border);
 }
+.btn-secondary:hover { border-color: var(--utc-rouge); color: var(--utc-rouge); }
+.btn-secondary:disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
 
-/* ── Formulaires ── */
+/* Boutons custom (branch main) */
+.btn-logout {
+    background: none;
+    border: 1.5px solid var(--utc-border);
+    color: var(--utc-gris-light);
+    padding: .35rem .9rem;
+    border-radius: var(--radius);
+    font-size: .8rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn-logout:hover { border-color: var(--utc-rouge); color: var(--utc-rouge); }
+
+.btn-danger-custom {
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    font-size: .8rem;
+    padding: .25rem .5rem;
+    border-radius: var(--radius);
+    font-family: inherit;
+}
+.btn-danger-custom:hover { color: var(--utc-rouge); background: var(--utc-rouge-light); }
+
+/* ── Formulaires Bootstrap override ── */
 .form-label {
     font-weight: 700;
     font-size: 0.88rem;
     color: var(--utc-gris);
+    text-transform: uppercase;
+    letter-spacing: .04em;
 }
 .form-control, .form-select {
     border: 1.5px solid var(--utc-border);
@@ -168,11 +252,30 @@ a:hover {
     background-color: var(--utc-blanc);
     outline: none;
 }
-.form-control::placeholder {
-    color: #b8a8ab;
+.form-control::placeholder { color: #b8a8ab; }
+
+/* Formulaires custom (branch main) */
+.form-row { display: flex; gap: 1rem; align-items: flex-end; }
+.form-group { flex: 1; }
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: .75rem;
+    padding: 1rem 1.25rem;
+    background: var(--utc-bg);
+    border-top: 1.5px solid var(--utc-border);
+}
+.error-msg {
+    background: var(--utc-rouge-light);
+    color: var(--utc-rouge-dark);
+    border: 1px solid var(--utc-rouge);
+    border-radius: var(--radius);
+    padding: .6rem 1rem;
+    font-size: .85rem;
+    margin-bottom: 1rem;
 }
 
-/* ── Tableaux ── */
+/* ── Tableaux Bootstrap override ── */
 .table thead {
     background-color: var(--utc-rouge);
     color: var(--utc-blanc);
@@ -191,7 +294,7 @@ a:hover {
 .badge-retard   { background-color: #fd7e14; color: #fff; }
 .badge-justifie { background-color: var(--utc-argent); color: #fff; }
 
-/* ── Alertes ── */
+/* ── Alertes Bootstrap override ── */
 .alert-danger {
     background-color: var(--utc-rouge-light);
     border-color: var(--utc-border);
@@ -203,10 +306,8 @@ a:hover {
     color: #1e6b38;
 }
 
-/* ── Pagination ── */
-.page-link {
-    color: var(--utc-rouge);
-}
+/* ── Pagination Bootstrap override ── */
+.page-link { color: var(--utc-rouge); }
 .page-item.active .page-link {
     background-color: var(--utc-rouge);
     border-color: var(--utc-rouge);
@@ -214,16 +315,15 @@ a:hover {
 }
 
 /* ── Utilitaires ── */
-.text-utc      { color: var(--utc-rouge) !important; }
-.bg-utc        { background-color: var(--utc-rouge) !important; }
-.border-utc    { border-color: var(--utc-rouge) !important; }
+.text-utc   { color: var(--utc-rouge) !important; }
+.bg-utc     { background-color: var(--utc-rouge) !important; }
+.border-utc { border-color: var(--utc-rouge) !important; }
+.empty      { text-align: center; padding: 2.5rem; color: var(--utc-gris-light); font-size: .9rem; }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
     h1 { font-size: 1.4rem; }
     h2 { font-size: 1.2rem; }
-
-    .navbar-brand img {
-        height: 30px;
-    }
+    .navbar-brand img { height: 30px; }
+    main { margin: 1.5rem auto; }
 }
