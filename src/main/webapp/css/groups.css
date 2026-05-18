@@ -1,0 +1,34 @@
+.groups-meta {
+  font-size: .8rem;
+  color: var(--txt-muted);
+}
+
+.check-table { width: 100%; border-collapse: collapse; }
+.check-table thead th {
+  background: var(--rouge); color: #fff;
+  padding: .65rem 1rem; text-align: left;
+  font-size: .78rem; font-weight: 600;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.check-table thead th:first-child { width: 44px; text-align: center; }
+.check-table tbody tr { border-bottom: 1px solid var(--gris-bd); transition: background .12s; cursor: pointer; }
+.check-table tbody tr:last-child { border-bottom: none; }
+.check-table tbody tr:hover { background: var(--rouge-lt); }
+.check-table tbody tr.checked-row { background: var(--rouge-lt); }
+.check-table td { padding: .7rem 1rem; font-size: .875rem; vertical-align: middle; }
+.check-table td:first-child { text-align: center; }
+.check-table input[type=checkbox] { accent-color: var(--rouge); width: 16px; height: 16px; cursor: pointer; }
+
+.check-student-info { display: flex; align-items: center; gap: .75rem; }
+.check-student-info .avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--rouge-lt); color: var(--rouge-dk);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: .8rem; overflow: hidden; flex-shrink: 0;
+}
+.check-student-info .avatar img { width: 100%; height: 100%; object-fit: cover; }
+.check-student-name { font-weight: 600; font-size: .875rem; }
+.check-student-email { font-size: .75rem; color: var(--txt-muted); margin-top: .1rem; }
+
+.empty-students { text-align: center; padding: 2rem; color: var(--txt-muted); font-size: .875rem; }
+.select-class-hint { text-align: center; padding: 2rem; color: var(--txt-muted); font-size: .875rem; font-style: italic; }
