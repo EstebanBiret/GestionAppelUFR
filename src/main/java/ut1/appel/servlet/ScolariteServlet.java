@@ -3,6 +3,7 @@ package ut1.appel.servlet;
 import ut1.appel.entity.StudentClass;
 import ut1.appel.entity.StudentGroup;
 import ut1.appel.entity.Users;
+import ut1.appel.service.CourseService;
 import ut1.appel.service.StudentClassService;
 import ut1.appel.service.StudentGroupService;
 
@@ -17,6 +18,7 @@ public class ScolariteServlet extends HttpServlet {
 
     private final StudentClassService classService = new StudentClassService();
     private final StudentGroupService groupService = new StudentGroupService();
+    private final CourseService courseService = new CourseService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -25,9 +27,11 @@ public class ScolariteServlet extends HttpServlet {
         switch (action) {
             case "/classes"                   -> handleClassesList(req, resp);
             case "/classes/form"              -> handleClassesForm(req, resp);
-            case "/groupes"                   -> handleGroupesList(req, resp);
-            case "/groupes/form"              -> handleGroupesForm(req, resp);
+            case "/groupes"                   -> handleGroupsList(req, resp);
+            case "/groupes/form"              -> handleGroupsForm(req, resp);
             case "/groupes/students-by-class" -> handleStudentsByClass(req, resp);
+            case "/cours"                     -> handleCourseList(req, resp);
+            case "/cours/form"                -> handleCourseForm(req, resp);
             default -> req.getRequestDispatcher("/WEB-INF/views/home/scolarite.jsp").forward(req, resp);
         }
     }
@@ -39,7 +43,8 @@ public class ScolariteServlet extends HttpServlet {
         switch (action) {
             case "/classes/save"             -> handleSave(req, resp);
             case "/classes/save-students"    -> handleSaveStudents(req, resp);
-            case "/groupes/save"             -> handleGroupeSave(req, resp);
+            case "/groupes/save"             -> handleGroupSave(req, resp);
+            case "/cours/save"               -> handleCourseSave(req, resp);
         }
     }
 
@@ -100,13 +105,13 @@ public class ScolariteServlet extends HttpServlet {
 
     //====== Groupes ======//
 
-    private void handleGroupesList(HttpServletRequest req, HttpServletResponse resp)
+    private void handleGroupsList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setAttribute("groupes", groupService.findAll());
         req.getRequestDispatcher("/WEB-INF/views/scolarite/groups.jsp").forward(req, resp);
     }
 
-    private void handleGroupesForm(HttpServletRequest req, HttpServletResponse resp)
+    private void handleGroupsForm(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String idParam = req.getParameter("id");
         if (idParam != null) {
@@ -152,7 +157,7 @@ public class ScolariteServlet extends HttpServlet {
         resp.getWriter().write(json.toString());
     }
 
-    private void handleGroupeSave(HttpServletRequest req, HttpServletResponse resp)
+    private void handleGroupSave(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String idParam  = req.getParameter("id");
         String name     = req.getParameter("name").trim();
@@ -162,7 +167,7 @@ public class ScolariteServlet extends HttpServlet {
 
         if (name.isEmpty() || classId == null) {
             req.setAttribute("error", "Le nom et la classe sont obligatoires.");
-            handleGroupesForm(req, resp); return;
+            handleGroupsForm(req, resp); return;
         }
         if (groupService.nameExistsInClass(name, classId, id)) {
             req.setAttribute("error", "Un groupe avec ce nom existe déjà dans cette classe.");
@@ -184,4 +189,48 @@ public class ScolariteServlet extends HttpServlet {
         else            groupService.update(id, name, classId, userIds);
         resp.sendRedirect(req.getContextPath() + "/scolarite/groupes");
     }
+
+    // ===== Cours ===== //
+
+    private void handleCourseList(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        req.setAttribute("cours", courseService.findAll());
+        req.getRequestDispatcher("/WEB-INF/views/scolarite/course.jsp").forward(req, resp);
+    }
+
+    private void handleCourseForm(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        req.setAttribute("classes",     classService.findAll());
+        req.setAttribute("enseignants", courseService.findAllEnseignants());
+        req.getRequestDispatcher("/WEB-INF/views/scolarite/courseForm.jsp").forward(req, resp);
+    }
+
+    private void handleCourseSave(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        String name       = req.getParameter("name").trim();
+        String classIdStr = req.getParameter("classId");
+        String respIdStr  = req.getParameter("responsableId");
+
+        Long classId = (classIdStr != null && !classIdStr.isEmpty()) ? Long.parseLong(classIdStr) : null;
+        Long respId  = (respIdStr  != null && !respIdStr.isEmpty())  ? Long.parseLong(respIdStr)  : null;
+
+        if (name.isEmpty() || classId == null || respId == null) {
+            req.setAttribute("error", "Tous les champs sont obligatoires.");
+            req.setAttribute("classes",     classService.findAll());
+            req.setAttribute("enseignants", courseService.findAllEnseignants());
+            req.getRequestDispatcher("/WEB-INF/views/scolarite/courseForm.jsp").forward(req, resp);
+            return;
+        }
+        if (courseService.existsForClass(name, classId, null)) {
+            req.setAttribute("error", "Un cours « " + name + " » existe déjà pour cette classe.");
+            req.setAttribute("classes",     classService.findAll());
+            req.setAttribute("enseignants", courseService.findAllEnseignants());
+            req.getRequestDispatcher("/WEB-INF/views/scolarite/courseForm.jsp").forward(req, resp);
+            return;
+        }
+
+        courseService.create(name, classId, respId);
+        resp.sendRedirect(req.getContextPath() + "/scolarite/cours");
+    }
+
 }

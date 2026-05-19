@@ -54,6 +54,14 @@
       </div>
     </a>
 
+    <a href="${pageContext.request.contextPath}/scolarite/cours" class="nav-card">
+      <div class="nav-icon">🎓</div>
+      <div>
+        <div class="nav-card-title">Cours & Séances</div>
+        <div class="nav-card-sub">Créer et planifier les cours</div>
+      </div>
+    </a>
+
   </div>
 </main>
 
