@@ -80,23 +80,35 @@
         </div>
 
         <div class="card" id="studentsCard" style="margin-bottom:0">
-          <div class="card-header" style="display:flex; align-items:center; gap:.75rem">
-            <input type="checkbox" id="checkAll" style="accent-color:var(--rouge); width:16px; height:16px">
-            <span>Étudiants</span>
-            <span style="font-weight:400; font-size:.8rem; color:var(--txt-muted)">— cochez les membres du groupe</span>
+          <div class="card-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.75rem">
+            <span>
+              Étudiants
+              <span style="font-weight:400; font-size:.8rem; color:var(--txt-muted); margin-left:.5rem">— cochez les membres du groupe</span>
+            </span>
+            <div style="position:relative">
+              <input type="text" class="search-bar" placeholder="Rechercher un étudiant…"
+                     oninput="filterCheckTable('studentsTbody', this.value)"
+                     style="width:240px">
+            </div>
           </div>
-          <table class="check-table">
-           <thead>
-             <tr>
-               <th><label for="checkAll" style="cursor:pointer">✓</label></th>
-               <th>Étudiant</th>
-               <th>Formation</th>
-               <th>Groupe actuel</th>
-             </tr>
-           </thead>
-            <tbody id="studentsTbody">
+          <table class="check-table" id="groupStudentsTable">
+            <thead>
               <tr>
-                <td colspan="5" id="selectHint" class="select-class-hint">
+                <th style="cursor:default"></th>
+                <th onclick="sortCheckTable('groupStudentsTable', 1, this)" data-dir="asc">
+                  Étudiant <span class="sort-icon">↕</span>
+                </th>
+                <th onclick="sortCheckTable('groupStudentsTable', 2, this)" data-dir="asc">
+                  Formation <span class="sort-icon">↕</span>
+                </th>
+                <th onclick="sortCheckTable('groupStudentsTable', 3, this)" data-dir="asc">
+                  Groupe actuel <span class="sort-icon">↕</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="studentsTbody">
+              <tr id="selectHint">
+                <td colspan="4" class="select-class-hint">
                   Sélectionnez d'abord une classe pour voir ses étudiants.
                 </td>
               </tr>
@@ -105,8 +117,10 @@
         </div>
 
         <div class="form-footer">
-          <a href="${pageContext.request.contextPath}/scolarite/groupes" class="btn btn-secondary">Annuler</a>
-          <button type="submit" class="btn btn-primary">
+<a href="${pageContext.request.contextPath}/scolarite/groupes"
+   class="btn btn-secondary"
+   onclick="return confirmCancel(event)">Annuler</a>
+   <button type="submit" class="btn btn-primary">
             <%= isEdit ? "Enregistrer les modifications" : "Créer le groupe" %>
           </button>
         </div>
