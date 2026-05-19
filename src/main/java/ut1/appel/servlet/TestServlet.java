@@ -188,13 +188,13 @@ public class TestServlet extends HttpServlet {
         // ============================================================
         Justification justifMarc = new Justification();
         justifMarc.setUser(marc);
-        justifMarc.setFileUrl("/resources/assets/justifications/justif_marc.pdf");
+        justifMarc.setFileUrl("/justifications/las_vegas.jpg");
         justifMarc.setDepositDate(LocalDate.now().minusDays(1));
         justifMarc.setStatus(JustificationStatus.APPROVED);
 
         Justification justifAlice = new Justification();
         justifAlice.setUser(alice);
-        justifAlice.setFileUrl("/resources/assets/justifications/justif_alice.pdf");
+        justifAlice.setFileUrl("/justifications/las_vegas.jpg");
         justifAlice.setDepositDate(LocalDate.now());
         justifAlice.setStatus(JustificationStatus.PENDING);
 

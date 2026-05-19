@@ -103,7 +103,7 @@ public class ScolariteServlet extends HttpServlet {
     private void handleGroupesList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setAttribute("groupes", groupService.findAll());
-        req.getRequestDispatcher("/WEB-INF/views/scolarite/groupes.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/scolarite/groups.jsp").forward(req, resp);
     }
 
     private void handleGroupesForm(HttpServletRequest req, HttpServletResponse resp)

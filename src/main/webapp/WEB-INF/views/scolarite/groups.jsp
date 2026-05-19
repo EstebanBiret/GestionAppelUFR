@@ -66,20 +66,8 @@
 </main>
 
 <script>
-  const contextPath = '<%= request.getContextPath() %>';
-  let selectedId = null;
-
-  function selectGroupe(id, row) {
-    document.querySelectorAll('#groupesTable tbody tr').forEach(r => r.classList.remove('selected'));
-    row.classList.add('selected');
-    document.getElementById('grp_' + id).checked = true;
-    selectedId = id;
-    document.getElementById('btnModifier').disabled = false;
-  }
-
-  function goEdit() {
-    if (selectedId) window.location.href = contextPath + '/scolarite/groupes/form?id=' + selectedId;
-  }
+  window._contextPath = '<%= request.getContextPath() %>';
 </script>
+<script src="${pageContext.request.contextPath}/js/groups.js"></script>
 </body>
 </html>
