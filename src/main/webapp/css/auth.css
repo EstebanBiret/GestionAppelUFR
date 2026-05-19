@@ -9,15 +9,6 @@ body {
     padding: 2rem 1rem;
 }
 
-body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 10px;
-    background: linear-gradient(90deg, var(--rouge, #C8102E) 0%, var(--rouge-dk, #A00C24) 100%);
-    z-index: 10;
-}
-
 .auth-header {
     text-align: center;
     margin-bottom: 1.5rem;

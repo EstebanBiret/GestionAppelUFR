@@ -79,11 +79,7 @@
             <td>
               <div class="user-cell">
                 <div class="avatar">
-                  <% if (u.getPicturePath() != null && !u.getPicturePath().isEmpty()) { %>
-                    <img src="${pageContext.request.contextPath}/images/users/<%= u.getPicturePath() %>" alt="">
-                  <% } else { %>
-                    <img src="${pageContext.request.contextPath}/images/users/default.jpg" alt="">
-                  <% } %>
+                    <img src="${pageContext.request.contextPath}/<%= u.getPicturePath() %>" alt="">
                 </div>
                 <div>
                   <div class="user-cell-name"><%= u.getFirstName() %> <%= u.getLastName() %></div>
@@ -149,11 +145,7 @@
             <td>
               <div class="user-cell">
                 <div class="avatar">
-                  <% if (u.getPicturePath() != null && !u.getPicturePath().isEmpty()) { %>
-                    <img src="${pageContext.request.contextPath}/images/users/<%= u.getPicturePath() %>" alt="">
-                  <% } else { %>
-                    <img src="${pageContext.request.contextPath}/images/users/default.jpg" alt="">
-                  <% } %>
+                    <img src="${pageContext.request.contextPath}/<%= u.getPicturePath() %>" alt="">
                 </div>
                 <div>
                   <div class="user-cell-name"><%= u.getFirstName() %> <%= u.getLastName() %></div>
