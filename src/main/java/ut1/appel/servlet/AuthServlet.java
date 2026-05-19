@@ -4,11 +4,18 @@ import ut1.appel.entity.Users;
 import ut1.appel.filter.AuthFilter;
 import ut1.appel.service.UserService;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @WebServlet("/auth/*")
+@MultipartConfig
 public class AuthServlet extends HttpServlet {
 
     private final UserService userService = new UserService();
@@ -49,11 +56,21 @@ public class AuthServlet extends HttpServlet {
     private void handleRegister(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        String firstName = req.getParameter("firstName").trim();
-        String lastName  = req.getParameter("lastName").trim();
-        String email     = req.getParameter("email").trim();
+        String firstName = req.getParameter("firstName");
+        String lastName  = req.getParameter("lastName");
+        String email     = req.getParameter("email");
         String password  = req.getParameter("password");
         String confirm   = req.getParameter("confirmPassword");
+
+        if (firstName == null || lastName == null || email == null || password == null || confirm == null) {
+            req.setAttribute("error", "Tous les champs sont obligatoires.");
+            req.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(req, resp);
+            return;
+        }
+
+        firstName = firstName.trim();
+        lastName  = lastName.trim();
+        email     = email.trim();
 
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             req.setAttribute("error", "Tous les champs sont obligatoires.");
@@ -73,28 +90,56 @@ public class AuthServlet extends HttpServlet {
             return;
         }
 
-        Users newUser = userService.register(firstName, lastName, email, password);
+        String picturePath = "images/users/default.jpg";
+        Part filePart = req.getPart("profilePicture");
+
+        if (filePart != null && filePart.getSize() > 0) {
+            String originalFileName = filePart.getSubmittedFileName();
+            String extension = "";
+
+            if (originalFileName != null && originalFileName.contains(".")) {
+                extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            }
+
+            String uniqueFileName = UUID.randomUUID() + extension;
+            String uploadDir = getServletContext().getInitParameter("uploadDir");
+
+            Path uploadPath = Paths.get(uploadDir);
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            Path targetFilePath = uploadPath.resolve(uniqueFileName);
+
+            Files.copy(filePart.getInputStream(), targetFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+            picturePath = "images/users/" + uniqueFileName;
+        }
+
+        Users newUser = userService.register(firstName, lastName, email, password, picturePath);
         req.getSession().setAttribute("currentUser", newUser);
         resp.sendRedirect(req.getContextPath() + "/auth/pending");
     }
 
+
     private void handleLogin(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        String email    = req.getParameter("email").trim();
+        String email    = req.getParameter("email");
         String password = req.getParameter("password");
 
-        Users user = userService.findByEmail(email);
-
-        if (user == null) {
-            req.setAttribute("error", "Aucun compte trouvé avec cet email.");
-            req.setAttribute("emailValue", email);
+        if (email == null || password == null) {
+            req.setAttribute("error", "Champs manquants.");
             req.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(req, resp);
             return;
         }
 
-        if (!user.getPassword().equals(UserService.hashPassword(password))) {
-            req.setAttribute("error", "Mot de passe incorrect.");
+        email = email.trim();
+        Users user = userService.findByEmail(email);
+
+        if (user == null || !user.getPassword().equals(UserService.hashPassword(password))) {
+            req.setAttribute("error", "Mot de passe ou email incorrect.");
             req.setAttribute("emailValue", email);
             req.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(req, resp);
             return;

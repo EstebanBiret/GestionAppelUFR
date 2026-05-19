@@ -40,7 +40,7 @@ public class UserService {
         }
     }
 
-    public Users register(String firstName, String lastName, String email, String password) {
+    public Users register(String firstName, String lastName, String email, String password, String picturePath) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
 
@@ -50,6 +50,7 @@ public class UserService {
             u.setEmail(email);
             u.setPassword(hashPassword(password));
             u.setRole(Role.PENDING);
+            u.setPicturePath(picturePath);
 
             session.persist(u);
             tx.commit();

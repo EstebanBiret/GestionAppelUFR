@@ -1,23 +1,50 @@
 <%@ page session="false" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<html>
-<head><title>Connexion</title></head>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth.css">
+</head>
 <body>
-<h2>Connexion</h2>
 
-<% if ("true".equals(request.getParameter("registered"))) { %>
-    <p style="color:green">Compte créé ! En attente d'activation par un administrateur.</p>
-<% } %>
-<% if (request.getAttribute("error") != null) { %>
-    <p style="color:red"><%= request.getAttribute("error") %></p>
-<% } %>
+<div class="auth-header">
+    <img src="${pageContext.request.contextPath}/images/logo_utc.jpg" alt="Université Toulouse Capitole">
+</div>
 
-<form method="post" action="${pageContext.request.contextPath}/auth/login">
-    <input type="email"    name="email"    placeholder="Email"         required><br>
-    <input type="password" name="password" placeholder="Mot de passe"  required><br>
-    <button type="submit">Se connecter</button>
-</form>
+<div class="auth-container login">
+    <h2>Connexion</h2>
 
-<a href="${pageContext.request.contextPath}/auth/register">Créer un compte</a>
+    <% if (request.getAttribute("error") != null) { %>
+    <div class="error-msg">
+        <%= request.getAttribute("error") %>
+    </div>
+    <% } %>
+
+    <form method="post" action="${pageContext.request.contextPath}/auth/login">
+        <div class="form-group">
+            <label for="email" class="form-label">Adresse email</label>
+            <input type="email" class="form-control" id="email" name="email"
+                   placeholder="nom@exemple.com"
+                   value="${emailValue}"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="password" name="password"
+                   placeholder="Mot de passe" required>
+        </div>
+        <div class="form-action">
+            <button type="submit" class="btn btn-primary">Se connecter</button>
+        </div>
+    </form>
+
+    <div class="form-footer-link">
+        <a href="${pageContext.request.contextPath}/auth/register">Créer un compte</a>
+    </div>
+</div>
 </body>
 </html>

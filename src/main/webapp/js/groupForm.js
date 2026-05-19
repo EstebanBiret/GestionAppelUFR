@@ -33,8 +33,8 @@ async function loadStudents(classId, currentGroupId, preCheckedIds) {
       ? `<span class="pill" style="background:var(--gris);color:var(--txt-muted)">${s.groupName}</span>`
       : `<span style="color:var(--txt-muted);font-size:.78rem">Aucun groupe</span>`;
     const avatarSrc = s.picturePath
-      ? `${window._contextPath}/images/users/${s.picturePath}`
-      : `${window._contextPath}/images/users/default.jpg`;
+      ? `${window._contextPath}/${s.picturePath}`
+      : `${window._contextPath}/default.jpg`;
 
     return `
       <tr class="${checked ? 'checked-row' : ''}" onclick="toggleRow(this)">
