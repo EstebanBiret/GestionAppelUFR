@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/scolarite/*")
-public class ScolariteServlet extends HttpServlet {
+public class ScholarshipServlet extends HttpServlet {
 
     private final StudentClassService classService = new StudentClassService();
     private final StudentGroupService groupService = new StudentGroupService();
@@ -28,7 +28,7 @@ public class ScolariteServlet extends HttpServlet {
             case "/groupes"                   -> handleGroupesList(req, resp);
             case "/groupes/form"              -> handleGroupesForm(req, resp);
             case "/groupes/students-by-class" -> handleStudentsByClass(req, resp);
-            default -> req.getRequestDispatcher("/WEB-INF/views/home/scolarite.jsp").forward(req, resp);
+            default -> req.getRequestDispatcher("/WEB-INF/views/home/scholarship.jsp").forward(req, resp);
         }
     }
 
@@ -48,7 +48,7 @@ public class ScolariteServlet extends HttpServlet {
     private void handleClassesList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setAttribute("classes", classService.findAll());
-        req.getRequestDispatcher("/WEB-INF/views/scolarite/classes.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/scholarship/classes.jsp").forward(req, resp);
     }
 
     private void handleClassesForm(HttpServletRequest req, HttpServletResponse resp)
@@ -65,7 +65,7 @@ public class ScolariteServlet extends HttpServlet {
         }
         req.setAttribute("classes", classService.findAll());
         req.setAttribute("students", classService.findAllStudents());
-        req.getRequestDispatcher("/WEB-INF/views/scolarite/classForm.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/scholarship/classForm.jsp").forward(req, resp);
     }
 
     private void handleSave(HttpServletRequest req, HttpServletResponse resp)
@@ -82,7 +82,7 @@ public class ScolariteServlet extends HttpServlet {
             if (id != null) req.setAttribute("studentClass", classService.findById(id));
             req.setAttribute("classes", classService.findAll());
             req.setAttribute("students", classService.findAllStudents());
-            req.getRequestDispatcher("/WEB-INF/views/scolarite/classForm.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/scholarship/classForm.jsp").forward(req, resp);
             return;
         }
         if (id == null) classService.create(name);
@@ -103,7 +103,7 @@ public class ScolariteServlet extends HttpServlet {
     private void handleGroupesList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setAttribute("groupes", groupService.findAll());
-        req.getRequestDispatcher("/WEB-INF/views/scolarite/groups.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/scholarship/groups.jsp").forward(req, resp);
     }
 
     private void handleGroupesForm(HttpServletRequest req, HttpServletResponse resp)
@@ -120,7 +120,7 @@ public class ScolariteServlet extends HttpServlet {
             }
         }
         req.setAttribute("classes", classService.findAll());
-        req.getRequestDispatcher("/WEB-INF/views/scolarite/groupForm.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/scholarship/groupForm.jsp").forward(req, resp);
     }
 
     private void handleStudentsByClass(HttpServletRequest req, HttpServletResponse resp)
@@ -169,7 +169,7 @@ public class ScolariteServlet extends HttpServlet {
             if (id != null) req.setAttribute("groupe", groupService.findById(id));
             req.setAttribute("classes", classService.findAll());
             req.setAttribute("students", groupService.findStudentsByClass(classId));
-            req.getRequestDispatcher("/WEB-INF/views/scolarite/groupForm.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/scholarship/groupForm.jsp").forward(req, resp);
             return;
         }
 
