@@ -44,3 +44,77 @@
 }
 .nav-card-title { font-weight: 600; font-size: .9rem; }
 .nav-card-sub { font-size: .78rem; color: var(--txt-muted); margin-top: .15rem; }
+
+.badge {
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+.badge-pending {
+    background-color: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fde68a;
+}
+.badge-accepted {
+    background-color: #d1fae5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+}
+.badge-rejected {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.card-body-flush {
+    padding: 0;
+}
+
+.empty-state {
+    padding: 3rem;
+    text-align: center;
+    color: var(--txt-muted);
+}
+.empty-state-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.table-suivi {
+    margin: 0;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-suivi thead tr {
+    background-color: var(--rouge);
+    color: white;
+    text-align: left;
+}
+
+.table-suivi th,
+.table-suivi td {
+    padding: 1rem;
+}
+
+.table-suivi tbody tr {
+    border-bottom: 1px solid var(--gris-bd);
+}
+
+.cell-date {
+    font-weight: 500;
+}
+.cell-comment,
+.cell-period {
+    color: var(--txt-muted);
+    font-size: 0.9rem;
+}
+.cell-status {
+    text-align: center;
+}
+.text-italic-muted {
+    color: var(--txt-muted);
+    font-style: italic;
+}
