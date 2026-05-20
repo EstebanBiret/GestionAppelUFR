@@ -57,6 +57,11 @@
                     <input type="file" id="justificatifFile" name="justificatifFile" class="form-control" accept=".pdf, image/*" required>
                 </div>
 
+                <div class="form-group" style="margin-top: 1rem; margin-bottom: 1rem;">
+                    <label for="comment" class="form-label">Commentaire (facultatif)</label>
+                    <textarea id="comment" name="comment" class="form-control" rows="3" placeholder="Précisez les dates ou la nature de l'absence..."></textarea>
+                </div>
+
                 <p style="font-size: 0.85rem; color: var(--txt-muted); margin-bottom: 1.5rem; line-height: 1.5;">
                     <em>Note : Votre justificatif sera transmis au service de la scolarité.
                         Un gestionnaire se chargera de l'étudier et de l'associer à vos absences correspondantes.

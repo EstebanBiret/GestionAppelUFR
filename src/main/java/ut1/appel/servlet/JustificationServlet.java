@@ -42,6 +42,9 @@ public class JustificationServlet extends HttpServlet {
 
         Part filePart = req.getPart("justificatifFile");
 
+        // NOUVEAU : Récupération du commentaire
+        String comment = req.getParameter("comment");
+
         if (filePart == null || filePart.getSize() == 0) {
             req.setAttribute("error", "Veuillez joindre un document justificatif.");
             req.getRequestDispatcher("/WEB-INF/views/student/justification.jsp").forward(req, resp);
@@ -69,7 +72,7 @@ public class JustificationServlet extends HttpServlet {
 
             String fileUrl = "justificatifs/" + uniqueFileName;
 
-            justificationService.declareAbsence(currentUser, fileUrl);
+            justificationService.declareAbsence(currentUser, fileUrl, comment);
 
             req.setAttribute("success", "Votre justificatif a été transmis avec succès à la scolarité.");
             req.getRequestDispatcher("/WEB-INF/views/student/justification.jsp").forward(req, resp);

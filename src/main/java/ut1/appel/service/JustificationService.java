@@ -11,7 +11,10 @@ import java.time.LocalDate;
 
 public class JustificationService {
 
-    public Justification declareAbsence(Users student, String fileUrl) {
+    /**
+     * Crée et sauvegarde une nouvelle demande de justification
+     */
+    public Justification declareAbsence(Users student, String fileUrl, String comment) {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
@@ -21,7 +24,11 @@ public class JustificationService {
                 justification.setUser(student);
                 justification.setFileUrl(fileUrl);
                 justification.setDepositDate(LocalDate.now());
+                justification.setComment(comment);
                 justification.setStatus(JustificationStatus.PENDING);
+
+                justification.setStartDate(null);
+                justification.setEndDate(null);
 
                 session.persist(justification);
                 tx.commit();

@@ -25,6 +25,12 @@ public class Justification {
 
     private LocalDate depositDate;
 
+    @Column(columnDefinition = "TEXT")
+    private String comment;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
+
     @Enumerated(EnumType.STRING)
     private JustificationStatus status;
 
