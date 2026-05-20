@@ -195,14 +195,14 @@ public class ScholarshipServlet extends HttpServlet {
     private void handleCourseList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setAttribute("cours", courseService.findAll());
-        req.getRequestDispatcher("/WEB-INF/views/scolarite/course.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/scholarship/course.jsp").forward(req, resp);
     }
 
     private void handleCourseForm(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setAttribute("classes",     classService.findAll());
-        req.setAttribute("enseignants", courseService.findAllEnseignants());
-        req.getRequestDispatcher("/WEB-INF/views/scolarite/courseForm.jsp").forward(req, resp);
+        req.setAttribute("enseignants", courseService.findAllTeachers());
+        req.getRequestDispatcher("/WEB-INF/views/scholarship/courseForm.jsp").forward(req, resp);
     }
 
     private void handleCourseSave(HttpServletRequest req, HttpServletResponse resp)
@@ -217,15 +217,15 @@ public class ScholarshipServlet extends HttpServlet {
         if (name.isEmpty() || classId == null || respId == null) {
             req.setAttribute("error", "Tous les champs sont obligatoires.");
             req.setAttribute("classes",     classService.findAll());
-            req.setAttribute("enseignants", courseService.findAllEnseignants());
-            req.getRequestDispatcher("/WEB-INF/views/scolarite/courseForm.jsp").forward(req, resp);
+            req.setAttribute("enseignants", courseService.findAllTeachers());
+            req.getRequestDispatcher("/WEB-INF/views/scholarship/courseForm.jsp").forward(req, resp);
             return;
         }
         if (courseService.existsForClass(name, classId, null)) {
             req.setAttribute("error", "Un cours « " + name + " » existe déjà pour cette classe.");
             req.setAttribute("classes",     classService.findAll());
-            req.setAttribute("enseignants", courseService.findAllEnseignants());
-            req.getRequestDispatcher("/WEB-INF/views/scolarite/courseForm.jsp").forward(req, resp);
+            req.setAttribute("enseignants", courseService.findAllTeachers());
+            req.getRequestDispatcher("/WEB-INF/views/scholarship/courseForm.jsp").forward(req, resp);
             return;
         }
 

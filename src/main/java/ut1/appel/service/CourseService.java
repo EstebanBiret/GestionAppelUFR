@@ -50,7 +50,7 @@ public class CourseService {
         }
     }
 
-    public List<Users> findAllEnseignants() {
+    public List<Users> findAllTeachers() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
                     "FROM Users u WHERE u.role = 'ENSEIGNANT' ORDER BY u.lastName, u.firstName",
