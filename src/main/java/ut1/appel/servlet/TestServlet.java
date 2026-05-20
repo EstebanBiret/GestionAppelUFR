@@ -34,6 +34,9 @@ public class TestServlet extends HttpServlet {
         // ============================================================
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
+
+            session.createNativeMutationQuery("DELETE FROM session_groups").executeUpdate();
+            session.createNativeMutationQuery("DELETE FROM session_classes").executeUpdate();
             session.createMutationQuery("DELETE FROM AttendanceRow").executeUpdate();
             session.createMutationQuery("DELETE FROM AttendanceSheet").executeUpdate();
             session.createMutationQuery("DELETE FROM Justification").executeUpdate();
@@ -42,6 +45,7 @@ public class TestServlet extends HttpServlet {
             session.createMutationQuery("DELETE FROM Users").executeUpdate();
             session.createMutationQuery("DELETE FROM StudentGroup").executeUpdate();
             session.createMutationQuery("DELETE FROM StudentClass").executeUpdate();
+
             tx.commit();
             out.println("Toutes les tables vidées\n");
         } catch (Exception e) {
@@ -198,7 +202,7 @@ public class TestServlet extends HttpServlet {
         justifMarc.setStatus(JustificationStatus.APPROUVEE);
         justifMarc.setComment("pitié acceptez");
         justifMarc.setStartDate(LocalDateTime.of(2026, 5, 1, 0, 0));
-        justifMarc.setEndDate(LocalDateTime.of(2026, 5, 25, 23, 59, 59));
+        justifMarc.setEndDate(LocalDateTime.of(2026, 5, 25, 5, 59, 59));
 
         Justification justifAlice = new Justification();
         justifAlice.setUser(alice);
