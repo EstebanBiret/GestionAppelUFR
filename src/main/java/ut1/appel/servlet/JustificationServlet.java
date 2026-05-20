@@ -41,6 +41,9 @@ public class JustificationServlet extends HttpServlet {
             case "/liste":
                 List<Justification> list = justificationService.findByUser(currentUser);
                 req.setAttribute("justifications", list);
+                if ("true".equals(req.getParameter("success"))) {
+                    req.setAttribute("success", "Votre justificatif a été transmis avec succès à la scolarité.");
+                }
                 req.getRequestDispatcher("/WEB-INF/views/student/justificationsList.jsp").forward(req, resp);
                 break;
 
@@ -100,10 +103,7 @@ public class JustificationServlet extends HttpServlet {
             String fileUrl = "justifications/" + uniqueFileName;
 
             justificationService.save(currentUser, fileUrl, comment);
-
-            req.setAttribute("success", "Votre justificatif a été transmis avec succès à la scolarité.");
-            req.getRequestDispatcher("/WEB-INF/views/student/justification.jsp").forward(req, resp);
-
+            resp.sendRedirect(req.getContextPath() + "/etudiant/justification/liste?success=true");
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("error", "Une erreur technique est survenue lors de l'envoi de votre fichier.");

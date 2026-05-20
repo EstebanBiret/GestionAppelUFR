@@ -44,6 +44,10 @@
         <a href="${pageContext.request.contextPath}/etudiant">← Tableau de bord</a>
     </div>
 
+    <% if (request.getAttribute("success") != null) { %>
+        <div class="alert-success">✓ <%= request.getAttribute("success") %></div>
+    <% } %>
+
     <div class="card">
         <div class="card-body card-body-flush">
             <% if (justifications == null || justifications.isEmpty()) { %>
