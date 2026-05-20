@@ -194,13 +194,16 @@ public class TestServlet extends HttpServlet {
         justifMarc.setUser(marc);
         justifMarc.setFileUrl("justifications/las_vegas.jpg");
         justifMarc.setDepositDate(LocalDate.now().minusDays(1));
-        justifMarc.setStatus(JustificationStatus.APPROVED);
+        justifMarc.setStatus(JustificationStatus.APPROUVEE);
+        justifMarc.setComment("pitié acceptez");
+        justifMarc.setStartDate(LocalDate.of(2026, 5, 1));
+        justifMarc.setEndDate(LocalDate.of(2026, 5, 28));
 
         Justification justifAlice = new Justification();
         justifAlice.setUser(alice);
         justifAlice.setFileUrl("justifications/las_vegas.jpg");
         justifAlice.setDepositDate(LocalDate.now());
-        justifAlice.setStatus(JustificationStatus.PENDING);
+        justifAlice.setStatus(JustificationStatus.EN_ATTENTE);
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
@@ -218,7 +221,7 @@ public class TestServlet extends HttpServlet {
         AttendanceRow rowAlice = makeRow(alice, sheetDAI, AttendanceRowStatus.ABSENT, false, justifAlice);
         AttendanceRow rowBob   = makeRow(bob,   sheetDAI, AttendanceRowStatus.PRESENT, false, null);
         AttendanceRow rowMarc  = makeRow(marc,  sheetSOA, AttendanceRowStatus.ABJ,    false, justifMarc);
-        AttendanceRow rowLea   = makeRow(lea,   sheetSOA, AttendanceRowStatus.LATE, true, null);
+        AttendanceRow rowLea   = makeRow(lea,   sheetSOA, AttendanceRowStatus.EN_RETARD, true, null);
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();

@@ -1,24 +1,23 @@
 package ut1.appel.servlet;
 
-import ut1.appel.entity.StudentClass;
-import ut1.appel.entity.StudentGroup;
-import ut1.appel.entity.Users;
-import ut1.appel.service.CourseService;
-import ut1.appel.service.StudentClassService;
-import ut1.appel.service.StudentGroupService;
+import ut1.appel.entity.*;
+import ut1.appel.service.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @WebServlet("/scolarite/*")
 public class ScholarshipServlet extends HttpServlet {
 
-    private final StudentClassService classService = new StudentClassService();
-    private final StudentGroupService groupService = new StudentGroupService();
-    private final CourseService courseService = new CourseService();
+    private final StudentClassService   classService   = new StudentClassService();
+    private final StudentGroupService   groupService   = new StudentGroupService();
+    private final CourseService         courseService  = new CourseService();
+    private final SessionService        sessionService = new SessionService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -32,6 +31,8 @@ public class ScholarshipServlet extends HttpServlet {
             case "/groupes/students-by-class" -> handleStudentsByClass(req, resp);
             case "/cours"                     -> handleCourseList(req, resp);
             case "/cours/form"                -> handleCourseForm(req, resp);
+            case "/seances"                   -> handleSeancesList(req, resp);
+            case "/seances/form"              -> handleSeancesForm(req, resp);
             default -> req.getRequestDispatcher("/WEB-INF/views/home/scholarship.jsp").forward(req, resp);
         }
     }
@@ -41,10 +42,11 @@ public class ScholarshipServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = req.getPathInfo() == null ? "/" : req.getPathInfo();
         switch (action) {
-            case "/classes/save"             -> handleSave(req, resp);
-            case "/classes/save-students"    -> handleSaveStudents(req, resp);
-            case "/groupes/save"             -> handleGroupSave(req, resp);
-            case "/cours/save"               -> handleCourseSave(req, resp);
+            case "/classes/save"          -> handleSave(req, resp);
+            case "/classes/save-students" -> handleSaveStudents(req, resp);
+            case "/groupes/save"          -> handleGroupSave(req, resp);
+            case "/cours/save"            -> handleCourseSave(req, resp);
+            case "/seances/save"          -> handleSeanceSave(req, resp);
         }
     }
 
@@ -103,7 +105,7 @@ public class ScholarshipServlet extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + "/scolarite/classes");
     }
 
-    //====== Groupes ======//
+    // ===== Groupes ===== //
 
     private void handleGroupsList(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -132,9 +134,7 @@ public class ScholarshipServlet extends HttpServlet {
             throws IOException {
         String classIdParam = req.getParameter("classId");
         resp.setContentType("application/json;charset=UTF-8");
-        if (classIdParam == null || classIdParam.isEmpty()) {
-            resp.getWriter().write("[]"); return;
-        }
+        if (classIdParam == null || classIdParam.isEmpty()) { resp.getWriter().write("[]"); return; }
         List<Users> students = groupService.findStudentsByClass(Long.parseLong(classIdParam));
         StringBuilder json = new StringBuilder("[");
         for (int i = 0; i < students.size(); i++) {
@@ -153,18 +153,16 @@ public class ScholarshipServlet extends HttpServlet {
                     .append("\"groupName\":").append(groupName != null ? "\"" + groupName + "\"" : "null")
                     .append("}");
         }
-        json.append("]");
-        resp.getWriter().write(json.toString());
+        resp.getWriter().write(json.append("]").toString());
     }
 
     private void handleGroupSave(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String idParam  = req.getParameter("id");
-        String name     = req.getParameter("name").trim();
+        String idParam    = req.getParameter("id");
+        String name       = req.getParameter("name").trim();
         String classIdStr = req.getParameter("classId");
         Long id      = (idParam != null && !idParam.isEmpty()) ? Long.parseLong(idParam) : null;
         Long classId = (classIdStr != null && !classIdStr.isEmpty()) ? Long.parseLong(classIdStr) : null;
-
         if (name.isEmpty() || classId == null) {
             req.setAttribute("error", "Le nom et la classe sont obligatoires.");
             handleGroupsForm(req, resp); return;
@@ -177,14 +175,12 @@ public class ScholarshipServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/views/scholarship/groupForm.jsp").forward(req, resp);
             return;
         }
-
         String[] checkedIds = req.getParameterValues("checkedStudents");
         Long[] userIds = null;
         if (checkedIds != null) {
             userIds = new Long[checkedIds.length];
             for (int i = 0; i < checkedIds.length; i++) userIds[i] = Long.parseLong(checkedIds[i]);
         }
-
         if (id == null) groupService.create(name, classId, userIds);
         else            groupService.update(id, name, classId, userIds);
         resp.sendRedirect(req.getContextPath() + "/scolarite/groupes");
@@ -210,10 +206,8 @@ public class ScholarshipServlet extends HttpServlet {
         String name       = req.getParameter("name").trim();
         String classIdStr = req.getParameter("classId");
         String respIdStr  = req.getParameter("responsableId");
-
         Long classId = (classIdStr != null && !classIdStr.isEmpty()) ? Long.parseLong(classIdStr) : null;
         Long respId  = (respIdStr  != null && !respIdStr.isEmpty())  ? Long.parseLong(respIdStr)  : null;
-
         if (name.isEmpty() || classId == null || respId == null) {
             req.setAttribute("error", "Tous les champs sont obligatoires.");
             req.setAttribute("classes",     classService.findAll());
@@ -228,9 +222,86 @@ public class ScholarshipServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/views/scholarship/courseForm.jsp").forward(req, resp);
             return;
         }
+        Long newCourseId = courseService.create(name, classId, respId);
+        resp.sendRedirect(req.getContextPath() + "/scolarite/cours?courseId=" + newCourseId + "&success=cours");
 
-        courseService.create(name, classId, respId);
-        resp.sendRedirect(req.getContextPath() + "/scolarite/cours");
     }
 
+    // ===== Séances ===== //
+
+    private void handleSeancesList(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        String courseIdParam = req.getParameter("courseId");
+        resp.setContentType("application/json;charset=UTF-8");
+        if (courseIdParam == null || courseIdParam.isEmpty()) { resp.getWriter().write("[]"); return; }
+        List<Session> sessions = sessionService.findByCourse(Long.parseLong(courseIdParam));
+        resp.getWriter().write(sessionService.toJsonArray(sessions));
+    }
+
+    private void handleSeancesForm(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        String courseIdParam = req.getParameter("courseId");
+        if (courseIdParam == null || courseIdParam.isEmpty()) {
+            resp.sendRedirect(req.getContextPath() + "/scolarite/cours"); return;
+        }
+        Course course = courseService.findById(Long.parseLong(courseIdParam));
+        if (course == null) {
+            resp.sendRedirect(req.getContextPath() + "/scolarite/cours"); return;
+        }
+        req.setAttribute("course",      course);
+        req.setAttribute("enseignants", courseService.findAllTeachers());
+        req.setAttribute("groupes",     groupService.findByClass(course.getStudentClass().getId()));
+        req.getRequestDispatcher("/WEB-INF/views/scholarship/sessionForm.jsp").forward(req, resp);
+    }
+
+    private void handleSeanceSave(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        Long courseId;
+        try {
+            courseId = Long.parseLong(req.getParameter("courseId"));
+        } catch (Exception e) {
+            resp.sendRedirect(req.getContextPath() + "/scolarite/cours"); return;
+        }
+
+        String dateParam      = req.getParameter("sessionDate");
+        String startParam     = req.getParameter("startTime");
+        String endParam       = req.getParameter("endTime");
+        String teacherIdParam = req.getParameter("teacherId");
+        String groupIdParam   = req.getParameter("groupId");
+
+        String    error    = null;
+        LocalDate date     = null;
+        LocalTime start    = null;
+        LocalTime end      = null;
+        Long      teacher  = null;
+        Long      groupId  = null;
+
+        try { date    = LocalDate.parse(dateParam); }        catch (Exception e) { error = "Date invalide."; }
+        try { start   = LocalTime.parse(startParam); }      catch (Exception e) { if (error == null) error = "Heure de début invalide."; }
+        try { end     = LocalTime.parse(endParam); }        catch (Exception e) { if (error == null) error = "Heure de fin invalide."; }
+        try { teacher = Long.parseLong(teacherIdParam); }   catch (Exception e) { if (error == null) error = "L'enseignant est obligatoire."; }
+
+        if (groupIdParam != null && !groupIdParam.isEmpty()) {
+            try { groupId = Long.parseLong(groupIdParam); } catch (Exception ignored) {}
+        }
+
+        if (error == null && date != null && date.isBefore(LocalDate.now()))
+            error = "La date ne peut pas être dans le passé.";
+        if (error == null && start != null && end != null && !end.isAfter(start))
+            error = "L'heure de fin doit être supérieure à l'heure de début.";
+
+        if (error != null) {
+            req.setAttribute("error", error);
+            Course course = courseService.findById(courseId);
+            req.setAttribute("course",      course);
+            req.setAttribute("enseignants", courseService.findAllTeachers());
+            if (course != null && course.getStudentClass() != null)
+                req.setAttribute("groupes", groupService.findByClass(course.getStudentClass().getId()));
+            req.getRequestDispatcher("/WEB-INF/views/scholarship/sessionForm.jsp").forward(req, resp);
+            return;
+        }
+
+        sessionService.create(courseId, teacher, date, start, end, groupId);
+        resp.sendRedirect(req.getContextPath() + "/scolarite/cours?courseId=" + courseId + "&success=seance");
+    }
 }

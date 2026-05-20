@@ -31,7 +31,7 @@ public class Users {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.PENDING;
+    private Role role = Role.EN_ATTENTE;
 
     @ManyToOne
     @JoinColumn(name = "class_id")
@@ -44,7 +44,7 @@ public class Users {
     private String picturePath;
 
     public boolean isAdmin() { return role == Role.ADMIN; }
-    public boolean isPending() { return role == Role.PENDING; }
+    public boolean isPending() { return role == Role.EN_ATTENTE; }
     public boolean isEtudiantFI() { return role == Role.ETUDIANT_FI; }
     public boolean isEtudiantFA() { return role == Role.ETUDIANT_FA; }
     public boolean isScolarite() { return role == Role.SCOLARITE; }

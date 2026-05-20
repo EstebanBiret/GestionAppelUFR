@@ -92,7 +92,7 @@
                <% for (Map.Entry<String, String> entry : allRoles.entrySet()) {
                    if (entry.getKey().equals("ADMIN")) continue; %>
                  <option value="<%= entry.getKey() %>"
-                   <%= entry.getKey().equals("PENDING") ? "selected" : "" %>>
+                   <%= entry.getKey().equals("EN_ATTENTE") ? "selected" : "" %>>
                    <%= entry.getValue() %>
                  </option>
                <% } %>

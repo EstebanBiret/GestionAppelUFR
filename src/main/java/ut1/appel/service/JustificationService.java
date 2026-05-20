@@ -21,7 +21,7 @@ public class JustificationService {
                     justification.setFileUrl(fileUrl);
                     justification.setDepositDate(LocalDate.now());
                     justification.setComment(comment);
-                    justification.setStatus(JustificationStatus.PENDING);
+                    justification.setStatus(JustificationStatus.EN_ATTENTE);
 
                     justification.setStartDate(null);
                     justification.setEndDate(null);
