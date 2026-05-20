@@ -37,7 +37,7 @@ public class TestServlet extends HttpServlet {
             session.createMutationQuery("DELETE FROM AttendanceSheet").executeUpdate();
             session.createMutationQuery("DELETE FROM Justification").executeUpdate();
             session.createMutationQuery("DELETE FROM Session").executeUpdate();
-            session.createMutationQuery("DELETE FROM Subject").executeUpdate();
+            session.createMutationQuery("DELETE FROM Course").executeUpdate();
             session.createMutationQuery("DELETE FROM Users").executeUpdate();
             session.createMutationQuery("DELETE FROM StudentGroup").executeUpdate();
             session.createMutationQuery("DELETE FROM StudentClass").executeUpdate();
@@ -88,26 +88,7 @@ public class TestServlet extends HttpServlet {
         }
 
         // ============================================================
-        // STEP 4 — Matières
-        // ============================================================
-        Subject subjectDAI = new Subject();
-        subjectDAI.setName("Développement Agile & Intégration");
-
-        Subject subjectSOA = new Subject();
-        subjectSOA.setName("Architecture SOA");
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
-            session.persist(subjectDAI);
-            session.persist(subjectSOA);
-            tx.commit();
-            out.println("Subjects créés : " + subjectDAI.getName() + ", " + subjectSOA.getName());
-        } catch (Exception e) {
-            out.println("Erreur Subject : " + e.getMessage());
-        }
-
-        // ============================================================
-        // STEP 5 — Utilisateurs
+        // STEP 4 — Utilisateurs
         // ============================================================
         Users admin     = makeUser("admin@ut-capitole.fr",           "admin123",  "Admin",  "Système",  Role.ADMIN,        null, null);
         Users scolarite = makeUser("scolarite@ut-capitole.fr",       "scol123",   "Sophie", "Dupont",   Role.SCOLARITE,    null, null);
@@ -129,25 +110,48 @@ public class TestServlet extends HttpServlet {
         }
 
         // ============================================================
-        // STEP 6 — Cours
+        // STEP 5 — Cours
+        // ============================================================
+        Course coursDAI = new Course();
+        coursDAI.setName("Développement Agile & Intégration");
+        coursDAI.setResponsable(profMartin);
+        coursDAI.setStudentClass(classMIAGE2);
+
+        Course coursSOA = new Course();
+        coursSOA.setName("Architecture SOA");
+        coursSOA.setResponsable(profDurand);
+        coursSOA.setStudentClass(classMIAGE2);
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.persist(coursDAI);
+            session.persist(coursSOA);
+            tx.commit();
+            out.println("Cours créés : " + coursDAI.getName() + ", " + coursSOA.getName());
+        } catch (Exception e) {
+            out.println("Erreur Cours : " + e.getMessage());
+        }
+
+        // ============================================================
+        // STEP 6 — Séances
         // ============================================================
 
         ut1.appel.entity.Session sessionDAI = new ut1.appel.entity.Session();
-        sessionDAI.setSubject(subjectDAI);
+        sessionDAI.setCourse(coursDAI);
         sessionDAI.setSessionDate(LocalDate.now());
         sessionDAI.setStartTime(LocalTime.of(8, 0));
         sessionDAI.setEndTime(LocalTime.of(10, 0));
-        sessionDAI.setSubject(subjectDAI);
+        sessionDAI.setCourse(coursDAI);
         sessionDAI.setTeacher(profMartin);
         sessionDAI.setStudentClasses(Set.of(classMIAGE2));
         sessionDAI.setStudentGroups(Set.of(groupTD1, groupTD2));
 
         ut1.appel.entity.Session sessionSOA = new ut1.appel.entity.Session();
-        sessionSOA.setSubject(subjectSOA);
+        sessionSOA.setCourse(coursSOA);
         sessionSOA.setSessionDate(LocalDate.now().plusDays(1));
         sessionSOA.setStartTime(LocalTime.of(10, 0));
         sessionSOA.setEndTime(LocalTime.of(12, 0));
-        sessionSOA.setSubject(subjectSOA);
+        sessionSOA.setCourse(coursSOA);
         sessionSOA.setTeacher(profDurand);
         sessionSOA.setStudentClasses(Set.of(classMIAGE2));
         sessionSOA.setStudentGroups(Set.of(groupTD2));
@@ -157,7 +161,7 @@ public class TestServlet extends HttpServlet {
             session.persist(sessionDAI);
             session.persist(sessionSOA);
             tx.commit();
-            out.println("Sessions créées : " + sessionDAI.getSubject().getName() + ", " + sessionSOA.getSubject().getName());
+            out.println("Sessions créées : " + sessionDAI.getCourse().getName() + ", " + sessionSOA.getCourse().getName());
         } catch (Exception e) {
             out.println("Erreur Sessions : " + e.getMessage());
         }
@@ -233,8 +237,8 @@ public class TestServlet extends HttpServlet {
             out.println("Utilisateurs          : " + session.createQuery("SELECT COUNT(u) FROM Users u", Long.class).uniqueResult());
             out.println("Classes   : " + session.createQuery("SELECT COUNT(c) FROM StudentClass c", Long.class).uniqueResult());
             out.println("Groupes   : " + session.createQuery("SELECT COUNT(g) FROM StudentGroup g", Long.class).uniqueResult());
-            out.println("Matières       : " + session.createQuery("SELECT COUNT(s) FROM Subject s", Long.class).uniqueResult());
-            out.println("Cours       : " + session.createQuery("SELECT COUNT(s) FROM Session s", Long.class).uniqueResult());
+            out.println("Cours       : " + session.createQuery("SELECT COUNT(s) FROM Course s", Long.class).uniqueResult());
+            out.println("Séances       : " + session.createQuery("SELECT COUNT(s) FROM Session s", Long.class).uniqueResult());
             out.println("Feuilles de présence: " + session.createQuery("SELECT COUNT(a) FROM AttendanceSheet a", Long.class).uniqueResult());
             out.println("Justificatifs d'absence : " + session.createQuery("SELECT COUNT(j) FROM Justification j", Long.class).uniqueResult());
             out.println("Lignes feuilles de présence : " + session.createQuery("SELECT COUNT(r) FROM AttendanceRow r", Long.class).uniqueResult());

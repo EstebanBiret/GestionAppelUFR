@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Subject {
+public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +20,13 @@ public class Subject {
 
     @Column(nullable = false)
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "responsable_id")
+    private Users responsable;
+
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private StudentClass studentClass;
+
 }
