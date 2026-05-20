@@ -152,12 +152,33 @@ public class TestServlet extends HttpServlet {
         sessionSOA.setStudentClasses(Set.of(classMIAGE2));
         sessionSOA.setStudentGroups(Set.of(groupTD2));
 
+        ut1.appel.entity.Session sessionTEST1 = new ut1.appel.entity.Session();
+        sessionTEST1.setSubject(subjectDAI);
+        sessionTEST1.setSessionDate(LocalDate.now());
+        sessionTEST1.setStartTime(LocalTime.of(18, 0));
+        sessionTEST1.setEndTime(LocalTime.of(20, 0));
+        sessionTEST1.setTeacher(profMartin);
+        sessionTEST1.setStudentClasses(Set.of(classMIAGE2));
+        sessionTEST1.setStudentGroups(Set.of(groupTD1));
+
+        ut1.appel.entity.Session sessionTEST2 = new ut1.appel.entity.Session();
+        sessionTEST2.setSubject(subjectDAI);
+        sessionTEST2.setSessionDate(LocalDate.now().plusDays(1));
+        sessionTEST2.setStartTime(LocalTime.of(18, 0));
+        sessionTEST2.setEndTime(LocalTime.of(20, 0));
+        sessionTEST2.setTeacher(profDurand);
+        sessionTEST2.setStudentClasses(Set.of(classMIAGE2));
+        sessionTEST2.setStudentGroups(Set.of(groupTD1));
+
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
             session.persist(sessionDAI);
             session.persist(sessionSOA);
+            session.persist(sessionTEST1);
+            session.persist(sessionTEST2);
             tx.commit();
-            out.println("Sessions créées : " + sessionDAI.getSubject().getName() + ", " + sessionSOA.getSubject().getName());
+            out.println("Sessions créées : " + sessionDAI.getSubject().getName() + ", " + sessionSOA.getSubject().getName() + ", " + sessionTEST1.getSubject().getName() + ", " + sessionTEST2.getSubject().getName());
         } catch (Exception e) {
             out.println("Erreur Sessions : " + e.getMessage());
         }
