@@ -11,39 +11,32 @@ import java.time.LocalDate;
 
 public class JustificationService {
 
-    /**
-     * Crée et sauvegarde une nouvelle demande de justification
-     */
-    public Justification declareAbsence(Users student, String fileUrl, String comment) {
+    public void save(Users student, String fileUrl, String comment) {
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                Transaction tx = session.beginTransaction();
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction tx = session.beginTransaction();
+                try {
+                    Justification justification = new Justification();
+                    justification.setUser(student);
+                    justification.setFileUrl(fileUrl);
+                    justification.setDepositDate(LocalDate.now());
+                    justification.setComment(comment);
+                    justification.setStatus(JustificationStatus.PENDING);
 
-            try {
-                Justification justification = new Justification();
-                justification.setUser(student);
-                justification.setFileUrl(fileUrl);
-                justification.setDepositDate(LocalDate.now());
-                justification.setComment(comment);
-                justification.setStatus(JustificationStatus.PENDING);
+                    justification.setStartDate(null);
+                    justification.setEndDate(null);
 
-                justification.setStartDate(null);
-                justification.setEndDate(null);
-
-                session.persist(justification);
-                tx.commit();
-
-                return justification;
-
-            } catch (Exception e) {
-                if (tx != null && tx.isActive()) {
-                    tx.rollback();
+                    session.persist(justification);
+                    tx.commit();
+                } catch (Exception e) {
+                    if (tx != null && tx.isActive()) {
+                        tx.rollback();
+                    }
+                    throw e;
                 }
-                throw e;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Erreur lors de l'enregistrement de la justification", e);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erreur lors de l'enregistrement de la justification", e);
-        }
     }
 }

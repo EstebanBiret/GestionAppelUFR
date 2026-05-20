@@ -34,12 +34,12 @@
 
 <main>
     <div class="welcome">
-        <div class="welcome-bar"></div>
-        <div>
-            <h1 class="welcome-title">Bienvenue <%= u.getFirstName() %> !</h1>
-            <div class="welcome-sub">Espace personnel — Rôle : <%= u.getRole() %></div>
-        </div>
-    </div>
+       <div class="welcome-bar"></div>
+       <div>
+         <div class="welcome-title">Bonjour, <%= u.getFirstName() %> <%= u.getLastName() %></div>
+         <div class="welcome-sub">Espace Étudiant — que souhaitez-vous faire ?</div>
+       </div>
+     </div>
 
     <div class="page-header">
         <h2>Mes actions rapides</h2>

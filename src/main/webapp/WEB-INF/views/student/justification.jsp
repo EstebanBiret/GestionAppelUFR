@@ -27,13 +27,14 @@
     </div>
     <div class="header-right">
         <div class="user-chip"><%= etudiant.getFirstName() %> <%= etudiant.getLastName() %></div>
-        <a href="${pageContext.request.contextPath}/etudiant" class="btn btn-secondary">Retour à l'accueil</a>
+        <a href="${pageContext.request.contextPath}/auth/logout" class="btn-logout">Se déconnecter</a>
     </div>
 </header>
 
 <main>
     <div class="page-header">
         <h1>Transmettre un justificatif</h1>
+        <a href="${pageContext.request.contextPath}/etudiant">← Tableau de bord</a>
     </div>
 
     <div class="card">
