@@ -23,12 +23,16 @@ public class Justification {
 
     private String fileUrl;
 
+    @Column(columnDefinition = "DATETIME")
     private LocalDateTime depositDate;
 
     @Column(columnDefinition = "TEXT")
     private String comment;
 
+    @Column(columnDefinition = "DATETIME")
     private LocalDateTime startDate;
+
+    @Column(columnDefinition = "DATETIME")
     private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)

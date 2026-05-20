@@ -38,7 +38,7 @@ public class CourseService {
         }
     }
 
-    public void create(String name, Long classId, Long responsableId) {
+    public Long create(String name, Long classId, Long responsableId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
             Course c = new Course();
@@ -47,6 +47,7 @@ public class CourseService {
             c.setResponsable(session.get(Users.class, responsableId));
             session.persist(c);
             tx.commit();
+            return c.getId();
         }
     }
 

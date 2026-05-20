@@ -14,8 +14,8 @@ import org.hibernate.Transaction;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +34,9 @@ public class TestServlet extends HttpServlet {
         // ============================================================
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
+
+            session.createNativeMutationQuery("DELETE FROM session_groups").executeUpdate();
+            session.createNativeMutationQuery("DELETE FROM session_classes").executeUpdate();
             session.createMutationQuery("DELETE FROM AttendanceRow").executeUpdate();
             session.createMutationQuery("DELETE FROM AttendanceSheet").executeUpdate();
             session.createMutationQuery("DELETE FROM Justification").executeUpdate();
@@ -42,6 +45,7 @@ public class TestServlet extends HttpServlet {
             session.createMutationQuery("DELETE FROM Users").executeUpdate();
             session.createMutationQuery("DELETE FROM StudentGroup").executeUpdate();
             session.createMutationQuery("DELETE FROM StudentClass").executeUpdate();
+
             tx.commit();
             out.println("Toutes les tables vidées\n");
         } catch (Exception e) {
@@ -196,6 +200,9 @@ public class TestServlet extends HttpServlet {
         justifMarc.setFileUrl("justifications/las_vegas.jpg");
         justifMarc.setDepositDate(LocalDateTime.now().minusDays(1));
         justifMarc.setStatus(JustificationStatus.APPROUVEE);
+        justifMarc.setComment("pitié acceptez");
+        justifMarc.setStartDate(LocalDateTime.of(2026, 5, 1, 0, 0));
+        justifMarc.setEndDate(LocalDateTime.of(2026, 5, 25, 5, 59, 59));
 
         Justification justifAlice = new Justification();
         justifAlice.setUser(alice);
@@ -219,7 +226,7 @@ public class TestServlet extends HttpServlet {
         AttendanceRow rowAlice = makeRow(alice, sheetDAI, AttendanceRowStatus.ABSENT, false, justifAlice);
         AttendanceRow rowBob   = makeRow(bob,   sheetDAI, AttendanceRowStatus.PRESENT, false, null);
         AttendanceRow rowMarc  = makeRow(marc,  sheetSOA, AttendanceRowStatus.ABJ,    false, justifMarc);
-        AttendanceRow rowLea   = makeRow(lea,   sheetSOA, AttendanceRowStatus.LATE, true, null);
+        AttendanceRow rowLea   = makeRow(lea,   sheetSOA, AttendanceRowStatus.EN_RETARD, true, null);
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
