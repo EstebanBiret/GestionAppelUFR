@@ -14,6 +14,7 @@ import org.hibernate.Transaction;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
@@ -193,14 +194,14 @@ public class TestServlet extends HttpServlet {
         Justification justifMarc = new Justification();
         justifMarc.setUser(marc);
         justifMarc.setFileUrl("justifications/las_vegas.jpg");
-        justifMarc.setDepositDate(LocalDate.now().minusDays(1));
-        justifMarc.setStatus(JustificationStatus.APPROVED);
+        justifMarc.setDepositDate(LocalDateTime.now().minusDays(1));
+        justifMarc.setStatus(JustificationStatus.APPROUVEE);
 
         Justification justifAlice = new Justification();
         justifAlice.setUser(alice);
         justifAlice.setFileUrl("justifications/las_vegas.jpg");
-        justifAlice.setDepositDate(LocalDate.now());
-        justifAlice.setStatus(JustificationStatus.PENDING);
+        justifAlice.setDepositDate(LocalDateTime.now());
+        justifAlice.setStatus(JustificationStatus.EN_ATTENTE);
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();

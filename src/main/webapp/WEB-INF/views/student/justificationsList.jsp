@@ -11,7 +11,7 @@
     }
     List<Justification> justifications = (List<Justification>) request.getAttribute("justifications");
 
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm");
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -82,9 +82,9 @@
                     </td>
 
                     <td class="cell-status">
-                        <% if ("PENDING".equals(j.getStatus().toString())) { %>
+                        <% if ("EN_ATTENTE".equals(j.getStatus().toString())) { %>
                         <span class="badge badge-pending">En attente</span>
-                        <% } else if ("APPROVED".equals(j.getStatus().toString())) { %>
+                        <% } else if ("APPROUVEE".equals(j.getStatus().toString())) { %>
                         <span class="badge badge-accepted">Validé</span>
                         <% } else { %>
                         <span class="badge badge-rejected">Refusé</span>

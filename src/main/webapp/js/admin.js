@@ -109,7 +109,7 @@ function updateCounts() {
   if (pc === 0 && !document.getElementById('pendingEmpty')) {
     const tr = document.createElement('tr');
     tr.id = 'pendingEmpty';
-    tr.innerHTML = '<td colspan="4" class="empty-table">✅ Aucun utilisateur en attente.</td>';
+    tr.innerHTML = '<td colspan="4" class="empty-table">Aucun utilisateur en attente.</td>';
     document.getElementById('pendingTbody').appendChild(tr);
   }
 }
