@@ -31,8 +31,8 @@ public class ScholarshipServlet extends HttpServlet {
             case "/groupes/students-by-class" -> handleStudentsByClass(req, resp);
             case "/cours"                     -> handleCourseList(req, resp);
             case "/cours/form"                -> handleCourseForm(req, resp);
-            case "/seances"                   -> handleSeancesList(req, resp);
-            case "/seances/form"              -> handleSeancesForm(req, resp);
+            case "/seances"                   -> handleSessionsList(req, resp);
+            case "/seances/form"              -> handleSessionsForm(req, resp);
             default -> req.getRequestDispatcher("/WEB-INF/views/home/scholarship.jsp").forward(req, resp);
         }
     }
@@ -46,7 +46,7 @@ public class ScholarshipServlet extends HttpServlet {
             case "/classes/save-students" -> handleSaveStudents(req, resp);
             case "/groupes/save"          -> handleGroupSave(req, resp);
             case "/cours/save"            -> handleCourseSave(req, resp);
-            case "/seances/save"          -> handleSeanceSave(req, resp);
+            case "/seances/save"          -> handleSessionSave(req, resp);
         }
     }
 
@@ -229,7 +229,7 @@ public class ScholarshipServlet extends HttpServlet {
 
     // ===== Séances ===== //
 
-    private void handleSeancesList(HttpServletRequest req, HttpServletResponse resp)
+    private void handleSessionsList(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         String courseIdParam = req.getParameter("courseId");
         resp.setContentType("application/json;charset=UTF-8");
@@ -238,7 +238,7 @@ public class ScholarshipServlet extends HttpServlet {
         resp.getWriter().write(sessionService.toJsonArray(sessions));
     }
 
-    private void handleSeancesForm(HttpServletRequest req, HttpServletResponse resp)
+    private void handleSessionsForm(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String courseIdParam = req.getParameter("courseId");
         if (courseIdParam == null || courseIdParam.isEmpty()) {
@@ -254,7 +254,7 @@ public class ScholarshipServlet extends HttpServlet {
         req.getRequestDispatcher("/WEB-INF/views/scholarship/sessionForm.jsp").forward(req, resp);
     }
 
-    private void handleSeanceSave(HttpServletRequest req, HttpServletResponse resp)
+    private void handleSessionSave(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Long courseId;
         try {
