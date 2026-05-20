@@ -1,7 +1,7 @@
 package ut1.appel.enums;
 
 public enum JustificationStatus {
-    PENDING,
-    APPROVED,
-    REJECTED
+    EN_ATTENTE,
+    APPROUVEE,
+    REJETEE
 }

@@ -86,4 +86,14 @@ public class StudentGroupService {
             if (u != null) u.setStudentGroup(g);
         }
     }
+
+    public List<StudentGroup> findByClass(Long classId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM StudentGroup g WHERE g.studentClass.id = :classId ORDER BY g.name",
+                            StudentGroup.class)
+                    .setParameter("classId", classId)
+                    .list();
+        }
+    }
 }

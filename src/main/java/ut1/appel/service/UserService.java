@@ -49,7 +49,7 @@ public class UserService {
             u.setLastName(lastName);
             u.setEmail(email);
             u.setPassword(hashPassword(password));
-            u.setRole(Role.PENDING);
+            u.setRole(Role.EN_ATTENTE);
             u.setPicturePath(picturePath);
 
             session.persist(u);

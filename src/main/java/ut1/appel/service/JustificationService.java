@@ -7,7 +7,7 @@ import ut1.appel.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class JustificationService {
 
@@ -19,9 +19,9 @@ public class JustificationService {
                     Justification justification = new Justification();
                     justification.setUser(student);
                     justification.setFileUrl(fileUrl);
-                    justification.setDepositDate(LocalDate.now());
+                    justification.setDepositDate(LocalDateTime.now());
                     justification.setComment(comment);
-                    justification.setStatus(JustificationStatus.PENDING);
+                    justification.setStatus(JustificationStatus.EN_ATTENTE);
 
                     justification.setStartDate(null);
                     justification.setEndDate(null);

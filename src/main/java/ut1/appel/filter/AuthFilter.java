@@ -27,7 +27,7 @@ public class AuthFilter implements Filter {
             case ENSEIGNANT               -> resp.sendRedirect(ctx + "/enseignant");
             case ETUDIANT_FI, ETUDIANT_FA -> resp.sendRedirect(ctx + "/etudiant");
             case SCOLARITE                -> resp.sendRedirect(ctx + "/scolarite");
-            case PENDING                  -> resp.sendRedirect(ctx + "/auth/pending");
+            case EN_ATTENTE               -> resp.sendRedirect(ctx + "/auth/pending");
         }
     }
 
@@ -62,7 +62,7 @@ public class AuthFilter implements Filter {
                 chain.doFilter(req, res);
                 return;
             }
-            if (user.getRole() != Role.PENDING
+            if (user.getRole() != Role.EN_ATTENTE
                     && (path.equals("/auth/login")
                     || path.equals("/auth/register"))) {
 
@@ -78,7 +78,7 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        if (user.getRole() == Role.PENDING) {
+        if (user.getRole() == Role.EN_ATTENTE) {
             response.sendRedirect(request.getContextPath() + "/auth/pending");
             return;
         }
