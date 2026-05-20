@@ -7,6 +7,7 @@ import ut1.appel.util.HibernateUtil;
 import org.hibernate.Transaction;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -50,6 +51,9 @@ public class SessionService {
             s.setStartTime(startTime);
             s.setEndTime(endTime);
 
+            LocalDateTime sessionStart = date.atTime(startTime);
+            LocalDateTime sessionEnd   = date.atTime(endTime);
+
             List<Users> students;
             if (groupId != null) {
                 Set<StudentGroup> groups = new HashSet<>();
@@ -81,11 +85,12 @@ public class SessionService {
 
                 List<Justification> justifs = hs.createQuery(
                                 "FROM Justification j WHERE j.user.id = :uid " +
-                                        "AND j.startDate <= :d AND j.endDate >= :d " +
+                                        "AND j.startDate <= :sessionEnd AND j.endDate >= :sessionStart " +
                                         "AND j.status IN (:statuses)",
                                 Justification.class)
-                        .setParameter("uid", student.getId())
-                        .setParameter("d", date)
+                        .setParameter("uid",          student.getId())
+                        .setParameter("sessionStart", sessionStart)
+                        .setParameter("sessionEnd",   sessionEnd)
                         .setParameterList("statuses",
                                 List.of(JustificationStatus.APPROUVEE, JustificationStatus.REJETEE))
                         .list();
