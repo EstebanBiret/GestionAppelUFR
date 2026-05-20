@@ -1,0 +1,44 @@
+.main-wide {
+  max-width: 1200px;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem;
+}
+
+.cours-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.seances-body {
+  min-height: 260px;
+}
+
+.seances-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .75rem;
+  padding: 3rem 1.5rem;
+  color: var(--txt-muted);
+}
+
+.seances-placeholder-icon {
+  font-size: 2rem;
+  opacity: .45;
+}
+
+.seances-placeholder-text {
+  font-size: .875rem;
+  text-align: center;
+  max-width: 220px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .cours-layout {
+    grid-template-columns: 1fr;
+  }
+}

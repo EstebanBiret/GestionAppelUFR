@@ -26,8 +26,8 @@ public class Session {
     private LocalTime endTime;
 
     @ManyToOne
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+    @JoinColumn(name = "course_id")
+    private Course course;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
