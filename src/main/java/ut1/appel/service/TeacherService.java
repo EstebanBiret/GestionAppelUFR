@@ -28,7 +28,7 @@ public class TeacherService {
                             "SELECT DISTINCT s FROM Session s " +
                                     "LEFT JOIN FETCH s.studentClasses " +
                                     "LEFT JOIN FETCH s.studentGroups " +
-                                    "LEFT JOIN FETCH s.subject " +
+                                    "LEFT JOIN FETCH s.course " +
                                     "WHERE s.teacher.id = :teacherId " +
                                     "AND s.sessionDate = :today " +
                                     "AND s.startTime <= :now AND s.endTime >= :now", ut1.appel.entity.Session.class)
@@ -46,7 +46,7 @@ public class TeacherService {
                             "SELECT DISTINCT s FROM Session s " +
                                     "LEFT JOIN FETCH s.studentClasses " +
                                     "LEFT JOIN FETCH s.studentGroups " +
-                                    "LEFT JOIN FETCH s.subject " +
+                                    "LEFT JOIN FETCH s.course " +
                                     "WHERE s.teacher.id = :teacherId " +
                                     "AND (s.sessionDate > :today OR (s.sessionDate = :today AND s.startTime > :now)) " +
                                     "ORDER BY s.sessionDate ASC, s.startTime ASC", ut1.appel.entity.Session.class)
@@ -64,7 +64,7 @@ public class TeacherService {
                             "SELECT DISTINCT s FROM Session s " +
                                     "LEFT JOIN FETCH s.studentClasses " +
                                     "LEFT JOIN FETCH s.studentGroups " +
-                                    "LEFT JOIN FETCH s.subject " +
+                                    "LEFT JOIN FETCH s.course " +
                                     "WHERE s.teacher.id = :teacherId " +
                                     "AND (s.sessionDate < :today OR (s.sessionDate = :today AND s.endTime < :now)) " +
                                     "ORDER BY s.sessionDate DESC, s.startTime DESC", ut1.appel.entity.Session.class)

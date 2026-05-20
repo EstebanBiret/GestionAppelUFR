@@ -75,7 +75,7 @@
                 <span class="tc-time-end"><%= currentSession.getEndTime().format(timeFmt) %></span>
             </div>
             <div class="tc-info">
-                <div class="tc-subject"><%= currentSession.getSubject() != null ? currentSession.getSubject().getName() : "—" %></div>
+                <div class="tc-subject"><%= currentSession.getCourse() != null ? currentSession.getCourse().getName() : "—" %></div>
                 <div class="tc-meta">
                     <% if (currentSession.getStudentClasses() != null) { for (StudentClass sc : currentSession.getStudentClasses()) { %>
                     <span class="tc-chip tc-chip-class"><%= sc.getName() %></span>
@@ -114,7 +114,7 @@
                     <span class="tc-time-end"><%= s.getEndTime().format(timeFmt) %></span>
                 </div>
                 <div class="tc-info">
-                    <div class="tc-subject"><%= s.getSubject() != null ? s.getSubject().getName() : "—" %></div>
+                    <div class="tc-subject"><%= s.getCourse() != null ? s.getCourse().getName() : "—" %></div>
                     <div class="tc-meta">
                         <% if (s.getStudentClasses() != null) { for (StudentClass sc : s.getStudentClasses()) { %>
                         <span class="tc-chip tc-chip-class"><%= sc.getName() %></span>
@@ -152,7 +152,7 @@
                     <span class="tc-time-end"><%= s.getEndTime().format(timeFmt) %></span>
                 </div>
                 <div class="tc-info">
-                    <div class="tc-subject"><%= s.getSubject() != null ? s.getSubject().getName() : "—" %></div>
+                    <div class="tc-subject"><%= s.getCourse() != null ? s.getCourse().getName() : "—" %></div>
                     <div class="tc-meta">
                         <% if (s.getStudentClasses() != null) { for (StudentClass sc : s.getStudentClasses()) { %>
                         <span class="tc-chip tc-chip-class"><%= sc.getName() %></span>

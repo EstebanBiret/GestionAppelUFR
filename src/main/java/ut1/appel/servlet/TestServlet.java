@@ -164,8 +164,8 @@ public class TestServlet extends HttpServlet {
         ut1.appel.entity.Session sessionTEST1 = new ut1.appel.entity.Session();
         sessionTEST1.setCourse(coursDAI);
         sessionTEST1.setSessionDate(LocalDate.now());
-        sessionTEST1.setStartTime(LocalTime.of(18, 0));
-        sessionTEST1.setEndTime(LocalTime.of(20, 0));
+        sessionTEST1.setStartTime(LocalTime.of(10, 0));
+        sessionTEST1.setEndTime(LocalTime.of(23, 30));
         sessionTEST1.setTeacher(profMartin);
         sessionTEST1.setStudentClasses(Set.of(classMIAGE2));
         sessionTEST1.setStudentGroups(Set.of(groupTD1));
