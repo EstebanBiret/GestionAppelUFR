@@ -37,6 +37,32 @@
   line-height: 1.5;
 }
 
+.btn-primary:disabled,
+.btn-primary[disabled] {
+  background: var(--gris-bd);
+  border-color: var(--gris-bd);
+  color: var(--txt-muted);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+input[type=date] {
+  width: 100%;
+  padding: .6rem .9rem;
+  border: 1.5px solid var(--gris-bd);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: .9rem;
+  transition: border-color var(--transition);
+  outline: none;
+  background: #fff;
+  color: var(--txt);
+}
+
+input[type=date]:focus {
+  border-color: var(--rouge);
+}
+
 @media (max-width: 768px) {
   .cours-layout {
     grid-template-columns: 1fr;

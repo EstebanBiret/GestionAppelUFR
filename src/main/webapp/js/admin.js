@@ -23,7 +23,7 @@ async function saveRole(uid, btn) {
 
     if (!data.success) { showToast('Erreur : ' + data.message, 'error'); return; }
 
-    if (newRole === 'PENDING') moveToPending(row, uid, newRole);
+    if (newRole === 'EN_ATTENTE') moveToPending(row, uid, newRole);
     else                       moveToAssigned(row, uid, newRole);
 
     showToast(`✓ Rôle mis à jour : ${ROLE_LABELS[newRole]}`, 'success');
@@ -45,14 +45,14 @@ function moveToPending(row, uid, role) {
   if (cells.length === 5) cells[2].remove();
 
   const select = row.querySelector('.role-select');
-  let pendingOpt = select.querySelector('option[value="PENDING"]');
+  let pendingOpt = select.querySelector('option[value="EN_ATTENTE"]');
   if (!pendingOpt) {
     pendingOpt = document.createElement('option');
-    pendingOpt.value = 'PENDING';
+    pendingOpt.value = 'EN_ATTENTE';
     pendingOpt.textContent = 'En attente';
     select.insertBefore(pendingOpt, select.firstChild);
   }
-  select.value = 'PENDING';
+  select.value = 'EN_ATTENTE';
 
   const emptyRow = document.getElementById('pendingEmpty');
   if (emptyRow) emptyRow.remove();
@@ -74,9 +74,9 @@ function moveToAssigned(row, uid, role) {
     cells[1].after(td);
 
     const select = row.querySelector('.role-select');
-    if (!select.querySelector('option[value="PENDING"]')) {
+    if (!select.querySelector('option[value="EN_ATTENTE"]')) {
       const opt = document.createElement('option');
-      opt.value = 'PENDING';
+      opt.value = 'EN_ATTENTE';
       opt.textContent = 'En attente';
       select.insertBefore(opt, select.firstChild);
     }

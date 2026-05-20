@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,13 +23,17 @@ public class Justification {
 
     private String fileUrl;
 
-    private LocalDate depositDate;
+    @Column(columnDefinition = "DATETIME")
+    private LocalDateTime depositDate;
 
     @Column(columnDefinition = "TEXT")
     private String comment;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    @Column(columnDefinition = "DATETIME")
+    private LocalDateTime startDate;
+
+    @Column(columnDefinition = "DATETIME")
+    private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
     private JustificationStatus status;

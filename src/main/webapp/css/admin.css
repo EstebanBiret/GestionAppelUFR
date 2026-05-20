@@ -49,7 +49,7 @@
 .role-SCOLARITE   { background: #DCFCE7; color: #166534; }
 .role-ETUDIANT_FI { background: #E8F4FD; color: #1565C0; }
 .role-ETUDIANT_FA { background: #FFF3E0; color: #E65100; }
-.role-PENDING     { background: var(--gris); color: var(--txt-muted); }
+.role-EN_ATTENTE  { background: var(--gris); color: var(--txt-muted); }
 
 .search-bar {
   width: 100%;
