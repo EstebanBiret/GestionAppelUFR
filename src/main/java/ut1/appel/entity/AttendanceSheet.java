@@ -21,6 +21,9 @@ public class AttendanceSheet {
 
     private LocalDateTime validationDate;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean isSigned = false;
+
     @OneToOne
     @JoinColumn(name = "session_id", unique = true)
     private Session session;
