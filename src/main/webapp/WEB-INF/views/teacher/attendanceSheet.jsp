@@ -263,7 +263,7 @@
 
             <% if (isSigned) { %>
             <div style="color: #047857; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
-                Fiche signée le <%= sheet.getValidationDate() != null ? sheet.getValidationDate().format(dateFmt) : "" %>
+                Fiche signée le <%= sheet.getLastModificationDate() != null ? sheet.getLastModificationDate().format(dateFmt) : "" %>
             </div>
             <% } else { %>
             <div style="display: flex; gap: 1rem; align-items: center;">

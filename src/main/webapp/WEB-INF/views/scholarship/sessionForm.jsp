@@ -97,10 +97,11 @@
               <option value="">— Choisir —</option>
               <%
 
-                for (int h = 8; h <= 17; h++) {
+                for (int h = 8; h <= 19; h++) {
                   for (int m = 0; m < 60; m += 30) {
+                    if (h == 19 && m > 30) continue;
                     String val = String.format("%02d:%02d", h, m);
-              %>
+                %>
                 <option value="<%= val %>"><%= val %></option>
               <%  }
                 }
@@ -112,12 +113,12 @@
             <select id="endTime" name="endTime" required>
               <option value="">— Choisir —</option>
               <%
-                for (int h = 8; h <= 18; h++) {
+                for (int h = 8; h <= 20; h++) {
                   for (int m = 0; m < 60; m += 30) {
-                    if (h == 8  && m == 0)  continue;
-                    if (h == 18 && m > 0)   continue;
+                    if (h == 8  && m == 0) continue;
+                    if (h == 20 && m > 0)  continue;
                     String val = String.format("%02d:%02d", h, m);
-              %>
+                %>
                 <option value="<%= val %>"><%= val %></option>
               <%  }
                 }

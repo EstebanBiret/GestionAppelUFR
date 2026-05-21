@@ -79,6 +79,8 @@ public class SessionService {
             AttendanceSheet sheet = new AttendanceSheet();
             sheet.setSession(s);
             sheet.setAttendanceRows(new ArrayList<>());
+            sheet.setIsSigned(false);
+            sheet.setLastModificationDate(null);
             hs.persist(sheet);
 
             for (Users student : students) {
