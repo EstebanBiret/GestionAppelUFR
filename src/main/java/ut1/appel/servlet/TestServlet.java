@@ -167,29 +167,29 @@ public class TestServlet extends HttpServlet {
                 "Erreur étudiants : "
         );
 
-//        // ============================================================
-//        // STEP 7 — Pending users
-//        // ============================================================
-//        UserService userService = new UserService();
-//
-//        try {
-//            List<Users> pendingUsers = List.of(
-//                    userService.register("Mathilde", "Caron", "pending.01@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
-//                    userService.register("Yanis", "Meunier", "pending.02@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
-//                    userService.register("Elisa", "Renaud", "pending.03@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
-//                    userService.register("Nolan", "Perrin", "pending.04@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
-//                    userService.register("Maëlys", "Colin", "pending.05@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
-//                    userService.register("Ilyes", "Marchand", "pending.06@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
-//                    userService.register("Clémence", "Aubert", "pending.07@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
-//                    userService.register("Baptiste", "Renard", "pending.08@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
-//                    userService.register("Nora", "Benoit", "pending.09@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
-//                    userService.register("Romain", "Barbier", "pending.10@etud.ut-capitole.fr", "etud123", "images/users/default.jpg")
-//            );
-//
-//            out.println("Utilisateurs en attente créés : " + pendingUsers.size());
-//        } catch (Exception e) {
-//            out.println("Erreur utilisateurs en attente : " + e.getMessage());
-//        }
+        // ============================================================
+        // STEP 7 — Pending users
+        // ============================================================
+        UserService userService = new UserService();
+
+        try {
+            List<Users> pendingUsers = List.of(
+                    userService.register("Mathilde", "Caron", "pending.01@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
+                    userService.register("Yanis", "Meunier", "pending.02@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
+                    userService.register("Elisa", "Renaud", "pending.03@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
+                    userService.register("Nolan", "Perrin", "pending.04@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
+                    userService.register("Maëlys", "Colin", "pending.05@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
+                    userService.register("Ilyes", "Marchand", "pending.06@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
+                    userService.register("Clémence", "Aubert", "pending.07@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
+                    userService.register("Baptiste", "Renard", "pending.08@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
+                    userService.register("Nora", "Benoit", "pending.09@etud.ut-capitole.fr", "etud123", "images/users/default.jpg"),
+                    userService.register("Romain", "Barbier", "pending.10@etud.ut-capitole.fr", "etud123", "images/users/default.jpg")
+            );
+
+            out.println("Utilisateurs en attente créés : " + pendingUsers.size());
+        } catch (Exception e) {
+            out.println("Erreur utilisateurs en attente : " + e.getMessage());
+        }
 
         // ============================================================
         // STEP 8 — Courses
