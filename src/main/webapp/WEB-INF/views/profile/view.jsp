@@ -45,7 +45,7 @@
   </div>
 
   <% if (success) { %>
-    <div class="alert-success">✓ Profil mis à jour avec succès.</div>
+    <div class="alert-success">Profil mis à jour avec succès.</div>
   <% } %>
 
   <div class="profile-card">
