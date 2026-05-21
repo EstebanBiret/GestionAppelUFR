@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="ut1.appel.entity.*" %>
 <%@ page import="ut1.appel.enums.Role" %>
+<%@ page import="ut1.appel.enums.AttendanceRowStatus" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Locale" %>
@@ -54,7 +55,7 @@
 </header>
 
 <main>
-    <div class="page-header">
+    <div class="page-header page-header-flex">
         <div>
             <h1>Fiche d'appel</h1>
         </div>
@@ -82,15 +83,33 @@
                         ? courseSession.getSessionDate().format(dayFmt) : "—" %>
             </span>
             <span class="as-sep">·</span>
-            <span>
+            <span class="as-time-container">
                 <%= courseSession.getStartTime() != null
                         ? courseSession.getStartTime().format(timeFmt) : "—" %>
                 →
                 <%= courseSession.getEndTime() != null
                         ? courseSession.getEndTime().format(timeFmt) : "—" %>
+
+                <%
+                    boolean isEnCours = false;
+                    if (courseSession.getSessionDate() != null && courseSession.getStartTime() != null && courseSession.getEndTime() != null) {
+                        java.time.LocalDate today = java.time.LocalDate.now();
+                        java.time.LocalTime now = java.time.LocalTime.now();
+
+                        if (courseSession.getSessionDate().equals(today) &&
+                                !now.isBefore(courseSession.getStartTime()) &&
+                                !now.isAfter(courseSession.getEndTime())) {
+                            isEnCours = true;
+                        }
+                    }
+                    if (isEnCours) {
+                %>
+                    <span class="as-badge-live">En cours</span>
+                <% } %>
             </span>
         </div>
     </div>
+
     <% if (sheet == null || sheet.getAttendanceRows() == null || sheet.getAttendanceRows().isEmpty()) { %>
     <div class="card">
         <div class="as-empty">Aucun étudiant dans cette feuille d'appel.</div>
@@ -98,55 +117,106 @@
     <% } else {
         List<AttendanceRow> rows = sheet.getAttendanceRows();
     %>
-    <div class="as-table-wrap">
-        <table class="as-table">
-            <thead>
-            <tr>
-                <th class="as-col-photo">Photo</th>
-                <th>Prénom</th>
-                <th>Nom</th>
-                <th class="as-col-formation">FI / FA</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% for (AttendanceRow row : rows) {
-                Users student = row.getUser();
-                if (student == null) continue;
-                String initials = "";
-                if (student.getFirstName() != null && !student.getFirstName().isEmpty())
-                    initials += student.getFirstName().charAt(0);
-                if (student.getLastName() != null && !student.getLastName().isEmpty())
-                    initials += student.getLastName().charAt(0);
-                boolean isFi = student.getRole() == Role.ETUDIANT_FI;
-                boolean isFa = student.getRole() == Role.ETUDIANT_FA;
-                String picturePath = student.getPicturePath() != null ? student.getPicturePath() : "";
-            %>
-            <tr>
-                <td>
-                    <div class="as-avatar-wrap">
-                        <img class="as-avatar"
-                             src="${pageContext.request.contextPath}/<%= picturePath %>"
-                             alt="<%= student.getFirstName() %> <%= student.getLastName() %>"
-                             data-initials="<%= initials %>"
-                             onerror="avatarFallback(this)">
-                    </div>
-                </td>
-                <td><span class="as-student-name"><%= student.getFirstName() %></span></td>
-                <td><span class="as-student-name"><%= student.getLastName() %></span></td>
-                <td>
-                    <% if (isFi) { %>
-                    <span class="as-badge-fi">FI</span>
-                    <% } else if (isFa) { %>
-                    <span class="as-badge-fa">FA</span>
-                    <% } else { %>
-                    <span class="as-muted-text">—</span>
-                    <% } %>
-                </td>
-            </tr>
-            <% } %>
-            </tbody>
-        </table>
-    </div>
+
+    <form action="${pageContext.request.contextPath}/enseignant/appel/save" method="POST">
+        <input type="hidden" name="sessionId" value="<%= courseSession.getId() %>">
+
+        <div class="as-table-wrap">
+            <table class="as-table">
+                <thead>
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th class="as-col-formation">FI / FA</th>
+                    <th class="as-col-photo">Photo</th>
+                    <th class="as-col-status">Statut</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for (AttendanceRow row : rows) {
+                    Users student = row.getUser();
+                    if (student == null) continue;
+                    String initials = "";
+                    if (student.getFirstName() != null && !student.getFirstName().isEmpty())
+                        initials += student.getFirstName().charAt(0);
+                    if (student.getLastName() != null && !student.getLastName().isEmpty())
+                        initials += student.getLastName().charAt(0);
+                    boolean isFi = student.getRole() == Role.ETUDIANT_FI;
+                    boolean isFa = student.getRole() == Role.ETUDIANT_FA;
+                    String picturePath = student.getPicturePath() != null ? student.getPicturePath() : "";
+
+                    AttendanceRowStatus currentStatus = row.getStatus() != null ? row.getStatus() : AttendanceRowStatus.PRESENT;
+                %>
+                <tr>
+                    <td><span class="as-student-name"><%= student.getFirstName() %></span></td>
+
+                    <td><span class="as-student-name text-uppercase"><%= student.getLastName() %></span></td>
+
+                    <td>
+                        <% if (isFi) { %>
+                        <span class="as-badge-fi">FI</span>
+                        <% } else if (isFa) { %>
+                        <span class="as-badge-fa">FA</span>
+                        <% } else { %>
+                        <span class="as-muted-text">—</span>
+                        <% } %>
+                    </td>
+
+                    <td>
+                        <div class="as-avatar-wrap">
+                            <img class="as-avatar"
+                                 src="${pageContext.request.contextPath}/<%= picturePath %>"
+                                 alt="<%= student.getFirstName() %> <%= student.getLastName() %>"
+                                 data-initials="<%= initials %>"
+                                 onerror="avatarFallback(this)">
+                        </div>
+                    </td>
+
+                    <td class="as-col-status">
+                        <div class="status-toggle-group">
+
+                            <input type="radio" id="present_<%= student.getId() %>" name="status_<%= student.getId() %>"
+                                   value="PRESENT" <%= currentStatus == AttendanceRowStatus.PRESENT ? "checked" : "" %>>
+                            <label for="present_<%= student.getId() %>" class="status-btn btn-present" title="Présent">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </label>
+
+                            <input type="radio" id="absent_<%= student.getId() %>" name="status_<%= student.getId() %>"
+                                   value="ABSENT" <%= (currentStatus == AttendanceRowStatus.ABSENT || currentStatus == AttendanceRowStatus.ABJ) ? "checked" : "" %>>
+                            <label for="absent_<%= student.getId() %>" class="status-btn btn-absent" title="Absent">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </label>
+
+                            <input type="radio" id="late_<%= student.getId() %>" name="status_<%= student.getId() %>"
+                                   value="LATE" <%= currentStatus == AttendanceRowStatus.EN_RETARD ? "checked" : "" %>>
+                            <label for="late_<%= student.getId() %>" class="status-btn btn-late" title="En retard">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </label>
+
+                        </div>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="as-footer-actions">
+            <a href="${pageContext.request.contextPath}/enseignant?action=home" class="as-footer-link">Retour</a>
+            <button type="submit" class="btn btn-primary btn-valider-appel">Valider l'appel</button>
+        </div>
+    </form>
     <% } %>
     <% } %>
 </main>
