@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class JustificationService {
 
@@ -38,5 +39,15 @@ public class JustificationService {
                 e.printStackTrace();
                 throw new RuntimeException("Erreur lors de l'enregistrement de la justification", e);
             }
+    }
+
+    public List<Justification> findByUser(Users user) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM Justification j WHERE j.user.id = :userId ORDER BY j.depositDate DESC",
+                            Justification.class)
+                    .setParameter("userId", user.getId())
+                    .list();
+        }
     }
 }
