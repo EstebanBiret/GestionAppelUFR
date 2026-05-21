@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/enseignant")
+@WebServlet({"/enseignant", "/enseignant/"})
 public class TeacherServlet extends HttpServlet {
 
     private final CourseService courseService = new CourseService();

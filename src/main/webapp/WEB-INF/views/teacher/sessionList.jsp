@@ -100,6 +100,13 @@
                         } %>
                     </div>
                 </div>
+                <% if (!isUpcoming && s.getCourse() != null) { %>
+                <a class="btn-stats"
+                   href="${pageContext.request.contextPath}/enseignant?action=stats&courseId=<%= s.getCourse().getId() %>"
+                   onclick="event.stopPropagation();">
+                    Voir le bilan
+                </a>
+                <% } %>
                 <span class="tc-arrow">→</span>
             </a>
             <% } %>

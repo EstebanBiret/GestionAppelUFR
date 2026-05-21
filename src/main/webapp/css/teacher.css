@@ -168,4 +168,17 @@
     justify-content: flex-end;
 }
 
+.btn-stats {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #e74c3c;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    margin-right: 8px;
+}
+
+.btn-stats:hover {
+    background: #c0392b;
 }
