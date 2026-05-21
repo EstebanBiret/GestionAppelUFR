@@ -12,7 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @WebServlet({"/enseignant/appel", "/enseignant/appel/save"})
 public class AttendanceSheetServlet extends HttpServlet {
@@ -124,7 +124,7 @@ public class AttendanceSheetServlet extends HttpServlet {
                     }
                 }
 
-                sheet.setValidationDate(LocalDate.now());
+                sheet.setValidationDate(LocalDateTime.now());
 
                 AttendanceSheetService.updateSheet(sheet);
             }
