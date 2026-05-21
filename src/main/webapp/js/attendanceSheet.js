@@ -27,12 +27,10 @@ function closeConfirmModal() {
 }
 
 function confirmSign() {
-    // On bloque le bouton pour éviter que le prof ne clique 2 fois par erreur
     let btn = document.querySelector('#confirmModal .btn-primary');
     btn.disabled = true;
     btn.textContent = "Signature en cours...";
 
-    // On change l'action cachée et on soumet le formulaire
     document.getElementById('submitAction').value = 'sign';
     document.getElementById('attendanceForm').submit();
 }

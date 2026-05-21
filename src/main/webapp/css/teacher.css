@@ -24,17 +24,23 @@
     50%      { box-shadow: 0 0 0 5px rgba(200,16,46,0); }
 }
 
-/* Carte cours en cours */
 .tc-card-current {
     border: 2px solid var(--rouge);
+    border-left: 6px solid var(--rouge);
     border-radius: 12px;
     background: #fff;
     overflow: hidden;
     margin-bottom: 1.5rem;
     box-shadow: 0 0 0 4px rgba(200,16,46,.07);
+    padding: 0;
 }
 
-/* Timeline */
+.tc-card-current .tc-event {
+    border: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+}
+
 .tc-timeline { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1.5rem; }
 
 .tc-day-header {
@@ -48,7 +54,6 @@
     background: var(--gris-bd);
 }
 
-/* Événement */
 .tc-event {
     background: #fff;
     border: 1.5px solid var(--gris-bd);
@@ -71,12 +76,10 @@
     opacity: .8;
 }
 
-/* Heure */
 .tc-time { display: flex; flex-direction: column; align-items: center; }
 .tc-time-start { font-size: .875rem; font-weight: 700; color: var(--txt); line-height: 1; }
 .tc-time-end   { font-size: .7rem;   color: var(--txt-muted); margin-top: 2px; }
 
-/* Infos */
 .tc-info { min-width: 0; }
 .tc-subject {
     font-size: .875rem; font-weight: 600;
@@ -85,7 +88,6 @@
 }
 .tc-meta { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 4px; }
 
-/* Chips classes / groupes */
 .tc-chip {
     font-size: .7rem; font-weight: 600;
     padding: 2px 8px; border-radius: 20px;

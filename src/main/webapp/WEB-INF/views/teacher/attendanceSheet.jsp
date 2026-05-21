@@ -5,6 +5,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="java.time.LocalDate" %>
 <%
     Users me = (Users) session.getAttribute("currentUser");
     if (me == null) {
@@ -21,6 +22,19 @@
     DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm");
 
     boolean isSigned = (sheet != null && Boolean.TRUE.equals(sheet.getIsSigned()));
+
+    boolean isTooEarlyToSign = false;
+    if (courseSession != null && courseSession.getSessionDate() != null && courseSession.getStartTime() != null) {
+        LocalDate checkDate = LocalDate.now();
+        java.time.LocalTime checkTime = java.time.LocalTime.now();
+
+        if (courseSession.getSessionDate().isAfter(checkDate)) {
+            isTooEarlyToSign = true;
+        }
+        else if (courseSession.getSessionDate().equals(checkDate) && courseSession.getStartTime().isAfter(checkTime)) {
+            isTooEarlyToSign = true;
+        }
+    }
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -252,11 +266,16 @@
                 Fiche signée le <%= sheet.getValidationDate() != null ? sheet.getValidationDate().format(dateFmt) : "" %>
             </div>
             <% } else { %>
-            <div style="display: flex; gap: 1rem;">
-                <div style="display: flex; gap: 1rem;">
-                    <button type="submit" name="submitAction" value="save" class="btn btn-secondary">Enregistrer brouillon</button>
-                    <button type="button" class="btn btn-primary btn-valider-appel" onclick="document.getElementById('confirmModal').classList.add('active')">Signer la fiche</button>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button type="submit" name="submitAction" value="save" class="btn btn-secondary">Enregistrer brouillon</button>
+                <% if (isTooEarlyToSign) { %>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <button type="button" class="btn btn-primary" disabled style="opacity: 0.5; cursor: not-allowed;">Signer la fiche</button>
+                    <span style="font-size: 0.75rem; color: var(--txt-muted); margin-top: 4px;">Le cours n'a pas encore commencé</span>
                 </div>
+                <% } else { %>
+                <button type="button" class="btn btn-primary btn-valider-appel" onclick="document.getElementById('confirmModal').classList.add('active')">Signer la fiche</button>
+                <% } %>
             </div>
             <% } %>
         </div>
