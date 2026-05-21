@@ -146,7 +146,6 @@ public class TestServlet extends HttpServlet {
         sessionDAI.setSessionDate(LocalDate.now());
         sessionDAI.setStartTime(LocalTime.of(8, 0));
         sessionDAI.setEndTime(LocalTime.of(10, 0));
-        sessionDAI.setCourse(coursDAI);
         sessionDAI.setTeacher(profMartin);
         sessionDAI.setStudentClasses(Set.of(classMIAGE2));
         sessionDAI.setStudentGroups(Set.of(groupTD1, groupTD2));
@@ -170,6 +169,61 @@ public class TestServlet extends HttpServlet {
         sessionTEST1.setStudentClasses(Set.of(classMIAGE2));
         sessionTEST1.setStudentGroups(Set.of(groupTD1));
 
+        ut1.appel.entity.Session sessionTEST3 = new ut1.appel.entity.Session();
+        sessionTEST3.setCourse(coursDAI);
+        sessionTEST3.setSessionDate(LocalDate.now().plusDays(2));
+        sessionTEST3.setStartTime(LocalTime.of(8, 0));
+        sessionTEST3.setEndTime(LocalTime.of(10, 0));
+        sessionTEST3.setTeacher(profMartin);
+        sessionTEST3.setStudentClasses(Set.of(classMIAGE2));
+        sessionTEST3.setStudentGroups(Set.of(groupTD1));
+
+        ut1.appel.entity.Session sessionTEST4 = new ut1.appel.entity.Session();
+        sessionTEST4.setCourse(coursDAI);
+        sessionTEST4.setSessionDate(LocalDate.now().plusDays(3));
+        sessionTEST4.setStartTime(LocalTime.of(10, 0));
+        sessionTEST4.setEndTime(LocalTime.of(12, 0));
+        sessionTEST4.setTeacher(profMartin);
+        sessionTEST4.setStudentClasses(Set.of(classMIAGE2));
+        sessionTEST4.setStudentGroups(Set.of(groupTD2));
+
+        ut1.appel.entity.Session sessionTEST5 = new ut1.appel.entity.Session();
+        sessionTEST5.setCourse(coursDAI);
+        sessionTEST5.setSessionDate(LocalDate.now().plusDays(1));
+        sessionTEST5.setStartTime(LocalTime.of(14, 0));
+        sessionTEST5.setEndTime(LocalTime.of(16, 0));
+        sessionTEST5.setTeacher(profMartin);
+        sessionTEST5.setStudentClasses(Set.of(classMIAGE2));
+        sessionTEST5.setStudentGroups(Set.of(groupTD1, groupTD2));
+
+        ut1.appel.entity.Session sessionTEST6 = new ut1.appel.entity.Session();
+        sessionTEST6.setCourse(coursDAI);
+        sessionTEST6.setSessionDate(LocalDate.now().plusDays(2));
+        sessionTEST6.setStartTime(LocalTime.of(16, 0));
+        sessionTEST6.setEndTime(LocalTime.of(18, 0));
+        sessionTEST6.setTeacher(profMartin);
+        sessionTEST6.setStudentClasses(Set.of(classMIAGE2));
+        sessionTEST6.setStudentGroups(Set.of(groupTD1));
+
+        ut1.appel.entity.Session sessionTEST7 = new ut1.appel.entity.Session();
+        sessionTEST7.setCourse(coursDAI);
+        sessionTEST7.setSessionDate(LocalDate.now().plusDays(4));
+        sessionTEST7.setStartTime(LocalTime.of(8, 0));
+        sessionTEST7.setEndTime(LocalTime.of(12, 0));
+        sessionTEST7.setTeacher(profMartin);
+        sessionTEST7.setStudentClasses(Set.of(classMIAGE2));
+        sessionTEST7.setStudentGroups(Set.of(groupTD1, groupTD2));
+
+        ut1.appel.entity.Session sessionTEST8 = new ut1.appel.entity.Session();
+        sessionTEST8.setCourse(coursDAI);
+        sessionTEST8.setSessionDate(LocalDate.now().plusDays(6));
+        sessionTEST8.setStartTime(LocalTime.of(10, 0));
+        sessionTEST8.setEndTime(LocalTime.of(12, 30));
+        sessionTEST8.setTeacher(profMartin);
+        sessionTEST8.setStudentClasses(Set.of(classMIAGE2));
+        sessionTEST8.setStudentGroups(Set.of(groupTD1));
+
+
         ut1.appel.entity.Session sessionTEST2 = new ut1.appel.entity.Session();
         sessionTEST2.setCourse(coursDAI);
         sessionTEST2.setSessionDate(LocalDate.now().plusDays(1));
@@ -179,15 +233,20 @@ public class TestServlet extends HttpServlet {
         sessionTEST2.setStudentClasses(Set.of(classMIAGE2));
         sessionTEST2.setStudentGroups(Set.of(groupTD1));
 
-
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
             session.persist(sessionDAI);
             session.persist(sessionSOA);
             session.persist(sessionTEST1);
             session.persist(sessionTEST2);
+            session.persist(sessionTEST3);
+            session.persist(sessionTEST4);
+            session.persist(sessionTEST5);
+            session.persist(sessionTEST6);
+            session.persist(sessionTEST7);
+            session.persist(sessionTEST8);
             tx.commit();
-            out.println("Sessions créées : " + sessionDAI.getCourse().getName() + ", " + sessionSOA.getCourse().getName());
+            out.println("Sessions créées : 4");
         } catch (Exception e) {
             out.println("Erreur Sessions : " + e.getMessage());
         }
@@ -203,12 +262,17 @@ public class TestServlet extends HttpServlet {
         sheetSOA.setSession(sessionSOA);
         sheetSOA.setValidationDate(LocalDate.now());
 
+        AttendanceSheet sheetTEST1 = new AttendanceSheet();
+        sheetTEST1.setSession(sessionTEST1);
+        sheetTEST1.setValidationDate(null);
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
             session.persist(sheetDAI);
             session.persist(sheetSOA);
+            session.persist(sheetTEST1);
             tx.commit();
-            out.println("AttendanceSheets créées : 2");
+            out.println("AttendanceSheets créées : 3");
         } catch (Exception e) {
             out.println("Erreur AttendanceSheet : " + e.getMessage());
         }
@@ -249,11 +313,18 @@ public class TestServlet extends HttpServlet {
         AttendanceRow rowMarc  = makeRow(marc,  sheetSOA, AttendanceRowStatus.ABJ,    false, justifMarc);
         AttendanceRow rowLea   = makeRow(lea,   sheetSOA, AttendanceRowStatus.EN_RETARD, true, null);
 
+        AttendanceRow rowAliceTEST = makeRow(alice, sheetTEST1, AttendanceRowStatus.PRESENT,  false, null);
+        AttendanceRow rowBobTEST   = makeRow(bob,   sheetTEST1, AttendanceRowStatus.EN_RETARD, false, null);
+        AttendanceRow rowMarcTEST  = makeRow(marc,  sheetTEST1, AttendanceRowStatus.ABSENT,    false, justifMarc);
+        AttendanceRow rowLeaTEST   = makeRow(lea,   sheetTEST1, AttendanceRowStatus.PRESENT,   false, null);
+
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
-            List.of(rowAlice, rowBob, rowMarc, rowLea).forEach(session::persist);
+            List.of(rowAlice, rowBob, rowMarc, rowLea,
+                            rowAliceTEST, rowBobTEST, rowMarcTEST, rowLeaTEST)
+                    .forEach(session::persist);
             tx.commit();
-            out.println("AttendanceRows créées : 4");
+            out.println("AttendanceRows créées : 8");
         } catch (Exception e) {
             out.println("Erreur AttendanceRow : " + e.getMessage());
         }

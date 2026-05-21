@@ -6,12 +6,12 @@
 
     <context-param>
         <param-name>uploadDir</param-name>
-        <param-value>FULL PATH  : .........\users\</param-value>
+        <param-value>C:\Users\Léa\Documents\M2\Projets\GestionAppelUFR\src\main\webapp\images\users\</param-value>
     </context-param>
 
     <context-param>
         <param-name>uploadDirJustif</param-name>
-        <param-value>FULL PATH  : .........\justifications</param-value>
+        <param-value>C:\Users\Léa\Documents\M2\Projets\GestionAppelUFR\src\main\webapp\justifications</param-value>
     </context-param>
 
 </web-app>

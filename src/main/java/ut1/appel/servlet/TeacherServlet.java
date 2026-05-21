@@ -9,6 +9,7 @@ import java.io.IOException;
 
 @WebServlet("/enseignant/*")
 public class TeacherServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -20,7 +21,6 @@ public class TeacherServlet extends HttpServlet {
             return;
         }
 
-        // Vérifier si on demande explicitement la page d'accueil
         String action = req.getParameter("action");
         if ("home".equals(action)) {
             req.getRequestDispatcher("/WEB-INF/views/home/teacher.jsp").forward(req, resp);
