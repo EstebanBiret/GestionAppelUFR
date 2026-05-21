@@ -63,6 +63,7 @@
     transition: background .12s;
     text-decoration: none;
     color: inherit;
+    margin-bottom: 4px;
 }
 .tc-event:hover { background: var(--gris); }
 .tc-event.past {
@@ -106,3 +107,18 @@
 }
 
 .tc-day-group { margin-bottom: 6px; }
+
+.page-subtitle {
+    color: var(--txt-muted);
+    font-size: .875rem;
+    margin-top: .25rem;
+}
+
+.tc-card-current .tc-event {
+    border-left-width: 5px;
+    border-radius: 10px;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+

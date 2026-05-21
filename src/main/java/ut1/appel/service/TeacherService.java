@@ -75,4 +75,19 @@ public class TeacherService {
                     .list();
         }
     }
+
+    public static ut1.appel.entity.Session getSessionById(Long sessionId) {
+        try (org.hibernate.Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT s FROM Session s " +
+                                    "LEFT JOIN FETCH s.course " +
+                                    "LEFT JOIN FETCH s.teacher " +
+                                    "LEFT JOIN FETCH s.studentClasses " +
+                                    "LEFT JOIN FETCH s.studentGroups " +
+                                    "WHERE s.id = :sessionId",
+                            ut1.appel.entity.Session.class)
+                    .setParameter("sessionId", sessionId)
+                    .uniqueResult();
+        }
+    }
 }

@@ -57,7 +57,7 @@
     <div class="page-header">
         <div>
             <h1>Bonjour, <%= me.getFirstName() %> 👋</h1>
-            <p style="color:var(--txt-muted);font-size:.875rem;margin-top:.25rem">
+            <p class="page-subtitle">
                 Voici un aperçu de vos cours.
             </p>
         </div>
@@ -68,7 +68,7 @@
         <span class="tc-live-dot"></span> Cours en ce moment
     </div>
     <div class="tc-card-current">
-        <a class="tc-event" style="border-left-width:5px;border-radius:10px;border-top:none;border-right:none;border-bottom:none"
+        <a class="tc-event"
            href="${pageContext.request.contextPath}/enseignant/appel?sessionId=<%= currentSession.getId() %>">
             <div class="tc-time">
                 <span class="tc-time-start"><%= currentSession.getStartTime().format(timeFmt) %></span>
@@ -108,7 +108,7 @@
             <% for (Session s : entry.getValue()) { %>
             <a class="tc-event"
                href="${pageContext.request.contextPath}/enseignant/appel?sessionId=<%= s.getId() %>"
-               style="margin-bottom:4px; display:grid">
+               >
                 <div class="tc-time">
                     <span class="tc-time-start"><%= s.getStartTime().format(timeFmt) %></span>
                     <span class="tc-time-end"><%= s.getEndTime().format(timeFmt) %></span>
@@ -146,7 +146,7 @@
             <% for (Session s : entry.getValue()) { %>
             <a class="tc-event past"
                href="${pageContext.request.contextPath}/enseignant/appel?sessionId=<%= s.getId() %>"
-               style="margin-bottom:4px; display:grid">
+               >
                 <div class="tc-time">
                     <span class="tc-time-start"><%= s.getStartTime().format(timeFmt) %></span>
                     <span class="tc-time-end"><%= s.getEndTime().format(timeFmt) %></span>
