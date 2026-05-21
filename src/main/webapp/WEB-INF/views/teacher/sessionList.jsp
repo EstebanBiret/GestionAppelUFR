@@ -12,7 +12,7 @@
 
     List<ut1.appel.entity.Session> sessions =
             (List<ut1.appel.entity.Session>) request.getAttribute("sessions");
-    String mode = (String) request.getAttribute("mode"); // "upcoming" ou "past"
+    String mode = (String) request.getAttribute("mode");
     if (sessions == null) sessions = new ArrayList<>();
 
     boolean isUpcoming = "upcoming".equals(mode);
@@ -22,7 +22,6 @@
     DateTimeFormatter dayFmt = DateTimeFormatter.ofPattern("EEEE dd/MM/yyyy", Locale.FRENCH);
     LocalDate today = LocalDate.now();
 
-    // Regrouper par date
     LinkedHashMap<LocalDate, List<ut1.appel.entity.Session>> byDay = new LinkedHashMap<>();
     for (ut1.appel.entity.Session s : sessions) {
         byDay.computeIfAbsent(s.getSessionDate(), k -> new ArrayList<>()).add(s);
