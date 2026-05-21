@@ -74,13 +74,8 @@
 </main>
 
 <script>
-  function previewPhoto(input) {
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = e => document.getElementById('previewImg').src = e.target.result;
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-</script>
+       window._contextPath = '<%= request.getContextPath() %>';
+   </script>
+   <script src="${pageContext.request.contextPath}/js/student.js"></script>
 </body>
 </html>

@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="ut1.appel.entity.Users" %>
 <%
-    Users etudiant = (Users) session.getAttribute("currentUser");
-    if (etudiant == null) {
+    Users u = (Users) session.getAttribute("currentUser");
+    if (u == null) {
         response.sendRedirect(request.getContextPath() + "/auth/login");
         return;
     }
@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transmettre un justificatif - UT Capitole</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/student.css">
 </head>
 <body>
 
@@ -26,8 +27,15 @@
         </div>
     </div>
     <div class="header-right">
-        <div class="user-chip"><%= etudiant.getFirstName() %> <%= etudiant.getLastName() %></div>
-        <a href="${pageContext.request.contextPath}/auth/logout" class="btn-logout">Se déconnecter</a>
+            <div class="user-dropdown">
+                <div class="user-chip" onclick="toggleDropdown()">
+                    <%= u.getFirstName() %> <%= u.getLastName() %> ▾
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="${pageContext.request.contextPath}/profil/voir">Mon profil</a>
+                </div>
+            </div>
+            <a href="${pageContext.request.contextPath}/auth/logout" class="btn-logout">Se déconnecter</a>
     </div>
 </header>
 
@@ -77,6 +85,9 @@
         </div>
     </div>
 </main>
-
+  <script>
+       window._contextPath = '<%= request.getContextPath() %>';
+   </script>
+   <script src="${pageContext.request.contextPath}/js/student.js"></script>
 </body>
 </html>
