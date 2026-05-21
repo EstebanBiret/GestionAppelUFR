@@ -2,12 +2,14 @@ package ut1.appel.servlet;
 
 import ut1.appel.entity.*;
 import ut1.appel.service.*;
+import ut1.appel.enums.JustificationStatus;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class ScholarshipServlet extends HttpServlet {
     private final StudentGroupService   groupService   = new StudentGroupService();
     private final CourseService         courseService  = new CourseService();
     private final SessionService        sessionService = new SessionService();
+    private final JustificationService justificationService = new JustificationService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -33,6 +36,8 @@ public class ScholarshipServlet extends HttpServlet {
             case "/cours/form"                -> handleCourseForm(req, resp);
             case "/seances"                   -> handleSessionsList(req, resp);
             case "/seances/form"              -> handleSessionsForm(req, resp);
+            case "/justificatifs"             -> handleJustifList(req, resp);
+            case "/justificatifs/form"        -> handleJustifForm(req, resp);
             default -> req.getRequestDispatcher("/WEB-INF/views/home/scholarship.jsp").forward(req, resp);
         }
     }
@@ -47,6 +52,7 @@ public class ScholarshipServlet extends HttpServlet {
             case "/groupes/save"          -> handleGroupSave(req, resp);
             case "/cours/save"            -> handleCourseSave(req, resp);
             case "/seances/save"          -> handleSessionSave(req, resp);
+            case "/justificatifs/save"    -> handleJustifSave(req, resp);
         }
     }
 
@@ -303,5 +309,66 @@ public class ScholarshipServlet extends HttpServlet {
 
         sessionService.create(courseId, teacher, date, start, end, groupId);
         resp.sendRedirect(req.getContextPath() + "/scolarite/cours?courseId=" + courseId + "&success=seance");
+    }
+
+    // ===== Justificatifs ===== //
+
+    private void handleJustifList(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        req.setAttribute("justificatifs", justificationService.findAll());
+        if ("ok".equals(req.getParameter("success")))
+            req.setAttribute("success", "Le justificatif a bien été traité.");
+        req.getRequestDispatcher("/WEB-INF/views/scholarship/justificationsList.jsp").forward(req, resp);
+    }
+
+    private void handleJustifForm(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        String idParam = req.getParameter("id");
+        if (idParam == null) { resp.sendRedirect(req.getContextPath() + "/scolarite/justificatifs"); return; }
+        Justification j = justificationService.findById(Long.parseLong(idParam));
+        if (j == null || j.getStatus() != JustificationStatus.EN_ATTENTE) {
+            resp.sendRedirect(req.getContextPath() + "/scolarite/justificatifs"); return;
+        }
+        req.setAttribute("justif", j);
+        req.getRequestDispatcher("/WEB-INF/views/scholarship/justificationForm.jsp").forward(req, resp);
+    }
+
+    private void handleJustifSave(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Long id;
+        try { id = Long.parseLong(req.getParameter("id")); }
+        catch (Exception e) { resp.sendRedirect(req.getContextPath() + "/scolarite/justificatifs"); return; }
+
+        String decision = req.getParameter("decision");
+        String feedback = req.getParameter("feedback");
+
+        if (!"APPROUVEE".equals(decision) && !"REJETEE".equals(decision)) {
+            req.setAttribute("error", "Décision invalide.");
+            req.setAttribute("justif", justificationService.findById(id));
+            req.getRequestDispatcher("/WEB-INF/views/scholarship/justificationForm.jsp").forward(req, resp);
+            return;
+        }
+
+        LocalDateTime start = null;
+        LocalDateTime end   = null;
+
+        if ("APPROUVEE".equals(decision)) {
+            String startStr = req.getParameter("startDate");
+            String endStr   = req.getParameter("endDate");
+            String error    = null;
+
+            try { start = LocalDateTime.parse(startStr); } catch (Exception e) { error = "Date de début invalide."; }
+            try { end   = LocalDateTime.parse(endStr);   } catch (Exception e) { if (error == null) error = "Date de fin invalide."; }
+            if (error == null && !end.isAfter(start)) error = "La date de fin doit être après la date de début.";
+
+            if (error != null) {
+                req.setAttribute("error", error);
+                req.setAttribute("justif", justificationService.findById(id));
+                req.getRequestDispatcher("/WEB-INF/views/scholarship/justificationForm.jsp").forward(req, resp);
+                return;
+            }
+        }
+
+        justificationService.process(id, JustificationStatus.valueOf(decision), start, end, feedback);
+        resp.sendRedirect(req.getContextPath() + "/scolarite/justificatifs?success=ok");
     }
 }

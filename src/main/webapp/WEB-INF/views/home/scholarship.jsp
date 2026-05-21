@@ -62,6 +62,14 @@
       </div>
     </a>
 
+    <a href="${pageContext.request.contextPath}/scolarite/justificatifs" class="nav-card">
+      <div class="nav-icon">📋</div>
+      <div>
+        <div class="nav-card-title">Justificatifs</div>
+        <div class="nav-card-sub">Consulter et traiter les demandes</div>
+      </div>
+    </a>
+
   </div>
 </main>
 

@@ -19,7 +19,8 @@ public class AttendanceSheet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime validationDate;
+    @Column(columnDefinition = "DATETIME")
+    private LocalDateTime lastModificationDate;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean isSigned = false;

@@ -64,6 +64,7 @@
                 <div class="form-group">
                     <label for="justificatifFile" class="form-label">Document justificatif (PDF ou Image) <span class="text-utc">*</span></label>
                     <input type="file" id="justificatifFile" name="justificatifFile" class="form-control" accept=".pdf, image/*" required>
+                    <div style="font-size: .78rem; color: var(--txt-muted); margin-top: .35rem;">Formats acceptés : PDF, image — taille max : 10 Mo</div>
                 </div>
 
                 <div class="form-group" style="margin-top: 1rem; margin-bottom: 1rem;">

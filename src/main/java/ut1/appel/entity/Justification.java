@@ -38,6 +38,12 @@ public class Justification {
     @Enumerated(EnumType.STRING)
     private JustificationStatus status;
 
+    @Column(columnDefinition = "TEXT")
+    private String scholarshipFeedback;
+
+    @Column(columnDefinition = "DATETIME")
+    private LocalDateTime processedDate;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;

@@ -86,8 +86,6 @@ public class TestServlet extends HttpServlet {
         StudentGroup groupM1AESTD1 = makeStudentGroup("TD1", classM1AES);
         StudentGroup groupM1AESTD2 = makeStudentGroup("TD2", classM1AES);
 
-        // M2 AES volontairement sans groupe de TD
-
         List<StudentGroup> studentGroups = List.of(
                 groupL1DroitTD1, groupL1DroitTD2, groupL1DroitTD3,
                 groupL2DroitTD1, groupL2DroitTD2, groupL2DroitTD3,
@@ -106,7 +104,7 @@ public class TestServlet extends HttpServlet {
         );
 
         // ============================================================
-        // STEP 4 — Administrative users
+        // STEP 4 — Admin & scolarité
         // ============================================================
         Users admin = makeUser("admin@ut-capitole.fr", "admin123", "Admin", "Système", Role.ADMIN, null, null);
         Users scolarite = makeUser("scolarite@ut-capitole.fr", "scol123", "Sophie", "Dupont", Role.SCOLARITE, null, null);
@@ -643,8 +641,13 @@ public class TestServlet extends HttpServlet {
         justification.setDepositDate(java.time.LocalDateTime.now().minusDays(2));
         justification.setComment(comment);
         justification.setStatus(status);
-        justification.setStartDate(java.time.LocalDateTime.of(startYear, startMonth, startDay, startHour, 0));
-        justification.setEndDate(java.time.LocalDateTime.of(endYear, endMonth, endDay, endHour, 59));
+        if (status == JustificationStatus.APPROUVEE) {
+            justification.setStartDate(java.time.LocalDateTime.of(startYear, startMonth, startDay, startHour, 0));
+            justification.setEndDate(java.time.LocalDateTime.of(endYear, endMonth, endDay, endHour, 59));
+        }
+        if (status != JustificationStatus.EN_ATTENTE) {
+            justification.setProcessedDate(java.time.LocalDateTime.now().minusDays(1));
+        }
 
         session.persist(justification);
         return 1;
