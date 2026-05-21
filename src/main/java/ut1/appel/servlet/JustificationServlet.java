@@ -110,4 +110,21 @@ public class JustificationServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/views/student/justification.jsp").forward(req, resp);
         }
     }
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        try {
+            super.service(req, resp);
+        } catch (Exception e) {
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            if (cause instanceof IllegalStateException || cause.getMessage() != null
+                    && cause.getMessage().toLowerCase().contains("size")) {
+                req.setAttribute("error", "Le fichier est trop volumineux. La taille maximale autorisée est de 10 Mo.");
+                req.getRequestDispatcher("/WEB-INF/views/student/justification.jsp").forward(req, resp);
+            } else {
+                throw e;
+            }
+        }
+    }
 }

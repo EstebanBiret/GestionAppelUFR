@@ -86,45 +86,28 @@ public class SessionService {
                 List<Justification> justifs = hs.createQuery(
                                 "FROM Justification j WHERE j.user.id = :uid " +
                                         "AND j.startDate <= :sessionEnd AND j.endDate >= :sessionStart " +
-                                        "AND j.status IN (:statuses)",
+                                        "AND j.status = :status",
                                 Justification.class)
                         .setParameter("uid",          student.getId())
                         .setParameter("sessionStart", sessionStart)
                         .setParameter("sessionEnd",   sessionEnd)
-                        .setParameterList("statuses",
-                                List.of(JustificationStatus.APPROUVEE, JustificationStatus.REJETEE))
+                        .setParameter("status",       JustificationStatus.APPROUVEE)
                         .list();
 
-                Justification bestJustif = justifs.stream()
-                        .filter(j -> j.getStatus() == JustificationStatus.APPROUVEE)
-                        .findFirst()
-                        .orElse(justifs.isEmpty() ? null : justifs.getFirst());
+                Justification justif = justifs.isEmpty() ? null : justifs.getFirst();
+                AttendanceRowStatus status = (justif != null) ? AttendanceRowStatus.ABJ : AttendanceRowStatus.PRESENT;
 
-                AttendanceRow row = getAttendanceRow(student, bestJustif, sheet);
+                AttendanceRow row = new AttendanceRow();
+                row.setAttendanceSheet(sheet);
+                row.setUser(student);
+                row.setStatus(status);
+                row.setChangedGroup(false);
+                row.setJustification(justif);
                 hs.persist(row);
             }
 
             tx.commit();
         }
-    }
-
-    private static AttendanceRow getAttendanceRow(Users student, Justification bestJustif, AttendanceSheet sheet) {
-        AttendanceRowStatus status;
-        if (bestJustif == null) {
-            status = AttendanceRowStatus.PRESENT;
-        } else if (bestJustif.getStatus() == JustificationStatus.APPROUVEE) {
-            status = AttendanceRowStatus.ABJ;
-        } else {
-            status = AttendanceRowStatus.ABSENT;
-        }
-
-        AttendanceRow row = new AttendanceRow();
-        row.setAttendanceSheet(sheet);
-        row.setUser(student);
-        row.setStatus(status);
-        row.setChangedGroup(false);
-        row.setJustification(bestJustif);
-        return row;
     }
 
     public String toJsonArray(List<Session> sessions) {

@@ -56,13 +56,6 @@
     <div class="profile-info">
       <p><strong><%= u.getFirstName() %> <%= u.getLastName() %></strong></p>
       <p><%= u.getEmail() %></p>
-      <p><span class="role-badge role-<%= u.getRole() %>"><%= u.getRole() %></span></p>
-      <% if (u.getStudentClass() != null) { %>
-        <p>Classe : <span class="badge"><%= u.getStudentClass().getName() %></span></p>
-      <% } %>
-      <% if (u.getStudentGroup() != null) { %>
-        <p>Groupe : <span class="badge"><%= u.getStudentGroup().getName() %></span></p>
-      <% } %>
     </div>
 
     <a href="${pageContext.request.contextPath}/profil/modifier" class="btn-primary">
