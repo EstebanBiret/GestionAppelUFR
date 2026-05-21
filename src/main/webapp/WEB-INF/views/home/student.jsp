@@ -17,16 +17,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/student.css">
 </head>
 
-<script>
-    function toggleDropdown() {
-        document.getElementById('dropdownMenu').classList.toggle('open');
-    }
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.user-dropdown')) {
-            document.getElementById('dropdownMenu').classList.remove('open');
-        }
-    });
-</script>
 <body>
 
 <header>
@@ -43,7 +33,7 @@
                 <%= u.getFirstName() %> <%= u.getLastName() %> ▾
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
-                <a href="${pageContext.request.contextPath}/profil/voir">👤 Mon profil</a>
+                <a href="${pageContext.request.contextPath}/profil/voir">Mon profil</a>
             </div>
         </div>
         <a href="${pageContext.request.contextPath}/auth/logout" class="btn-logout">Se déconnecter</a>
@@ -82,6 +72,9 @@
     </div>
 
 </main>
-
+   <script>
+       window._contextPath = '<%= request.getContextPath() %>';
+   </script>
+   <script src="${pageContext.request.contextPath}/js/student.js"></script>
 </body>
 </html>
