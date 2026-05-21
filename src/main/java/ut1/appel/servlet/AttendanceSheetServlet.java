@@ -99,33 +99,46 @@ public class AttendanceSheetServlet extends HttpServlet {
             AttendanceSheet sheet = AttendanceSheetService.getSheetBySessionId(sessionId);
 
             if (sheet != null && sheet.getAttendanceRows() != null) {
+
+                if (Boolean.TRUE.equals(sheet.getIsSigned())) {
+                    httpSession.setAttribute("flashError", "Cette fiche est déjà signée et ne peut plus être modifiée.");
+                    resp.sendRedirect(req.getContextPath() + "/enseignant/appel?sessionId=" + sessionId);
+                    return;
+                }
+
                 for (AttendanceRow row : sheet.getAttendanceRows()) {
                     Long studentId = row.getUser().getId();
                     String statusParam = req.getParameter("status_" + studentId);
 
                     if (statusParam != null) {
                         switch (statusParam) {
-                            case "PRESENT": row.setStatus(AttendanceRowStatus.PRESENT);
-                            break;
+                            case "PRESENT": row.setStatus(AttendanceRowStatus.PRESENT); break;
                             case "ABSENT":
                                 if (row.getStatus() != AttendanceRowStatus.ABJ) {
                                     row.setStatus(AttendanceRowStatus.ABSENT);
                                 }
                                 break;
-                            case "LATE": row.setStatus(AttendanceRowStatus.EN_RETARD);
-                            break;
+                            case "LATE": row.setStatus(AttendanceRowStatus.EN_RETARD); break;
                         }
                     }
                 }
 
-                sheet.setValidationDate(LocalDateTime.now());
+                String action = req.getParameter("submitAction");
 
                 try {
-                    AttendanceSheetService.updateSheet(sheet);
-                    httpSession.setAttribute("flashSuccess", "La fiche de présence a été validée et enregistrée avec succès.");
+                    if ("sign".equals(action)) {
+                        sheet.setIsSigned(true);
+                        sheet.setValidationDate(LocalDateTime.now());
+                        AttendanceSheetService.updateSheet(sheet);
+                        httpSession.setAttribute("flashSuccess", "La fiche d'appel a été signée et verrouillée avec succès.");
+                    } else {
+                        sheet.setValidationDate(LocalDateTime.now());
+                        AttendanceSheetService.updateSheet(sheet);
+                        httpSession.setAttribute("flashSuccess", "Le brouillon de l'appel a bien été enregistré.");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    httpSession.setAttribute("flashError", "Une erreur technique est survenue lors de l'enregistrement.");
+                    httpSession.setAttribute("flashError", "Une erreur technique est survenue.");
                 }
             }
 
