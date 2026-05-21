@@ -18,6 +18,9 @@
 
     DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
     DateTimeFormatter dayFmt = DateTimeFormatter.ofPattern("EEEE dd MMMM yyyy", Locale.FRENCH);
+    DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy à HH:mm");
+
+    boolean isSigned = (sheet != null && Boolean.TRUE.equals(sheet.getIsSigned()));
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -60,13 +63,15 @@
         String flashError = (String) session.getAttribute("flashError");
         if (flashSuccess != null) {
     %>
-    <div class="alert alert-success"><%= flashSuccess %></div>
+    <div class="alert alert-success"><%= flashSuccess %>
+    </div>
     <%
             session.removeAttribute("flashSuccess");
         }
         if (flashError != null) {
     %>
-    <div class="alert alert-danger"><%= flashError %></div>
+    <div class="alert alert-danger"><%= flashError %>
+    </div>
     <%
             session.removeAttribute("flashError");
         }
@@ -137,6 +142,7 @@
 
     <form id="attendanceForm" action="${pageContext.request.contextPath}/enseignant/appel/save" method="POST">
         <input type="hidden" name="sessionId" value="<%= courseSession.getId() %>">
+        <input type="hidden" id="submitAction" name="submitAction" value="save">
 
         <div class="as-table-wrap">
             <table class="as-table">
@@ -163,7 +169,9 @@
                     String picturePath = student.getPicturePath() != null ? student.getPicturePath() : "";
 
                     AttendanceRowStatus currentStatus = row.getStatus() != null ? row.getStatus() : AttendanceRowStatus.PRESENT;
+
                     boolean isAbj = (currentStatus == AttendanceRowStatus.ABJ);
+                    boolean isDisabled = isAbj || isSigned;
                 %>
 
                 <tr class="<%= isAbj ? "as-row-abj" : "" %>">
@@ -199,9 +207,8 @@
 
                     <td class="as-col-status">
                         <div class="status-toggle-group">
-
                             <input type="radio" id="present_<%= student.getId() %>" name="status_<%= student.getId() %>"
-                                   value="PRESENT" <%= currentStatus == AttendanceRowStatus.PRESENT ? "checked" : "" %> <%= isAbj ? "disabled" : "" %>>
+                                   value="PRESENT" <%= currentStatus == AttendanceRowStatus.PRESENT ? "checked" : "" %> <%= isDisabled ? "disabled" : "" %>>
                             <label for="present_<%= student.getId() %>" class="status-btn btn-present" title="Présent">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                      stroke-linecap="round" stroke-linejoin="round">
@@ -210,7 +217,7 @@
                             </label>
 
                             <input type="radio" id="absent_<%= student.getId() %>" name="status_<%= student.getId() %>"
-                                   value="ABSENT" <%= (currentStatus == AttendanceRowStatus.ABSENT || currentStatus == AttendanceRowStatus.ABJ) ? "checked" : "" %> <%= isAbj ? "disabled" : "" %>>
+                                   value="ABSENT" <%= (currentStatus == AttendanceRowStatus.ABSENT || currentStatus == AttendanceRowStatus.ABJ) ? "checked" : "" %> <%= isDisabled ? "disabled" : "" %>>
                             <label for="absent_<%= student.getId() %>" class="status-btn btn-absent" title="Absent">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                      stroke-linecap="round" stroke-linejoin="round">
@@ -220,7 +227,7 @@
                             </label>
 
                             <input type="radio" id="late_<%= student.getId() %>" name="status_<%= student.getId() %>"
-                                   value="LATE" <%= currentStatus == AttendanceRowStatus.EN_RETARD ? "checked" : "" %> <%= isAbj ? "disabled" : "" %>>
+                                   value="LATE" <%= currentStatus == AttendanceRowStatus.EN_RETARD ? "checked" : "" %> <%= isDisabled ? "disabled" : "" %>>
                             <label for="late_<%= student.getId() %>" class="status-btn btn-late" title="En retard">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                                      stroke-linecap="round" stroke-linejoin="round">
@@ -239,22 +246,36 @@
 
         <div class="as-footer-actions">
             <a href="${pageContext.request.contextPath}/enseignant?action=home" class="as-footer-link">Retour</a>
-            <button type="button" class="btn btn-primary btn-valider-appel" onclick="openConfirmModal()">Valider l'appel</button>
+
+            <% if (isSigned) { %>
+            <div style="color: #047857; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                Fiche signée le <%= sheet.getValidationDate() != null ? sheet.getValidationDate().format(dateFmt) : "" %>
+            </div>
+            <% } else { %>
+            <div style="display: flex; gap: 1rem;">
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" name="submitAction" value="save" class="btn btn-secondary">Enregistrer brouillon</button>
+                    <button type="button" class="btn btn-primary btn-valider-appel" onclick="document.getElementById('confirmModal').classList.add('active')">Signer la fiche</button>
+                </div>
+            </div>
+            <% } %>
         </div>
     </form>
     <% } %>
     <% } %>
 </main>
+
 <div id="confirmModal" class="as-modal-overlay">
     <div class="as-modal">
-        <div class="as-modal-title">Confirmer l'appel</div>
+        <div class="as-modal-title">Signer la fiche d'appel</div>
         <div class="as-modal-body">
-            Êtes-vous sûr de vouloir valider cette fiche de présence ? <br><br>
-            Une fois validée, les absences seront transmises automatiquement à la scolarité.
+            Êtes-vous sûr de vouloir signer cette fiche de présence ? <br><br>
+            <strong>Attention :</strong> Une fois signée, la fiche sera verrouillée et vous ne pourrez plus la modifier.
+            Les absences seront transmises automatiquement à la scolarité.
         </div>
         <div class="as-modal-actions">
             <button type="button" class="btn btn-secondary" onclick="closeConfirmModal()">Annuler</button>
-            <button type="button" class="btn btn-primary" onclick="submitAttendanceForm()">Oui, valider</button>
+            <button type="button" class="btn btn-primary" onclick="confirmSign()">Oui, signer l'appel</button>
         </div>
     </div>
 </div>
