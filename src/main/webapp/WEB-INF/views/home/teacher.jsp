@@ -131,6 +131,13 @@
         <% } } %>
     </div>
 
+    <div class="plus">
+        <a href="${pageContext.request.contextPath}/enseignant?action=upcoming"
+           class="btn btn-secondary">
+            Voir tous les cours à venir →
+        </a>
+    </div>
+
     <div class="tc-section-label">
         Derniers cours
         <span class="tc-badge muted"><%= pastSessions.size() %></span>
@@ -168,6 +175,14 @@
         </div>
         <% } } %>
     </div>
+
+    <div class="plus">
+        <a href="${pageContext.request.contextPath}/enseignant?action=past"
+           class="btn btn-secondary">
+            Voir tous les cours passés →
+        </a>
+    </div>
+
 </main>
 
 </body>

@@ -1,0 +1,10 @@
+.page-header .back-link {
+    font-size: .85rem;
+    color: var(--txt-muted);
+    text-decoration: none;
+}
+
+.tc-timeline .tc-event {
+    margin-bottom: 4px;
+    display: grid;
+}

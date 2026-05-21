@@ -90,4 +90,41 @@ public class TeacherService {
                     .uniqueResult();
         }
     }
+
+    public static List<ut1.appel.entity.Session> getAllUpcomingSessionsForTeacher(Long teacherId) {
+        try (org.hibernate.Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT s FROM Session s " +
+                                    "LEFT JOIN FETCH s.studentClasses " +
+                                    "LEFT JOIN FETCH s.studentGroups " +
+                                    "LEFT JOIN FETCH s.course " +
+                                    "WHERE s.teacher.id = :teacherId " +
+                                    "AND (s.sessionDate > :today OR (s.sessionDate = :today AND s.startTime > :now)) " +
+                                    "ORDER BY s.sessionDate ASC, s.startTime ASC", ut1.appel.entity.Session.class)
+                    .setParameter("teacherId", teacherId)
+                    .setParameter("today", LocalDate.now())
+                    .setParameter("now", LocalTime.now())
+                    .list();
+
+        }
+    }
+
+    public static List<ut1.appel.entity.Session> getAllPastSessionsForTeacher(Long teacherId) {
+        try (org.hibernate.Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT DISTINCT s FROM Session s " +
+                                    "LEFT JOIN FETCH s.studentClasses " +
+                                    "LEFT JOIN FETCH s.studentGroups " +
+                                    "LEFT JOIN FETCH s.course " +
+                                    "WHERE s.teacher.id = :teacherId " +
+                                    "AND (s.sessionDate < :today OR (s.sessionDate = :today AND s.endTime < :now)) " +
+                                    "ORDER BY s.sessionDate DESC, s.startTime DESC", ut1.appel.entity.Session.class)
+                    .setParameter("teacherId", teacherId)
+                    .setParameter("today", LocalDate.now())
+                    .setParameter("now", LocalTime.now())
+                    .list();
+        }
+    }
+
+
 }

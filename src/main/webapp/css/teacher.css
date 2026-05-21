@@ -122,3 +122,16 @@
     border-bottom: none;
 }
 
+.plus {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.plus a {
+    display: inline-block;
+}
+
+.plus a.btn-secondary {
+    font-size: .82rem;
+    padding: .4rem .9rem;
+}
