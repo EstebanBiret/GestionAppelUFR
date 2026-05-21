@@ -52,23 +52,31 @@
 
 <main>
     <div class="welcome">
-       <div class="welcome-bar"></div>
-       <div>
-         <div class="welcome-title">Bonjour, <%= u.getFirstName() %> <%= u.getLastName() %></div>
-         <div class="welcome-sub">Espace Étudiant — que souhaitez-vous faire ?</div>
-       </div>
-     </div>
+        <div class="welcome-bar"></div>
+        <div>
+            <div class="welcome-title">Bonjour, <%= u.getFirstName() %> <%= u.getLastName() %></div>
+            <div class="welcome-sub">Espace Étudiant — que souhaitez-vous faire ?</div>
+        </div>
+    </div>
 
     <div class="page-header">
         <h2>Mes actions rapides</h2>
     </div>
 
     <div class="nav-grid">
-        <a href="${pageContext.request.contextPath}/etudiant/justification" class="nav-card">
+        <a href="${pageContext.request.contextPath}/etudiant/justification/nouveau" class="nav-card">
             <div class="nav-icon">📄</div>
             <div>
                 <div class="nav-card-title">Justifier une absence</div>
                 <div class="nav-card-sub">Transmettre un certificat médical ou un autre justificatif</div>
+            </div>
+        </a>
+
+        <a href="${pageContext.request.contextPath}/etudiant/justification/liste" class="nav-card">
+            <div class="nav-icon">🔍</div>
+            <div>
+                <div class="nav-card-title">Suivre mes justificatifs</div>
+                <div class="nav-card-sub">Consulter l'état de validation de vos documents par la scolarité</div>
             </div>
         </a>
     </div>

@@ -38,7 +38,7 @@
   </div>
 
   <% if (error != null) { %>
-    <div class="error-msg">⚠ <%= error %></div>
+    <div class="error-msg"><%= error %></div>
   <% } %>
 
   <div class="card">

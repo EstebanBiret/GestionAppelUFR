@@ -51,7 +51,7 @@
             <div class="alert-success"><%= request.getAttribute("success") %></div>
             <% } %>
 
-            <form action="${pageContext.request.contextPath}/etudiant/justification" method="POST" enctype="multipart/form-data">
+            <form action="${pageContext.request.contextPath}/etudiant/justification/save" method="POST" enctype="multipart/form-data">
 
                 <div class="form-group">
                     <label for="justificatifFile" class="form-label">Document justificatif (PDF ou Image) <span class="text-utc">*</span></label>

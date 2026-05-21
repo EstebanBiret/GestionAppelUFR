@@ -24,12 +24,12 @@ public class AdminServlet extends HttpServlet {
             List<Users> pending = session.createQuery(
                             "FROM Users u WHERE u.role = :pending ORDER BY u.lastName, u.firstName",
                             Users.class)
-                    .setParameter("pending", Role.PENDING)
+                    .setParameter("pending", Role.EN_ATTENTE)
                     .list();
             List<Users> assigned = session.createQuery(
                             "FROM Users u WHERE u.role <> :pending AND u.role <> :admin ORDER BY u.role, u.lastName",
                             Users.class)
-                    .setParameter("pending", Role.PENDING)
+                    .setParameter("pending", Role.EN_ATTENTE)
                     .setParameter("admin", Role.ADMIN)
                     .list();
             req.setAttribute("pending", pending);
@@ -65,7 +65,7 @@ public class AdminServlet extends HttpServlet {
 
             resp.getWriter().write(String.format(
                     "{\"success\":true,\"userId\":%d,\"newRole\":\"%s\",\"newRoleLabel\":\"%s\",\"wasPending\":%b}",
-                    u.getId(), u.getRole().name(), getRoleLabel(u.getRole()), newRole.equals("PENDING")
+                    u.getId(), u.getRole().name(), getRoleLabel(u.getRole()), newRole.equals("EN_ATTENTE")
             ));
         } catch (Exception e) {
             resp.getWriter().write("{\"success\":false,\"message\":\"" + e.getMessage() + "\"}");
@@ -80,7 +80,7 @@ public class AdminServlet extends HttpServlet {
 
     private static String getRoleLabel(Role r) {
         return switch (r) {
-            case PENDING     -> "En attente";
+            case EN_ATTENTE  -> "En attente";
             case ADMIN       -> "Administrateur";
             case ETUDIANT_FI -> "Étudiant (Initial)";
             case ETUDIANT_FA -> "Étudiant (Alternance)";

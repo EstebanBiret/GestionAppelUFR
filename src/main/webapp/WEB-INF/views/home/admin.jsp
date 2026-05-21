@@ -69,7 +69,7 @@
         <tbody id="pendingTbody">
           <% if (pending.isEmpty()) { %>
             <tr id="pendingEmpty"><td colspan="4" class="empty-table">
-              ✅ Aucun utilisateur en attente d'attribution de rôle.
+              Aucun utilisateur en attente d'attribution de rôle.
             </td></tr>
           <% } else { for (Users u : pending) {
               String initials = u.getFirstName().substring(0,1).toUpperCase() + u.getLastName().substring(0,1).toUpperCase();
@@ -92,7 +92,7 @@
                <% for (Map.Entry<String, String> entry : allRoles.entrySet()) {
                    if (entry.getKey().equals("ADMIN")) continue; %>
                  <option value="<%= entry.getKey() %>"
-                   <%= entry.getKey().equals("PENDING") ? "selected" : "" %>>
+                   <%= entry.getKey().equals("EN_ATTENTE") ? "selected" : "" %>>
                    <%= entry.getValue() %>
                  </option>
                <% } %>

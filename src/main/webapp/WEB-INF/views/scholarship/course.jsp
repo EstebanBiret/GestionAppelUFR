@@ -4,6 +4,8 @@
     Users u = (Users) session.getAttribute("currentUser");
     if (u == null) { response.sendRedirect(request.getContextPath() + "/auth/login"); return; }
     List<Course> cours = (List<Course>) request.getAttribute("cours");
+    String success          = request.getParameter("success");
+    String autoSelectParam  = request.getParameter("courseId");
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -35,6 +37,12 @@
     <a href="${pageContext.request.contextPath}/scolarite">← Tableau de bord</a>
   </div>
 
+ <% if ("cours".equals(success)) { %>
+    <div class="alert-success" style="margin-bottom:1.25rem">Le cours a bien été créé.</div>
+  <% } else if ("seance".equals(success)) { %>
+    <div class="alert-success" style="margin-bottom:1.25rem">La séance a bien été ajoutée.</div>
+  <% } %>
+
   <div class="cours-layout">
 
     <div class="card cours-panel">
@@ -51,11 +59,15 @@
         <tbody>
           <% if (cours == null || cours.isEmpty()) { %>
             <tr><td colspan="4" class="empty">Aucun cours créé pour le moment.</td></tr>
-          <% } else { for (Course c : cours) { %>
-            <tr onclick="selectCours(<%= c.getId() %>, this)">
+          <% } else { for (Course c : cours) {
+               String className = c.getStudentClass() != null ? c.getStudentClass().getName() : "";
+          %>
+            <tr onclick="selectCours(<%= c.getId() %>, this)"
+                data-course-name="<%= c.getName() %>"
+                data-class-name="<%= className %>">
               <td><input type="radio" name="selectedCours" value="<%= c.getId() %>" id="crs_<%= c.getId() %>"></td>
               <td><strong><%= c.getName() %></strong></td>
-              <td><span class="badge"><%= c.getStudentClass() != null ? c.getStudentClass().getName() : "—" %></span></td>
+              <td><span class="badge"><%= !className.isEmpty() ? className : "—" %></span></td>
               <td>
                 <% if (c.getResponsable() != null) { %>
                   <%= c.getResponsable().getFirstName() %> <%= c.getResponsable().getLastName() %>
@@ -73,12 +85,17 @@
     </div>
 
     <div class="card seances-panel">
-      <div class="card-header">Séances</div>
+      <div class="card-header" id="seancesPanelTitle">Séances</div>
       <div class="seances-body" id="seancesBody">
         <div class="seances-placeholder">
           <div class="seances-placeholder-icon">📅</div>
           <div class="seances-placeholder-text">Sélectionnez un cours pour afficher ses séances.</div>
         </div>
+      </div>
+      <div class="actions">
+        <button id="btnCreateSeance" class="btn btn-primary" disabled onclick="goToSeanceForm()">
+          + Ajouter une séance
+        </button>
       </div>
     </div>
 
@@ -87,6 +104,7 @@
 
 <script>
   window._contextPath = '<%= request.getContextPath() %>';
+  window._autoSelectCourseId = <%= autoSelectParam != null ? autoSelectParam : "null" %>;
 </script>
 <script src="${pageContext.request.contextPath}/js/course.js"></script>
 </body>

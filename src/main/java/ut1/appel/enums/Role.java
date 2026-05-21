@@ -1,7 +1,7 @@
 package ut1.appel.enums;
 
 public enum Role {
-    PENDING,
+    EN_ATTENTE,
     ADMIN,
     ETUDIANT_FI,
     ETUDIANT_FA,
