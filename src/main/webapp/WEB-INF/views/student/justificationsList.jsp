@@ -33,9 +33,16 @@
         </div>
     </div>
     <div class="header-right">
-        <div class="user-chip"><%= u.getFirstName() %> <%= u.getLastName() %></div>
-        <a href="${pageContext.request.contextPath}/auth/logout" class="btn-logout">Se déconnecter</a>
-    </div>
+            <div class="user-dropdown">
+                <div class="user-chip" onclick="toggleDropdown()">
+                    <%= u.getFirstName() %> <%= u.getLastName() %> ▾
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="${pageContext.request.contextPath}/profil/voir">Mon profil</a>
+                </div>
+            </div>
+            <a href="${pageContext.request.contextPath}/auth/logout" class="btn-logout">Se déconnecter</a>
+        </div>
 </header>
 
 <main>
@@ -102,6 +109,9 @@
         </div>
     </div>
 </main>
-
+  <script>
+       window._contextPath = '<%= request.getContextPath() %>';
+   </script>
+   <script src="${pageContext.request.contextPath}/js/student.js"></script>
 </body>
 </html>

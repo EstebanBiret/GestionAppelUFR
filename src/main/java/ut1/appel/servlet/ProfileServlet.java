@@ -7,12 +7,17 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.*;
 import java.util.UUID;
+import java.nio.file.StandardCopyOption;
 
 @WebServlet("/profil/*")
-@MultipartConfig
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024,
+        maxFileSize       = 5 * 1024 * 1024,
+        maxRequestSize    = 10 * 1024 * 1024
+)
 public class ProfileServlet extends HttpServlet {
 
     private final UserService userService = new UserService();
@@ -20,81 +25,74 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        String action = req.getPathInfo();
-
-        switch (action == null ? "/voir" : action) {
-            case "/modifier" ->
-                    req.getRequestDispatcher("/WEB-INF/views/profil/modifier.jsp").forward(req, resp);
-            default ->
-                    req.getRequestDispatcher("/WEB-INF/views/profil/voir.jsp").forward(req, resp);
+        String action = req.getPathInfo() == null ? "/" : req.getPathInfo();
+        switch (action) {
+            case "/voir"     -> handleView(req, resp);
+            case "/modifier" -> handleEditForm(req, resp);
+            default          -> resp.sendRedirect(req.getContextPath() + "/profil/voir");
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
-        String action = req.getPathInfo();
-
-        if ("/modifier".equals(action)) {
-            handleModifier(req, resp);
-        }
+        if ("/save".equals(req.getPathInfo())) handleSave(req, resp);
+        else resp.sendRedirect(req.getContextPath() + "/profil/voir");
     }
 
-    private void handleModifier(HttpServletRequest req, HttpServletResponse resp)
+    private void handleView(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/views/profile/view.jsp").forward(req, resp);
+    }
 
-        HttpSession session = req.getSession(false);
-        Users currentUser = (session != null) ? (Users) session.getAttribute("currentUser") : null;
+    private void handleEditForm(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/views/profile/edit.jsp").forward(req, resp);
+    }
 
-        if (currentUser == null) {
-            resp.sendRedirect(req.getContextPath() + "/auth/login");
+    private void handleSave(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        Users u     = (Users) req.getSession().getAttribute("currentUser");
+        String email = req.getParameter("email");
+
+        if (email == null || email.isBlank()) {
+            req.setAttribute("error", "L'adresse email est obligatoire.");
+            req.getRequestDispatcher("/WEB-INF/views/profile/edit.jsp").forward(req, resp);
+            return;
+        }
+        if (!email.equalsIgnoreCase(u.getEmail())
+                && userService.emailExists(email.trim().toLowerCase())) {
+            req.setAttribute("error", "Cette adresse email est déjà utilisée.");
+            req.getRequestDispatcher("/WEB-INF/views/profile/edit.jsp").forward(req, resp);
             return;
         }
 
-        String newEmail = req.getParameter("email");
-        if (newEmail != null) newEmail = newEmail.trim();
-
-        if (newEmail != null && !newEmail.isBlank()
-                && !newEmail.equals(currentUser.getEmail())
-                && userService.emailExists(newEmail)) {
-            req.setAttribute("error", "Cet email est déjà utilisé par un autre compte.");
-            req.getRequestDispatcher("/WEB-INF/views/profil/modifier.jsp").forward(req, resp);
-            return;
-        }
-
-        // Handle photo upload
         String newPicturePath = null;
-        Part filePart = req.getPart("photo");
-
-        if (filePart != null && filePart.getSize() > 0) {
-            String originalName = filePart.getSubmittedFileName();
-            String extension = "";
-            if (originalName != null && originalName.contains(".")) {
-                extension = originalName.substring(originalName.lastIndexOf("."));
+        Part photoPart = req.getPart("photo");
+        if (photoPart != null && photoPart.getSize() > 0) {
+            String originalName = photoPart.getSubmittedFileName();
+            String ext = (originalName != null && originalName.contains("."))
+                    ? originalName.substring(originalName.lastIndexOf('.'))
+                    : ".jpg";
+            if (!ext.toLowerCase().matches("\\.(jpg|jpeg|png|gif|webp)")) {
+                req.setAttribute("error", "Format non supporté (jpg, png, gif, webp).");
+                req.getRequestDispatcher("/WEB-INF/views/profile/edit.jsp").forward(req, resp);
+                return;
             }
 
-            String uniqueFileName = UUID.randomUUID() + extension;
+            String fileName  = UUID.randomUUID() + ext;
             String uploadDir = getServletContext().getInitParameter("uploadDir");
-            Path uploadPath = Paths.get(uploadDir);
-
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            Files.copy(filePart.getInputStream(),
-                    uploadPath.resolve(uniqueFileName),
+            Path uploadPath  = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) Files.createDirectories(uploadPath);
+            Files.copy(photoPart.getInputStream(),
+                    uploadPath.resolve(fileName),
                     StandardCopyOption.REPLACE_EXISTING);
 
-            newPicturePath = "images/users/" + uniqueFileName;
+            newPicturePath = "images/users/" + fileName;
         }
 
-        Users updatedUser = userService.updateProfile(currentUser.getId(), newEmail, newPicturePath);
-
-        // Refresh session with updated user
-        session.setAttribute("currentUser", updatedUser);
-
+        Users updated = userService.updateProfile(u.getId(), email, newPicturePath);
+        req.getSession().setAttribute("currentUser", updated);
         resp.sendRedirect(req.getContextPath() + "/profil/voir?success=1");
     }
 }
