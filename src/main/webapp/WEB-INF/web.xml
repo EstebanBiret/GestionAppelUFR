@@ -10,8 +10,8 @@
     </context-param>
 
     <context-param>
-        <param-name>uploadDirJustif</param-name>
-        <param-value>FULL PATH  : .........\justifications</param-value>
+        <param-name>uploadDir</param-name>
+        <param-value>C:\Users\yasmi\OneDrive\Documents\Projet\GestionAppelUFR\src\main\webapp\images\users\</param-value>
     </context-param>
 
 </web-app>
