@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/student.css">
 </head>
+
 <body>
 
 <header>
@@ -27,34 +28,53 @@
         </div>
     </div>
     <div class="header-right">
-        <div class="user-chip"><%= u.getFirstName() %> <%= u.getLastName() %></div>
+        <div class="user-dropdown">
+            <div class="user-chip" onclick="toggleDropdown()">
+                <%= u.getFirstName() %> <%= u.getLastName() %> ▾
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="${pageContext.request.contextPath}/profil/voir">Mon profil</a>
+            </div>
+        </div>
         <a href="${pageContext.request.contextPath}/auth/logout" class="btn-logout">Se déconnecter</a>
     </div>
 </header>
 
 <main>
     <div class="welcome">
-       <div class="welcome-bar"></div>
-       <div>
-         <div class="welcome-title">Bonjour, <%= u.getFirstName() %> <%= u.getLastName() %></div>
-         <div class="welcome-sub">Espace Étudiant — que souhaitez-vous faire ?</div>
-       </div>
-     </div>
+        <div class="welcome-bar"></div>
+        <div>
+            <div class="welcome-title">Bonjour, <%= u.getFirstName() %> <%= u.getLastName() %></div>
+            <div class="welcome-sub">Espace Étudiant — que souhaitez-vous faire ?</div>
+        </div>
+    </div>
 
     <div class="page-header">
         <h2>Mes actions rapides</h2>
     </div>
 
     <div class="nav-grid">
-        <a href="${pageContext.request.contextPath}/etudiant/justification" class="nav-card">
+        <a href="${pageContext.request.contextPath}/etudiant/justification/nouveau" class="nav-card">
             <div class="nav-icon">📄</div>
             <div>
                 <div class="nav-card-title">Justifier une absence</div>
                 <div class="nav-card-sub">Transmettre un certificat médical ou un autre justificatif</div>
             </div>
         </a>
-    </div>
-</main>
 
+        <a href="${pageContext.request.contextPath}/etudiant/justification/liste" class="nav-card">
+            <div class="nav-icon">🔍</div>
+            <div>
+                <div class="nav-card-title">Suivre mes justificatifs</div>
+                <div class="nav-card-sub">Consulter l'état de validation de vos documents par la scolarité</div>
+            </div>
+        </a>
+    </div>
+
+</main>
+   <script>
+       window._contextPath = '<%= request.getContextPath() %>';
+   </script>
+   <script src="${pageContext.request.contextPath}/js/student.js"></script>
 </body>
 </html>

@@ -57,4 +57,19 @@ public class UserService {
             return u;
         }
     }
+
+    public Users updateProfile(Long userId, String newEmail, String newPicturePath) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            Users user = session.get(Users.class, userId);
+            if (user == null) throw new RuntimeException("User not found");
+            if (newEmail != null && !newEmail.isBlank())
+                user.setEmail(newEmail.trim().toLowerCase());
+            if (newPicturePath != null)
+                user.setPicturePath(newPicturePath);
+            session.merge(user);
+            tx.commit();
+            return user;
+        }
+    }
 }
