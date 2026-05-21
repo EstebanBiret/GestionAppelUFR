@@ -39,7 +39,7 @@ public class TestServlet extends HttpServlet {
         StudentClass classL3Droit = makeStudentClass("L3 Droit");
         StudentClass classL3MIASHS = makeStudentClass("L3 MIASHS");
         StudentClass classMIAGE1 = makeStudentClass("M1 MIAGE");
-        StudentClass classMIAGE2 = makeStudentClass("M2 MIAGE");
+        StudentClass classMIAGE2 = makeStudentClass("M2 IPM");
         StudentClass classM1Informatique = makeStudentClass("M1 Informatique");
         StudentClass classM2Informatique = makeStudentClass("M2 Informatique");
         StudentClass classM1AES = makeStudentClass("M1 AES");
