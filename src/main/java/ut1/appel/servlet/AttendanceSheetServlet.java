@@ -132,6 +132,7 @@ public class AttendanceSheetServlet extends HttpServlet {
                         AttendanceSheetService.updateSheet(sheet);
                         httpSession.setAttribute("flashSuccess", "La fiche d'appel a été signée et verrouillée avec succès.");
                     } else {
+                        sheet.setValidationDate(LocalDateTime.now());
                         AttendanceSheetService.updateSheet(sheet);
                         httpSession.setAttribute("flashSuccess", "Le brouillon de l'appel a bien été enregistré.");
                     }
