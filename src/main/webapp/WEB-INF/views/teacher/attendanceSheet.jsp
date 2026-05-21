@@ -55,6 +55,23 @@
 </header>
 
 <main>
+    <%
+        String flashSuccess = (String) session.getAttribute("flashSuccess");
+        String flashError = (String) session.getAttribute("flashError");
+        if (flashSuccess != null) {
+    %>
+    <div class="alert alert-success"><%= flashSuccess %></div>
+    <%
+            session.removeAttribute("flashSuccess");
+        }
+        if (flashError != null) {
+    %>
+    <div class="alert alert-danger"><%= flashError %></div>
+    <%
+            session.removeAttribute("flashError");
+        }
+    %>
+
     <div class="page-header page-header-flex">
         <div>
             <h1>Fiche d'appel</h1>
@@ -118,7 +135,7 @@
         List<AttendanceRow> rows = sheet.getAttendanceRows();
     %>
 
-    <form action="${pageContext.request.contextPath}/enseignant/appel/save" method="POST">
+    <form id="attendanceForm" action="${pageContext.request.contextPath}/enseignant/appel/save" method="POST">
         <input type="hidden" name="sessionId" value="<%= courseSession.getId() %>">
 
         <div class="as-table-wrap">
@@ -146,11 +163,19 @@
                     String picturePath = student.getPicturePath() != null ? student.getPicturePath() : "";
 
                     AttendanceRowStatus currentStatus = row.getStatus() != null ? row.getStatus() : AttendanceRowStatus.PRESENT;
+                    boolean isAbj = (currentStatus == AttendanceRowStatus.ABJ);
                 %>
-                <tr>
+
+                <tr class="<%= isAbj ? "as-row-abj" : "" %>">
+
                     <td><span class="as-student-name"><%= student.getFirstName() %></span></td>
 
-                    <td><span class="as-student-name text-uppercase"><%= student.getLastName() %></span></td>
+                    <td>
+                        <span class="as-student-name text-uppercase"><%= student.getLastName() %></span>
+                        <% if (isAbj) { %>
+                        <span class="as-badge-abj">Justifié</span>
+                        <% } %>
+                    </td>
 
                     <td>
                         <% if (isFi) { %>
@@ -176,7 +201,7 @@
                         <div class="status-toggle-group">
 
                             <input type="radio" id="present_<%= student.getId() %>" name="status_<%= student.getId() %>"
-                                   value="PRESENT" <%= currentStatus == AttendanceRowStatus.PRESENT ? "checked" : "" %>>
+                                   value="PRESENT" <%= currentStatus == AttendanceRowStatus.PRESENT ? "checked" : "" %> <%= isAbj ? "disabled" : "" %>>
                             <label for="present_<%= student.getId() %>" class="status-btn btn-present" title="Présent">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                      stroke-linecap="round" stroke-linejoin="round">
@@ -185,7 +210,7 @@
                             </label>
 
                             <input type="radio" id="absent_<%= student.getId() %>" name="status_<%= student.getId() %>"
-                                   value="ABSENT" <%= (currentStatus == AttendanceRowStatus.ABSENT || currentStatus == AttendanceRowStatus.ABJ) ? "checked" : "" %>>
+                                   value="ABSENT" <%= (currentStatus == AttendanceRowStatus.ABSENT || currentStatus == AttendanceRowStatus.ABJ) ? "checked" : "" %> <%= isAbj ? "disabled" : "" %>>
                             <label for="absent_<%= student.getId() %>" class="status-btn btn-absent" title="Absent">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
                                      stroke-linecap="round" stroke-linejoin="round">
@@ -195,7 +220,7 @@
                             </label>
 
                             <input type="radio" id="late_<%= student.getId() %>" name="status_<%= student.getId() %>"
-                                   value="LATE" <%= currentStatus == AttendanceRowStatus.EN_RETARD ? "checked" : "" %>>
+                                   value="LATE" <%= currentStatus == AttendanceRowStatus.EN_RETARD ? "checked" : "" %> <%= isAbj ? "disabled" : "" %>>
                             <label for="late_<%= student.getId() %>" class="status-btn btn-late" title="En retard">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                                      stroke-linecap="round" stroke-linejoin="round">
@@ -214,11 +239,26 @@
 
         <div class="as-footer-actions">
             <a href="${pageContext.request.contextPath}/enseignant?action=home" class="as-footer-link">Retour</a>
-            <button type="submit" class="btn btn-primary btn-valider-appel">Valider l'appel</button>
+            <button type="button" class="btn btn-primary btn-valider-appel" onclick="openConfirmModal()">Valider l'appel</button>
         </div>
     </form>
     <% } %>
     <% } %>
 </main>
+<div id="confirmModal" class="as-modal-overlay">
+    <div class="as-modal">
+        <div class="as-modal-title">Confirmer l'appel</div>
+        <div class="as-modal-body">
+            Êtes-vous sûr de vouloir valider cette fiche de présence ? <br><br>
+            Une fois validée, les absences seront transmises automatiquement à la scolarité.
+        </div>
+        <div class="as-modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeConfirmModal()">Annuler</button>
+            <button type="button" class="btn btn-primary" onclick="submitAttendanceForm()">Oui, valider</button>
+        </div>
+    </div>
+</div>
+
+<script src="${pageContext.request.contextPath}/js/attendanceSheet.js"></script>
 </body>
 </html>

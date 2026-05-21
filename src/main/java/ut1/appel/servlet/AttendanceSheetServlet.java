@@ -99,37 +99,37 @@ public class AttendanceSheetServlet extends HttpServlet {
             AttendanceSheet sheet = AttendanceSheetService.getSheetBySessionId(sessionId);
 
             if (sheet != null && sheet.getAttendanceRows() != null) {
-
                 for (AttendanceRow row : sheet.getAttendanceRows()) {
                     Long studentId = row.getUser().getId();
-
                     String statusParam = req.getParameter("status_" + studentId);
 
                     if (statusParam != null) {
                         switch (statusParam) {
-                            case "PRESENT":
-                                row.setStatus(AttendanceRowStatus.PRESENT);
-                                break;
-
+                            case "PRESENT": row.setStatus(AttendanceRowStatus.PRESENT);
+                            break;
                             case "ABSENT":
                                 if (row.getStatus() != AttendanceRowStatus.ABJ) {
                                     row.setStatus(AttendanceRowStatus.ABSENT);
                                 }
                                 break;
-
-                            case "LATE":
-                                row.setStatus(AttendanceRowStatus.EN_RETARD);
-                                break;
+                            case "LATE": row.setStatus(AttendanceRowStatus.EN_RETARD);
+                            break;
                         }
                     }
                 }
 
                 sheet.setValidationDate(LocalDateTime.now());
 
-                AttendanceSheetService.updateSheet(sheet);
+                try {
+                    AttendanceSheetService.updateSheet(sheet);
+                    httpSession.setAttribute("flashSuccess", "La fiche de présence a été validée et enregistrée avec succès.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    httpSession.setAttribute("flashError", "Une erreur technique est survenue lors de l'enregistrement.");
+                }
             }
 
-            resp.sendRedirect(req.getContextPath() + "/enseignant?action=home");
+            resp.sendRedirect(req.getContextPath() + "/enseignant/appel?sessionId=" + sessionId);
 
         } catch (NumberFormatException e) {
             resp.sendRedirect(req.getContextPath() + "/enseignant");
