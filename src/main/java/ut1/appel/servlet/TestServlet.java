@@ -433,7 +433,7 @@ public class TestServlet extends HttpServlet {
             createdSessions += createSession(sessionService, coursGenieLogiciel, profRavat, 2026, 5, 8, 15, 17, null);
             createdSessions += createSession(sessionService, coursArchitectureLogicielle, profBernard, 2026, 5, 11, 8, 12, groupM2InformatiqueTD1);
             createdSessions += createSession(sessionService, coursSecuriteSystemes, profNavard, 2026, 5, 12, 13, 17, null);
-            createdSessions += createSession(sessionService, coursEconomieOrganisations, profAndonnof, 2026, 5, 13, 8, 10, groupM1AESTD1);
+            createdSessions += createSession(sessionService, coursEconomieOrganisations, profBour, 2026, 5, 13, 8, 10, groupM1AESTD1);
             createdSessions += createSession(sessionService, coursDroitTravail, profBerro, 2026, 5, 18, 10, 12, null);
             createdSessions += createSession(sessionService, coursManagementPublic, profBour, 2026, 5, 19, 13, 15, null);
             createdSessions += createSession(sessionService, coursControleGestion, profParpex, 2026, 5, 21, 15, 17, null);
@@ -458,7 +458,7 @@ public class TestServlet extends HttpServlet {
             createdSessions += createSession(sessionService, coursGenieLogiciel, profRavat, 2026, 6, 11, 10, 12, null);
             createdSessions += createSession(sessionService, coursArchitectureLogicielle, profBernard, 2026, 6, 12, 13, 15, groupM2InformatiqueTD1);
             createdSessions += createSession(sessionService, coursSecuriteSystemes, profNavard, 2026, 6, 15, 15, 17, null);
-            createdSessions += createSession(sessionService, coursEconomieOrganisations, profAndonnof, 2026, 6, 16, 8, 10, groupM1AESTD2);
+            createdSessions += createSession(sessionService, coursEconomieOrganisations, profBour, 2026, 6, 16, 8, 10, groupM1AESTD2);
             createdSessions += createSession(sessionService, coursDroitTravail, profBerro, 2026, 6, 17, 10, 12, null);
             createdSessions += createSession(sessionService, coursManagementPublic, profBour, 2026, 6, 18, 13, 15, null);
             createdSessions += createSession(sessionService, coursControleGestion, profParpex, 2026, 6, 19, 15, 17, null);
@@ -466,6 +466,74 @@ public class TestServlet extends HttpServlet {
             out.println("Séances créées avec feuilles d'appel : " + createdSessions);
         } catch (Exception e) {
             out.println("Erreur Séances après " + createdSessions + " création(s) : " + e.getMessage());
+        }
+
+        // ============================================================
+        // STEP 11 — Absences répétées pour le bilan (Andonnof)
+        // ============================================================
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+
+            Users cible = session.createQuery(
+                            "FROM Users u WHERE u.email = :email", Users.class)
+                    .setParameter("email", "m1aes.01@etud.ut-capitole.fr")
+                    .uniqueResult();
+
+            Course cours = session.get(Course.class, coursEconomieOrganisations.getId());
+            Users prof   = session.get(Users.class, profBour.getId());
+
+            if (cible == null || cours == null || prof == null) {
+                out.println("STEP 11 — entité introuvable, annulé.");
+                tx.rollback();
+            } else {
+                java.time.LocalDate[] dates = {
+                        java.time.LocalDate.of(2026, 3, 10),
+                        java.time.LocalDate.of(2026, 3, 17),
+                        java.time.LocalDate.of(2026, 3, 24)
+                };
+
+                for (java.time.LocalDate date : dates) {
+                    ut1.appel.entity.Session s = new ut1.appel.entity.Session();
+                    s.setCourse(cours);
+                    s.setTeacher(prof);
+                    s.setSessionDate(date);
+                    s.setStartTime(java.time.LocalTime.of(8, 0));
+                    s.setEndTime(java.time.LocalTime.of(10, 0));
+                    s.setStudentClasses(new java.util.HashSet<>(List.of(session.get(StudentClass.class, classM1AES.getId()))));
+                    s.setStudentGroups(new java.util.HashSet<>());
+                    session.persist(s);
+
+                    AttendanceSheet sheet = new AttendanceSheet();
+                    sheet.setSession(s);
+                    sheet.setIsSigned(true);
+                    sheet.setLastModificationDate(java.time.LocalDateTime.now().minusDays(1));
+                    sheet.setAttendanceRows(new java.util.ArrayList<>());
+                    session.persist(sheet);
+
+                    List<Users> etudiants = session.createQuery(
+                                    "FROM Users u WHERE u.studentClass.id = :cid", Users.class)
+                            .setParameter("cid", classM1AES.getId())
+                            .list();
+
+                    for (Users etudiant : etudiants) {
+                        AttendanceRow row = new AttendanceRow();
+                        row.setAttendanceSheet(sheet);
+                        row.setUser(etudiant);
+                        row.setChangedGroup(false);
+                        row.setJustification(null);
+                        row.setStatus(etudiant.getId().equals(cible.getId())
+                                ? ut1.appel.enums.AttendanceRowStatus.ABSENT
+                                : ut1.appel.enums.AttendanceRowStatus.PRESENT);
+                        session.persist(row);
+                    }
+                }
+
+                tx.commit();
+                out.println("STEP 11 — 3 séances créées, " + cible.getFirstName()
+                        + " " + cible.getLastName() + " ABSENT sur les 3, fiches signées.");
+            }
+        } catch (Exception e) {
+            out.println("Erreur STEP 11 : " + e.getMessage());
         }
 
         // ============================================================
