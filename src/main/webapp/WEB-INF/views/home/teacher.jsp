@@ -7,12 +7,24 @@
 
     Long teacherId = me.getId();
 
-    Session        currentSession   = TeacherService.getCurrentSession(teacherId);
-    List<Session>  upcomingSessions = TeacherService.getUpcomingSessionsForTeacher(teacherId);
-    List<Session>  pastSessions     = TeacherService.getPastSessionsForTeacher(teacherId);
+    Session       currentSession   = TeacherService.getCurrentSession(teacherId);
+    List<Session> upcomingSessions = TeacherService.getUpcomingSessionsForTeacher(teacherId);
+    List<Session> pastSessions     = TeacherService.getPastSessionsForTeacher(teacherId);
 
-    DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm");
+    DateTimeFormatter dayFmt  = DateTimeFormatter.ofPattern("EEEE dd/MM/yyyy", Locale.FRENCH);
+
+    java.time.LocalDate today = java.time.LocalDate.now();
+
+    LinkedHashMap<java.time.LocalDate, List<Session>> upcomingByDay = new LinkedHashMap<>();
+    for (Session s : upcomingSessions) {
+        upcomingByDay.computeIfAbsent(s.getSessionDate(), k -> new ArrayList<>()).add(s);
+    }
+
+    LinkedHashMap<java.time.LocalDate, List<Session>> pastByDay = new LinkedHashMap<>();
+    for (Session s : pastSessions) {
+        pastByDay.computeIfAbsent(s.getSessionDate(), k -> new ArrayList<>()).add(s);
+    }
 %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,7 +32,6 @@
     <meta charset="UTF-8">
     <title>Tableau de bord — Enseignant</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/admin.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/teacher.css">
 </head>
 <body>
@@ -39,27 +50,11 @@
     </div>
 </header>
 
-<%
-    java.util.LinkedHashMap<java.time.LocalDate, java.util.List<Session>> upcomingByDay = new java.util.LinkedHashMap<>();
-    for (Session s : upcomingSessions) {
-        upcomingByDay.computeIfAbsent(s.getSessionDate(), k -> new java.util.ArrayList<>()).add(s);
-    }
-    java.util.LinkedHashMap<java.time.LocalDate, java.util.List<Session>> pastByDay = new java.util.LinkedHashMap<>();
-    for (Session s : pastSessions) {
-        pastByDay.computeIfAbsent(s.getSessionDate(), k -> new java.util.ArrayList<>()).add(s);
-    }
-
-    java.time.LocalDate today = java.time.LocalDate.now();
-    DateTimeFormatter dayFmt  = DateTimeFormatter.ofPattern("EEEE dd/MM/yyyy", java.util.Locale.FRENCH);
-%>
-
 <main>
     <div class="page-header">
         <div>
             <h1>Bonjour, <%= me.getFirstName() %> 👋</h1>
-            <p class="page-subtitle">
-                Voici un aperçu de vos cours.
-            </p>
+            <p class="page-subtitle">Voici un aperçu de vos cours.</p>
         </div>
     </div>
 
@@ -75,14 +70,22 @@
                 <span class="tc-time-end"><%= currentSession.getEndTime().format(timeFmt) %></span>
             </div>
             <div class="tc-info">
-                <div class="tc-subject"><%= currentSession.getCourse() != null ? currentSession.getCourse().getName() : "—" %></div>
+                <div class="tc-subject">
+                    <%= currentSession.getCourse() != null ? currentSession.getCourse().getName() : "—" %>
+                </div>
                 <div class="tc-meta">
-                    <% if (currentSession.getStudentClasses() != null) { for (StudentClass sc : currentSession.getStudentClasses()) { %>
-                    <span class="tc-chip tc-chip-class"><%= sc.getName() %></span>
-                    <% } } %>
-                    <% if (currentSession.getStudentGroups() != null) { for (StudentGroup sg : currentSession.getStudentGroups()) { %>
-                    <span class="tc-chip tc-chip-group"><%= sg.getName() %></span>
-                    <% } } %>
+                    <% if (currentSession.getCourse() != null && currentSession.getCourse().getStudentClass() != null) { %>
+                        <span class="tc-chip tc-chip-class">
+                            <%= currentSession.getCourse().getStudentClass().getName() %>
+                        </span>
+                    <% } %>
+                    <% if (currentSession.getStudentGroups() != null && !currentSession.getStudentGroups().isEmpty()) {
+                        for (StudentGroup sg : currentSession.getStudentGroups()) { %>
+                            <span class="tc-chip tc-chip-group"><%= sg.getName() %></span>
+                    <%  }
+                    } else { %>
+                        <span class="tc-chip tc-chip-group">Classe entière</span>
+                    <% } %>
                 </div>
             </div>
             <span class="tc-arrow">→</span>
@@ -96,44 +99,51 @@
     </div>
     <div class="tc-timeline">
         <% if (upcomingSessions.isEmpty()) { %>
-        <div class="tc-empty">Aucun cours à venir.</div>
-        <% } else { for (java.util.Map.Entry<java.time.LocalDate, java.util.List<Session>> entry : upcomingByDay.entrySet()) {
-            java.time.LocalDate d = entry.getKey();
-            String dayLabel = d.equals(today) ? "Aujourd'hui" : d.format(dayFmt);
+            <div class="tc-empty">Aucun cours à venir.</div>
+        <% } else {
+            for (Map.Entry<java.time.LocalDate, List<Session>> entry : upcomingByDay.entrySet()) {
+                java.time.LocalDate d = entry.getKey();
+                String dayLabel = d.equals(today) ? "Aujourd'hui" : d.format(dayFmt);
         %>
-        <div class="tc-day-group">
-            <div class="tc-day-header">
-                <%= dayLabel %> <div class="tc-day-line"></div>
-            </div>
-            <% for (Session s : entry.getValue()) { %>
-            <a class="tc-event"
-               href="${pageContext.request.contextPath}/enseignant/appel?sessionId=<%= s.getId() %>"
-               >
-                <div class="tc-time">
-                    <span class="tc-time-start"><%= s.getStartTime().format(timeFmt) %></span>
-                    <span class="tc-time-end"><%= s.getEndTime().format(timeFmt) %></span>
+            <div class="tc-day-group">
+                <div class="tc-day-header">
+                    <%= dayLabel %><div class="tc-day-line"></div>
                 </div>
-                <div class="tc-info">
-                    <div class="tc-subject"><%= s.getCourse() != null ? s.getCourse().getName() : "—" %></div>
-                    <div class="tc-meta">
-                        <% if (s.getStudentClasses() != null) { for (StudentClass sc : s.getStudentClasses()) { %>
-                        <span class="tc-chip tc-chip-class"><%= sc.getName() %></span>
-                        <% } } %>
-                        <% if (s.getStudentGroups() != null) { for (StudentGroup sg : s.getStudentGroups()) { %>
-                        <span class="tc-chip tc-chip-group"><%= sg.getName() %></span>
-                        <% } } %>
+                <% for (Session s : entry.getValue()) { %>
+                <a class="tc-event"
+                   href="${pageContext.request.contextPath}/enseignant/appel?sessionId=<%= s.getId() %>">
+                    <div class="tc-time">
+                        <span class="tc-time-start"><%= s.getStartTime().format(timeFmt) %></span>
+                        <span class="tc-time-end"><%= s.getEndTime().format(timeFmt) %></span>
                     </div>
-                </div>
-                <span class="tc-arrow">→</span>
-            </a>
-            <% } %>
-        </div>
+                    <div class="tc-info">
+                        <div class="tc-subject">
+                            <%= s.getCourse() != null ? s.getCourse().getName() : "—" %>
+                        </div>
+                        <div class="tc-meta">
+                            <% if (s.getCourse() != null && s.getCourse().getStudentClass() != null) { %>
+                                <span class="tc-chip tc-chip-class">
+                                    <%= s.getCourse().getStudentClass().getName() %>
+                                </span>
+                            <% } %>
+                            <% if (s.getStudentGroups() != null && !s.getStudentGroups().isEmpty()) {
+                                for (StudentGroup sg : s.getStudentGroups()) { %>
+                                    <span class="tc-chip tc-chip-group"><%= sg.getName() %></span>
+                            <%  }
+                            } else { %>
+                                <span class="tc-chip tc-chip-group">Classe entière</span>
+                            <% } %>
+                        </div>
+                    </div>
+                    <span class="tc-arrow">→</span>
+                </a>
+                <% } %>
+            </div>
         <% } } %>
     </div>
 
     <div class="plus">
-        <a href="${pageContext.request.contextPath}/enseignant?action=upcoming"
-           class="btn btn-secondary">
+        <a href="${pageContext.request.contextPath}/enseignant?action=upcoming" class="btn btn-secondary">
             Voir tous les cours à venir →
         </a>
     </div>
@@ -144,45 +154,52 @@
     </div>
     <div class="tc-timeline">
         <% if (pastSessions.isEmpty()) { %>
-        <div class="tc-empty">Aucun cours passé.</div>
-        <% } else { for (java.util.Map.Entry<java.time.LocalDate, java.util.List<Session>> entry : pastByDay.entrySet()) { %>
-        <div class="tc-day-group">
-            <div class="tc-day-header">
-                <%= entry.getKey().format(dayFmt) %> <div class="tc-day-line"></div>
-            </div>
-            <% for (Session s : entry.getValue()) { %>
-            <a class="tc-event past"
-               href="${pageContext.request.contextPath}/enseignant/appel?sessionId=<%= s.getId() %>"
-               >
-                <div class="tc-time">
-                    <span class="tc-time-start"><%= s.getStartTime().format(timeFmt) %></span>
-                    <span class="tc-time-end"><%= s.getEndTime().format(timeFmt) %></span>
+            <div class="tc-empty">Aucun cours passé.</div>
+        <% } else {
+            for (Map.Entry<java.time.LocalDate, List<Session>> entry : pastByDay.entrySet()) {
+        %>
+            <div class="tc-day-group">
+                <div class="tc-day-header">
+                    <%= entry.getKey().format(dayFmt) %><div class="tc-day-line"></div>
                 </div>
-                <div class="tc-info">
-                    <div class="tc-subject"><%= s.getCourse() != null ? s.getCourse().getName() : "—" %></div>
-                    <div class="tc-meta">
-                        <% if (s.getStudentClasses() != null) { for (StudentClass sc : s.getStudentClasses()) { %>
-                        <span class="tc-chip tc-chip-class"><%= sc.getName() %></span>
-                        <% } } %>
-                        <% if (s.getStudentGroups() != null) { for (StudentGroup sg : s.getStudentGroups()) { %>
-                        <span class="tc-chip tc-chip-group"><%= sg.getName() %></span>
-                        <% } } %>
+                <% for (Session s : entry.getValue()) { %>
+                <a class="tc-event past"
+                   href="${pageContext.request.contextPath}/enseignant/appel?sessionId=<%= s.getId() %>">
+                    <div class="tc-time">
+                        <span class="tc-time-start"><%= s.getStartTime().format(timeFmt) %></span>
+                        <span class="tc-time-end"><%= s.getEndTime().format(timeFmt) %></span>
                     </div>
-                </div>
-                <span class="tc-arrow">→</span>
-            </a>
-            <% } %>
-        </div>
+                    <div class="tc-info">
+                        <div class="tc-subject">
+                            <%= s.getCourse() != null ? s.getCourse().getName() : "—" %>
+                        </div>
+                        <div class="tc-meta">
+                            <% if (s.getCourse() != null && s.getCourse().getStudentClass() != null) { %>
+                                <span class="tc-chip tc-chip-class">
+                                    <%= s.getCourse().getStudentClass().getName() %>
+                                </span>
+                            <% } %>
+                            <% if (s.getStudentGroups() != null && !s.getStudentGroups().isEmpty()) {
+                                for (StudentGroup sg : s.getStudentGroups()) { %>
+                                    <span class="tc-chip tc-chip-group"><%= sg.getName() %></span>
+                            <%  }
+                            } else { %>
+                                <span class="tc-chip tc-chip-group">Classe entière</span>
+                            <% } %>
+                        </div>
+                    </div>
+                    <span class="tc-arrow">→</span>
+                </a>
+                <% } %>
+            </div>
         <% } } %>
     </div>
 
     <div class="plus">
-        <a href="${pageContext.request.contextPath}/enseignant?action=past"
-           class="btn btn-secondary">
+        <a href="${pageContext.request.contextPath}/enseignant?action=past" class="btn btn-secondary">
             Voir tous les cours passés →
         </a>
     </div>
-
 </main>
 
 </body>

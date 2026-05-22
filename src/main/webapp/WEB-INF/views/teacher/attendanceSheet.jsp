@@ -103,16 +103,18 @@
             <%= courseSession.getCourse() != null ? courseSession.getCourse().getName() : "—" %>
         </div>
         <div class="as-session-meta">
-            <% if (courseSession.getStudentClasses() != null) {
-                for (StudentClass sc : courseSession.getStudentClasses()) { %>
-            <span class="as-chip as-chip-class"><%= sc.getName() %></span>
-            <% }
-            } %>
-            <% if (courseSession.getStudentGroups() != null) {
-                for (StudentGroup sg : courseSession.getStudentGroups()) { %>
-            <span class="as-chip as-chip-group"><%= sg.getName() %></span>
-            <% }
-            } %>
+            <% if (courseSession.getCourse() != null && courseSession.getCourse().getStudentClass() != null) { %>
+            <span class="tc-chip tc-chip-class"><%= courseSession.getCourse().getStudentClass().getName() %></span>
+        <% } %>
+
+        <% if (courseSession.getStudentGroups() != null && !courseSession.getStudentGroups().isEmpty()) {
+            for (StudentGroup sg : courseSession.getStudentGroups()) { %>
+                <span class="tc-chip tc-chip-group"><%= sg.getName() %></span>
+        <%  }
+        } else { %>
+            <span class="tc-chip tc-chip-group">Classe entière</span>
+        <% } %>
+
             <span class="as-sep">·</span>
             <span>
                 <%= courseSession.getSessionDate() != null

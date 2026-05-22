@@ -7,4 +7,5 @@
 .tc-timeline .tc-event {
     margin-bottom: 4px;
     display: grid;
+    cursor: pointer;
 }
